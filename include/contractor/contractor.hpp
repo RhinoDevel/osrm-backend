@@ -654,7 +654,7 @@ class Contractor
         out_node_levels.swap(node_levels);
     }
 
-    template <class Edge> inline void GetEdges(DeallocatingVector<Edge> &edges)
+    template <class Edge> inline void GetEdges(util::DeallocatingVector<Edge> &edges)
     {
         util::Percent p(contractor_graph->GetNumberOfNodes());
         SimpleLogger().Write() << "Getting edges of minimized graph";

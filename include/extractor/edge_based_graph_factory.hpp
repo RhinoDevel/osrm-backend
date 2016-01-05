@@ -61,7 +61,7 @@ class EdgeBasedGraphFactory
              const bool generate_edge_lookup);
 #endif
 
-    void GetEdgeBasedEdges(DeallocatingVector<EdgeBasedEdge> &edges);
+    void GetEdgeBasedEdges(util::DeallocatingVector<EdgeBasedEdge> &edges);
 
     void GetEdgeBasedNodes(std::vector<EdgeBasedNode> &nodes);
     void GetStartPointMarkers(std::vector<bool> &node_is_startpoint);

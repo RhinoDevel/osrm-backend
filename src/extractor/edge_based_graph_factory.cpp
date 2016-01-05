@@ -37,7 +37,7 @@ EdgeBasedGraphFactory::EdgeBasedGraphFactory(
 {
 }
 
-void EdgeBasedGraphFactory::GetEdgeBasedEdges(DeallocatingVector<EdgeBasedEdge> &output_edge_list)
+void EdgeBasedGraphFactory::GetEdgeBasedEdges(util::DeallocatingVector<EdgeBasedEdge> &output_edge_list)
 {
     BOOST_ASSERT_MSG(0 == output_edge_list.size(), "Vector is not empty");
     using std::swap; // Koenig swap
