@@ -387,7 +387,7 @@ std::size_t Prepare::WriteContractedGraph(unsigned max_node_id,
         }
 #endif
         hsgr_output_stream.write((char *)&current_edge,
-                                 sizeof(StaticGraph<EdgeData>::EdgeArrayEntry));
+                                 sizeof(util::StaticGraph<EdgeData>::EdgeArrayEntry));
 
         ++number_of_used_edges;
     }
