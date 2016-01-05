@@ -22,8 +22,8 @@ PhantomNode::PhantomNode(NodeID forward_node_id,
                          unsigned component_id,
                          FixedPointCoordinate &location,
                          unsigned short fwd_segment_position,
-                         TravelMode forward_travel_mode,
-                         TravelMode backward_travel_mode)
+                         extractor::TravelMode forward_travel_mode,
+                         extractor::TravelMode backward_travel_mode)
     : forward_node_id(forward_node_id), reverse_node_id(reverse_node_id), name_id(name_id),
       forward_weight(forward_weight), reverse_weight(reverse_weight),
       forward_offset(forward_offset), reverse_offset(reverse_offset),

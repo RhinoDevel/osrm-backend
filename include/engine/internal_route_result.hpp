@@ -27,7 +27,7 @@ struct PathData
              unsigned name_id,
              TurnInstruction turn_instruction,
              EdgeWeight segment_duration,
-             TravelMode travel_mode)
+             extractor::TravelMode travel_mode)
         : node(node), name_id(name_id), segment_duration(segment_duration),
           turn_instruction(turn_instruction), travel_mode(travel_mode)
     {
@@ -36,7 +36,7 @@ struct PathData
     unsigned name_id;
     EdgeWeight segment_duration;
     TurnInstruction turn_instruction;
-    TravelMode travel_mode : 4;
+    extractor::TravelMode travel_mode : 4;
 };
 
 struct InternalRouteResult

@@ -29,8 +29,8 @@ struct PhantomNode
                 unsigned component_id,
                 FixedPointCoordinate &location,
                 unsigned short fwd_segment_position,
-                TravelMode forward_travel_mode,
-                TravelMode backward_travel_mode);
+                extractor::TravelMode forward_travel_mode,
+                extractor::TravelMode backward_travel_mode);
 
     PhantomNode();
 
@@ -79,8 +79,8 @@ struct PhantomNode
     unsigned short fwd_segment_position;
     // note 4 bits would suffice for each,
     // but the saved byte would be padding anyway
-    TravelMode forward_travel_mode;
-    TravelMode backward_travel_mode;
+    extractor::TravelMode forward_travel_mode;
+    extractor::TravelMode backward_travel_mode;
 
     int GetForwardWeightPlusOffset() const;
 

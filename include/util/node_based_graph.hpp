@@ -30,7 +30,7 @@ struct NodeBasedEdgeData
                       bool reversed,
                       bool roundabout,
                       bool startpoint,
-                      TravelMode travel_mode)
+                      extractor::TravelMode travel_mode)
         : distance(distance), edge_id(edge_id), name_id(name_id),
           access_restricted(access_restricted), reversed(reversed), roundabout(roundabout),
           startpoint(startpoint), travel_mode(travel_mode)
@@ -44,7 +44,7 @@ struct NodeBasedEdgeData
     bool reversed : 1;
     bool roundabout : 1;
     bool startpoint : 1;
-    TravelMode travel_mode : 4;
+    extractor::TravelMode travel_mode : 4;
 
     bool IsCompatibleTo(const NodeBasedEdgeData &other) const
     {
