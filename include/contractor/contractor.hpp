@@ -71,11 +71,11 @@ class Contractor
     };
 
     using ContractorGraph = util::DynamicGraph<ContractorEdgeData>;
-    //    using ContractorHeap = BinaryHeap<NodeID, NodeID, int, ContractorHeapData,
+    //    using ContractorHeap = util::BinaryHeap<NodeID, NodeID, int, ContractorHeapData,
     //    ArrayStorage<NodeID, NodeID>
     //    >;
     using ContractorHeap =
-        BinaryHeap<NodeID, NodeID, int, ContractorHeapData, XORFastHashStorage<NodeID, NodeID>>;
+        util::BinaryHeap<NodeID, NodeID, int, ContractorHeapData, XORFastHashStorage<NodeID, NodeID>>;
     using ContractorEdge = ContractorGraph::InputEdge;
 
     struct ContractorThreadData
