@@ -314,9 +314,9 @@ std::size_t Prepare::WriteContractedGraph(unsigned max_node_id,
     node_array.resize(max_node_id + 2);
 
     SimpleLogger().Write() << "Building node array";
-    StaticGraph<EdgeData>::EdgeIterator edge = 0;
-    StaticGraph<EdgeData>::EdgeIterator position = 0;
-    StaticGraph<EdgeData>::EdgeIterator last_edge;
+    util::StaticGraph<EdgeData>::EdgeIterator edge = 0;
+    util::StaticGraph<EdgeData>::EdgeIterator position = 0;
+    util::StaticGraph<EdgeData>::EdgeIterator last_edge;
 
     // initializing 'first_edge'-field of nodes:
     for (const auto node : util::irange(0u, max_used_node_id + 1))
@@ -361,7 +361,7 @@ std::size_t Prepare::WriteContractedGraph(unsigned max_node_id,
     SimpleLogger().Write() << "Building edge array";
     int number_of_used_edges = 0;
 
-    StaticGraph<EdgeData>::EdgeArrayEntry current_edge;
+    util::StaticGraph<EdgeData>::EdgeArrayEntry current_edge;
     for (const auto edge : util::irange<std::size_t>(0, contracted_edge_list.size()))
     {
         // no eigen loops

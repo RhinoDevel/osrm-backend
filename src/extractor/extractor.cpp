@@ -368,7 +368,7 @@ void extractor::FindComponents(unsigned max_edge_id,
             return source == rhs.source && target == rhs.target;
         }
     };
-    using UncontractedGraph = StaticGraph<UncontractedEdgeData>;
+    using UncontractedGraph = util::StaticGraph<UncontractedEdgeData>;
     std::vector<InputEdge> edges;
     edges.reserve(input_edge_list.size() * 2);
 
