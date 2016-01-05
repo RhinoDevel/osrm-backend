@@ -44,7 +44,7 @@ int Prepare::Run()
 #else
     static_assert(sizeof(extractor::NodeBasedEdge) == 20,
                   "changing extractor::NodeBasedEdge type has influence on memory consumption!");
-    static_assert(sizeof(EdgeBasedEdge) == 16,
+    static_assert(sizeof(extractor::EdgeBasedEdge) == 16,
                   "changing EdgeBasedEdge type has influence on memory consumption!");
 #endif
 
@@ -59,7 +59,7 @@ int Prepare::Run()
 
     util::SimpleLogger().Write() << "Loading edge-expanded graph representation";
 
-    util::DeallocatingVector<EdgeBasedEdge> edge_based_edge_list;
+    util::DeallocatingVector<extractor::EdgeBasedEdge> edge_based_edge_list;
 
     size_t max_edge_id = LoadEdgeExpandedGraph(
         config.edge_based_graph_path, edge_based_edge_list, config.edge_segment_lookup_path,
@@ -113,7 +113,7 @@ template <> struct hash<std::pair<OSMNodeID, OSMNodeID>>
 }
 
 std::size_t Prepare::LoadEdgeExpandedGraph(std::string const &edge_based_graph_filename,
-                                           util::DeallocatingVector<EdgeBasedEdge> &edge_based_edge_list,
+                                           util::DeallocatingVector<extractor::EdgeBasedEdge> &edge_based_edge_list,
                                            const std::string &edge_segment_lookup_filename,
                                            const std::string &edge_penalty_filename,
                                            const std::string &segment_speed_filename)
@@ -175,7 +175,7 @@ std::size_t Prepare::LoadEdgeExpandedGraph(std::string const &edge_based_graph_f
     for (; number_of_edges > 0; --number_of_edges)
     {
         EdgeBasedEdge inbuffer;
-        input_stream.read((char *)&inbuffer, sizeof(EdgeBasedEdge));
+        input_stream.read((char *)&inbuffer, sizeof(extractor::EdgeBasedEdge));
 
         if (update_edge_weights)
         {
@@ -398,7 +398,7 @@ std::size_t Prepare::WriteContractedGraph(unsigned max_node_id,
  \brief Build contracted graph.
  */
 void Prepare::ContractGraph(const unsigned max_edge_id,
-                            util::DeallocatingVector<EdgeBasedEdge> &edge_based_edge_list,
+                            util::DeallocatingVector<extractor::EdgeBasedEdge> &edge_based_edge_list,
                             util::DeallocatingVector<QueryEdge> &contracted_edge_list,
                             std::vector<bool> &is_core_node,
                             std::vector<float> &inout_node_levels) const
