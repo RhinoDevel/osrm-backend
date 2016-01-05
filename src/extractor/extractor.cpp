@@ -593,8 +593,8 @@ void extractor::WriteEdgeBasedGraph(std::string const &output_file_filename,
 
     std::ofstream file_out_stream;
     file_out_stream.open(output_file_filename.c_str(), std::ios::binary);
-    const FingerPrint fingerprint = FingerPrint::GetValid();
-    file_out_stream.write((char *)&fingerprint, sizeof(FingerPrint));
+    const util::FingerPrint fingerprint = util::FingerPrint::GetValid();
+    file_out_stream.write((char *)&fingerprint, sizeof(util::FingerPrint));
 
     std::cout << "[extractor] Writing edge-based-graph egdes       ... " << std::flush;
     TIMER_START(write_edges);

@@ -138,9 +138,9 @@ std::size_t Prepare::LoadEdgeExpandedGraph(std::string const &edge_based_graph_f
         }
     }
 
-    const FingerPrint fingerprint_valid = FingerPrint::GetValid();
-    FingerPrint fingerprint_loaded;
-    input_stream.read((char *)&fingerprint_loaded, sizeof(FingerPrint));
+    const util::FingerPrint fingerprint_valid = util::FingerPrint::GetValid();
+    util::FingerPrint fingerprint_loaded;
+    input_stream.read((char *)&fingerprint_loaded, sizeof(util::FingerPrint));
     fingerprint_loaded.TestPrepare(fingerprint_valid);
 
     size_t number_of_edges = 0;
@@ -291,9 +291,9 @@ std::size_t Prepare::WriteContractedGraph(unsigned max_node_id,
     util::SimpleLogger().Write() << "Serializing compacted graph of " << contracted_edge_count
                            << " edges";
 
-    const FingerPrint fingerprint = FingerPrint::GetValid();
+    const util::FingerPrint fingerprint = util::FingerPrint::GetValid();
     boost::filesystem::ofstream hsgr_output_stream(config.graph_output_path, std::ios::binary);
-    hsgr_output_stream.write((char *)&fingerprint, sizeof(FingerPrint));
+    hsgr_output_stream.write((char *)&fingerprint, sizeof(util::FingerPrint));
     const unsigned max_used_node_id = [&contracted_edge_list]
     {
         unsigned tmp_max = 0;

@@ -238,9 +238,9 @@ int main(const int argc, const char *argv[]) try
 
     boost::filesystem::ifstream hsgr_input_stream(hsgr_path, std::ios::binary);
 
-    FingerPrint fingerprint_valid = FingerPrint::GetValid();
-    FingerPrint fingerprint_loaded;
-    hsgr_input_stream.read((char *)&fingerprint_loaded, sizeof(FingerPrint));
+    util::FingerPrint fingerprint_valid = util::FingerPrint::GetValid();
+    util::FingerPrint fingerprint_loaded;
+    hsgr_input_stream.read((char *)&fingerprint_loaded, sizeof(util::FingerPrint));
     if (fingerprint_loaded.TestGraphUtil(fingerprint_valid))
     {
         SimpleLogger().Write(logDEBUG) << "Fingerprint checked out ok";

@@ -70,8 +70,8 @@ void ExtractionContainers::PrepareData(const std::string &output_file_name,
     {
         std::ofstream file_out_stream;
         file_out_stream.open(output_file_name.c_str(), std::ios::binary);
-        const FingerPrint fingerprint = FingerPrint::GetValid();
-        file_out_stream.write((char *)&fingerprint, sizeof(FingerPrint));
+        const util::FingerPrint fingerprint = util::FingerPrint::GetValid();
+        file_out_stream.write((char *)&fingerprint, sizeof(util::FingerPrint));
 
         PrepareNodes();
         WriteNodes(file_out_stream);
@@ -555,8 +555,8 @@ void ExtractionContainers::WriteRestrictions(const std::string &path) const
     std::ofstream restrictions_out_stream;
     unsigned written_restriction_count = 0;
     restrictions_out_stream.open(path.c_str(), std::ios::binary);
-    const FingerPrint fingerprint = FingerPrint::GetValid();
-    restrictions_out_stream.write((char *)&fingerprint, sizeof(FingerPrint));
+    const util::FingerPrint fingerprint = util::FingerPrint::GetValid();
+    restrictions_out_stream.write((char *)&fingerprint, sizeof(util::FingerPrint));
     const auto count_position = restrictions_out_stream.tellp();
     restrictions_out_stream.write((char *)&written_restriction_count, sizeof(unsigned));
 
