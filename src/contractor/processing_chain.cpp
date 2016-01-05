@@ -169,13 +169,13 @@ std::size_t Prepare::LoadEdgeExpandedGraph(std::string const &edge_based_graph_f
         }
     }
 
-    DEBUG_GEOMETRY_START(config);
+    util::DEBUG_GEOMETRY_START(config);
 
     // TODO: can we read this in bulk?  util::DeallocatingVector isn't necessarily
     // all stored contiguously
     for (; number_of_edges > 0; --number_of_edges)
     {
-        EdgeBasedEdge inbuffer;
+        extractor::EdgeBasedEdge inbuffer;
         input_stream.read((char *)&inbuffer, sizeof(extractor::EdgeBasedEdge));
 
         if (update_edge_weights)
@@ -218,7 +218,7 @@ std::size_t Prepare::LoadEdgeExpandedGraph(std::string const &edge_based_graph_f
                                         (segment_length * 10.) / (speed_iter->second / 3.6) + .5)));
                     new_weight += new_segment_weight;
 
-                    DEBUG_GEOMETRY_EDGE(new_segment_weight, segment_length, previous_osm_node_id,
+                    util::DEBUG_GEOMETRY_EDGE(new_segment_weight, segment_length, previous_osm_node_id,
                                         this_osm_node_id);
                 }
                 else
@@ -226,7 +226,7 @@ std::size_t Prepare::LoadEdgeExpandedGraph(std::string const &edge_based_graph_f
                     // If no lookup found, use the original weight value for this segment
                     new_weight += segment_weight;
 
-                    DEBUG_GEOMETRY_EDGE(segment_weight, segment_length, previous_osm_node_id,
+                    util::DEBUG_GEOMETRY_EDGE(segment_weight, segment_length, previous_osm_node_id,
                                         this_osm_node_id);
                 }
 
@@ -239,7 +239,7 @@ std::size_t Prepare::LoadEdgeExpandedGraph(std::string const &edge_based_graph_f
         edge_based_edge_list.emplace_back(std::move(inbuffer));
     }
 
-    DEBUG_GEOMETRY_STOP();
+    util::DEBUG_GEOMETRY_STOP();
     util::SimpleLogger().Write() << "Done reading edges";
     return max_edge_id;
 }
