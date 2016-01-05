@@ -310,7 +310,7 @@ std::size_t Prepare::WriteContractedGraph(unsigned max_node_id,
     util::SimpleLogger().Write(logDEBUG) << "input graph has " << (max_node_id + 1) << " nodes";
     util::SimpleLogger().Write(logDEBUG) << "contracted graph has " << (max_used_node_id + 1) << " nodes";
 
-    std::vector<StaticGraph<EdgeData>::NodeArrayEntry> node_array;
+    std::vector<util::StaticGraph<EdgeData>::NodeArrayEntry> node_array;
     // make sure we have at least one sentinel
     node_array.resize(max_node_id + 2);
 
@@ -355,7 +355,7 @@ std::size_t Prepare::WriteContractedGraph(unsigned max_node_id,
     if (node_array_size > 0)
     {
         hsgr_output_stream.write((char *)&node_array[0],
-                                 sizeof(StaticGraph<EdgeData>::NodeArrayEntry) * node_array_size);
+                                 sizeof(util::StaticGraph<EdgeData>::NodeArrayEntry) * node_array_size);
     }
 
     // serialize all edges

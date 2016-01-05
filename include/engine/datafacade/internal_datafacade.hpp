@@ -34,7 +34,7 @@ template <class EdgeDataT> class InternalDataFacade final : public BaseDataFacad
 
   private:
     using super = BaseDataFacade<EdgeDataT>;
-    using QueryGraph = StaticGraph<typename super::EdgeData>;
+    using QueryGraph = util::StaticGraph<typename super::EdgeData>;
     using InputEdge = typename QueryGraph::InputEdge;
     using RTreeLeaf = typename super::RTreeLeaf;
     using InternalRTree = StaticRTree<RTreeLeaf, ShM<FixedPointCoordinate, false>::vector, false>;

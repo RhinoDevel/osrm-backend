@@ -32,9 +32,9 @@ template <class EdgeDataT> class SharedDataFacade final : public BaseDataFacade<
   private:
     using EdgeData = EdgeDataT;
     using super = BaseDataFacade<EdgeData>;
-    using QueryGraph = StaticGraph<EdgeData, true>;
-    using GraphNode = typename StaticGraph<EdgeData, true>::NodeArrayEntry;
-    using GraphEdge = typename StaticGraph<EdgeData, true>::EdgeArrayEntry;
+    using QueryGraph = util::StaticGraph<EdgeData, true>;
+    using GraphNode = typename QueryGraph::NodeArrayEntry;
+    using GraphEdge = typename QueryGraph::EdgeArrayEntry;
     using NameIndexBlock = typename RangeTable<16, true>::BlockT;
     using InputEdge = typename QueryGraph::InputEdge;
     using RTreeLeaf = typename super::RTreeLeaf;

@@ -42,7 +42,7 @@ struct TarjanEdgeData
     unsigned name_id;
 };
 
-using TarjanGraph = StaticGraph<TarjanEdgeData>;
+using TarjanGraph = util::StaticGraph<TarjanEdgeData>;
 using TarjanEdge = TarjanGraph::InputEdge;
 
 void deleteFileIfExists(const std::string &file_name)

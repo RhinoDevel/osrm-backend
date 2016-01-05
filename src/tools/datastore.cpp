@@ -19,10 +19,6 @@
 
 #include "osrm/coordinate.hpp"
 
-using RTreeLeaf = BaseDataFacade<QueryEdge::EdgeData>::RTreeLeaf;
-using RTreeNode = StaticRTree<RTreeLeaf, ShM<FixedPointCoordinate, true>::vector, true>::TreeNode;
-using QueryGraph = StaticGraph<QueryEdge::EdgeData>;
-
 #ifdef __linux__
 #include <sys/mman.h>
 #endif
@@ -40,6 +36,10 @@ namespace osrm
 {
 namespace tools
 {
+
+using RTreeLeaf = typename engine::datafacade::BaseDataFacade<contractor::QueryEdge::EdgeData>::RTreeLeaf;
+using RTreeNode = util::StaticRTree<RTreeLeaf, ShM<FixedPointCoordinate, true>::vector, true>::TreeNode;
+using QueryGraph = util::StaticGraph<contractor::QueryEdge::EdgeData>;
 
 // delete a shared memory region. report warning if it could not be deleted
 void deleteRegion(const SharedDataType region)

@@ -17,8 +17,8 @@ namespace osrm
 namespace tools
 {
 
-using EdgeData = QueryEdge::EdgeData;
-using QueryGraph = StaticGraph<EdgeData>;
+using EdgeData = contractor::QueryEdge::EdgeData;
+using QueryGraph = util::StaticGraph<EdgeData>;
 
 int main(int argc, char *argv[])
 {
