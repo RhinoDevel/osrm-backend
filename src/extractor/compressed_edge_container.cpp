@@ -186,7 +186,7 @@ void CompressedEdgeContainer::PrintStatistics() const
         longest_chain_length = std::max(longest_chain_length, (uint64_t)current_vector.size());
     }
 
-    SimpleLogger().Write() << "Geometry successfully removed:"
+    util::SimpleLogger().Write() << "Geometry successfully removed:"
                               "\n  compressed edges: "
                            << compressed_edges
                            << "\n  compressed geometries: " << compressed_geometries

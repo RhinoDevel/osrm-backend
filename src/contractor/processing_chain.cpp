@@ -57,7 +57,7 @@ int Prepare::Run()
 
     // Create a new lua state
 
-    SimpleLogger().Write() << "Loading edge-expanded graph representation";
+    util::SimpleLogger().Write() << "Loading edge-expanded graph representation";
 
     util::DeallocatingVector<EdgeBasedEdge> edge_based_edge_list;
 
@@ -79,7 +79,7 @@ int Prepare::Run()
                   node_levels);
     TIMER_STOP(contraction);
 
-    SimpleLogger().Write() << "Contraction took " << TIMER_SEC(contraction) << " sec";
+    util::SimpleLogger().Write() << "Contraction took " << TIMER_SEC(contraction) << " sec";
 
     std::size_t number_of_used_edges = WriteContractedGraph(max_edge_id, contracted_edge_list);
     WriteCoreNodeMarker(std::move(is_core_node));
@@ -90,12 +90,12 @@ int Prepare::Run()
 
     TIMER_STOP(preparing);
 
-    SimpleLogger().Write() << "Preprocessing : " << TIMER_SEC(preparing) << " seconds";
-    SimpleLogger().Write() << "Contraction: " << ((max_edge_id + 1) / TIMER_SEC(contraction))
+    util::SimpleLogger().Write() << "Preprocessing : " << TIMER_SEC(preparing) << " seconds";
+    util::SimpleLogger().Write() << "Contraction: " << ((max_edge_id + 1) / TIMER_SEC(contraction))
                            << " nodes/sec and " << number_of_used_edges / TIMER_SEC(contraction)
                            << " edges/sec";
 
-    SimpleLogger().Write() << "finished preprocessing";
+    util::SimpleLogger().Write() << "finished preprocessing";
 
     return 0;
 }
@@ -118,7 +118,7 @@ std::size_t Prepare::LoadEdgeExpandedGraph(std::string const &edge_based_graph_f
                                            const std::string &edge_penalty_filename,
                                            const std::string &segment_speed_filename)
 {
-    SimpleLogger().Write() << "Opening " << edge_based_graph_filename;
+    util::SimpleLogger().Write() << "Opening " << edge_based_graph_filename;
     boost::filesystem::ifstream input_stream(edge_based_graph_filename, std::ios::binary);
 
     const bool update_edge_weights = segment_speed_filename != "";
@@ -148,13 +148,13 @@ std::size_t Prepare::LoadEdgeExpandedGraph(std::string const &edge_based_graph_f
     input_stream.read((char *)&max_edge_id, sizeof(size_t));
 
     edge_based_edge_list.resize(number_of_edges);
-    SimpleLogger().Write() << "Reading " << number_of_edges << " edges from the edge based graph";
+    util::SimpleLogger().Write() << "Reading " << number_of_edges << " edges from the edge based graph";
 
     std::unordered_map<std::pair<OSMNodeID, OSMNodeID>, unsigned> segment_speed_lookup;
 
     if (update_edge_weights)
     {
-        SimpleLogger().Write() << "Segment speed data supplied, will update edge weights from "
+        util::SimpleLogger().Write() << "Segment speed data supplied, will update edge weights from "
                                << segment_speed_filename;
         io::CSVReader<3> csv_in(segment_speed_filename);
         csv_in.set_header("from_node", "to_node", "speed");
@@ -239,7 +239,7 @@ std::size_t Prepare::LoadEdgeExpandedGraph(std::string const &edge_based_graph_f
     }
 
     DEBUG_GEOMETRY_STOP();
-    SimpleLogger().Write() << "Done reading edges";
+    util::SimpleLogger().Write() << "Done reading edges";
     return max_edge_id;
 }
 
@@ -287,7 +287,7 @@ std::size_t Prepare::WriteContractedGraph(unsigned max_node_id,
     // Sorting contracted edges in a way that the static query graph can read some in in-place.
     tbb::parallel_sort(contracted_edge_list.begin(), contracted_edge_list.end());
     const unsigned contracted_edge_count = contracted_edge_list.size();
-    SimpleLogger().Write() << "Serializing compacted graph of " << contracted_edge_count
+    util::SimpleLogger().Write() << "Serializing compacted graph of " << contracted_edge_count
                            << " edges";
 
     const FingerPrint fingerprint = FingerPrint::GetValid();
@@ -306,14 +306,14 @@ std::size_t Prepare::WriteContractedGraph(unsigned max_node_id,
         return tmp_max;
     }();
 
-    SimpleLogger().Write(logDEBUG) << "input graph has " << (max_node_id + 1) << " nodes";
-    SimpleLogger().Write(logDEBUG) << "contracted graph has " << (max_used_node_id + 1) << " nodes";
+    util::SimpleLogger().Write(logDEBUG) << "input graph has " << (max_node_id + 1) << " nodes";
+    util::SimpleLogger().Write(logDEBUG) << "contracted graph has " << (max_used_node_id + 1) << " nodes";
 
     std::vector<StaticGraph<EdgeData>::NodeArrayEntry> node_array;
     // make sure we have at least one sentinel
     node_array.resize(max_node_id + 2);
 
-    SimpleLogger().Write() << "Building node array";
+    util::SimpleLogger().Write() << "Building node array";
     util::StaticGraph<EdgeData>::EdgeIterator edge = 0;
     util::StaticGraph<EdgeData>::EdgeIterator position = 0;
     util::StaticGraph<EdgeData>::EdgeIterator last_edge;
@@ -337,11 +337,11 @@ std::size_t Prepare::WriteContractedGraph(unsigned max_node_id,
         node_array[sentinel_counter].first_edge = contracted_edge_count;
     }
 
-    SimpleLogger().Write() << "Serializing node array";
+    util::SimpleLogger().Write() << "Serializing node array";
 
     RangebasedCRC32 crc32_calculator;
     const unsigned edges_crc32 = crc32_calculator(contracted_edge_list);
-    SimpleLogger().Write() << "Writing CRC32: " << edges_crc32;
+    util::SimpleLogger().Write() << "Writing CRC32: " << edges_crc32;
 
     const unsigned node_array_size = node_array.size();
     // serialize crc32, aka checksum
@@ -358,7 +358,7 @@ std::size_t Prepare::WriteContractedGraph(unsigned max_node_id,
     }
 
     // serialize all edges
-    SimpleLogger().Write() << "Building edge array";
+    util::SimpleLogger().Write() << "Building edge array";
     int number_of_used_edges = 0;
 
     util::StaticGraph<EdgeData>::EdgeArrayEntry current_edge;
@@ -374,12 +374,12 @@ std::size_t Prepare::WriteContractedGraph(unsigned max_node_id,
 #ifndef NDEBUG
         if (current_edge.data.distance <= 0)
         {
-            SimpleLogger().Write(logWARNING) << "Edge: " << edge
+            util::SimpleLogger().Write(logWARNING) << "Edge: " << edge
                                              << ",source: " << contracted_edge_list[edge].source
                                              << ", target: " << contracted_edge_list[edge].target
                                              << ", dist: " << current_edge.data.distance;
 
-            SimpleLogger().Write(logWARNING) << "Failed at adjacency list of node "
+            util::SimpleLogger().Write(logWARNING) << "Failed at adjacency list of node "
                                              << contracted_edge_list[edge].source << "/"
                                              << node_array.size() - 1;
             return 1;

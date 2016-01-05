@@ -156,7 +156,7 @@ class Contractor
 #ifndef NDEBUG
             if (static_cast<unsigned int>(std::max(diter->weight, 1)) > 24 * 60 * 60 * 10)
             {
-                SimpleLogger().Write(logWARNING)
+                util::SimpleLogger().Write(logWARNING)
                     << "Edge weight large -> "
                     << static_cast<unsigned int>(std::max(diter->weight, 1)) << " : "
                     << static_cast<unsigned int>(diter->source) << " -> "
@@ -258,11 +258,11 @@ class Contractor
         //            }
         //        }
         //
-        //        SimpleLogger().Write() << "edges at node with id " << highestNode << " has degree
+        //        util::SimpleLogger().Write() << "edges at node with id " << highestNode << " has degree
         //        " << maxdegree;
         //        for(unsigned i = contractor_graph->BeginEdges(highestNode); i <
         //        contractor_graph->EndEdges(highestNode); ++i) {
-        //            SimpleLogger().Write() << " ->(" << highestNode << "," <<
+        //            util::SimpleLogger().Write() << " ->(" << highestNode << "," <<
         //            contractor_graph->GetTarget(i)
         //            << "); via: " << contractor_graph->GetEdgeData(i).via;
         //        }
@@ -595,7 +595,7 @@ class Contractor
             //            avgdegree /= std::max((unsigned)1,(unsigned)remaining_nodes.size() );
             //            quaddegree /= std::max((unsigned)1,(unsigned)remaining_nodes.size() );
             //
-            //            SimpleLogger().Write() << "rest: " << remaining_nodes.size() << ", max: "
+            //            util::SimpleLogger().Write() << "rest: " << remaining_nodes.size() << ", max: "
             //            << maxdegree << ", min: " << mindegree << ", avg: " << avgdegree << ",
             //            quad: " << quaddegree;
 
@@ -638,7 +638,7 @@ class Contractor
             is_core_node.clear();
         }
 
-        SimpleLogger().Write() << "[core] " << remaining_nodes.size() << " nodes "
+        util::SimpleLogger().Write() << "[core] " << remaining_nodes.size() << " nodes "
                                << contractor_graph->GetNumberOfEdges() << " edges." << std::endl;
 
         thread_data_list.data.clear();
@@ -657,7 +657,7 @@ class Contractor
     template <class Edge> inline void GetEdges(util::DeallocatingVector<Edge> &edges)
     {
         util::Percent p(contractor_graph->GetNumberOfNodes());
-        SimpleLogger().Write() << "Getting edges of minimized graph";
+        util::SimpleLogger().Write() << "Getting edges of minimized graph";
         const NodeID number_of_nodes = contractor_graph->GetNumberOfNodes();
         if (contractor_graph->GetNumberOfNodes())
         {

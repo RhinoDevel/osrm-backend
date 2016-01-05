@@ -146,7 +146,7 @@ template <typename GraphT> class TarjanSCC
 
                         if (size_of_current_component > 1000)
                         {
-                            SimpleLogger().Write() << "large component [" << component_index
+                            util::SimpleLogger().Write() << "large component [" << component_index
                                                    << "]=" << size_of_current_component;
                         }
 
@@ -158,7 +158,7 @@ template <typename GraphT> class TarjanSCC
         }
 
         TIMER_STOP(SCC_RUN);
-        SimpleLogger().Write() << "SCC run took: " << TIMER_MSEC(SCC_RUN) / 1000. << "s";
+        util::SimpleLogger().Write() << "SCC run took: " << TIMER_MSEC(SCC_RUN) / 1000. << "s";
 
         size_one_counter = std::count_if(component_size_vector.begin(), component_size_vector.end(),
                                          [](unsigned value)

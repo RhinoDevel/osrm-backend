@@ -92,14 +92,14 @@ int SourceContainer::loadRasterSource(const std::string &path_string,
     const auto itr = LoadedSourcePaths.find(path_string);
     if (itr != LoadedSourcePaths.end())
     {
-        SimpleLogger().Write() << "[source loader] Already loaded source '" << path_string
+        util::SimpleLogger().Write() << "[source loader] Already loaded source '" << path_string
                                << "' at source_id " << itr->second;
         return itr->second;
     }
 
     int source_id = static_cast<int>(LoadedSources.size());
 
-    SimpleLogger().Write() << "[source loader] Loading from " << path_string << "  ... ";
+    util::SimpleLogger().Write() << "[source loader] Loading from " << path_string << "  ... ";
     TIMER_START(loading_source);
 
     boost::filesystem::path filepath(path_string);
@@ -115,7 +115,7 @@ int SourceContainer::loadRasterSource(const std::string &path_string,
     LoadedSourcePaths.emplace(path_string, source_id);
     LoadedSources.push_back(std::move(source));
 
-    SimpleLogger().Write() << "[source loader] ok, after " << TIMER_SEC(loading_source) << "s";
+    util::SimpleLogger().Write() << "[source loader] ok, after " << TIMER_SEC(loading_source) << "s";
 
     return source_id;
 }

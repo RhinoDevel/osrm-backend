@@ -182,9 +182,9 @@ void GraphCompressor::PrintStatistics(unsigned original_number_of_nodes,
             new_edge_count += (graph.EndEdges(i) - graph.BeginEdges(i));
         }
     }
-    SimpleLogger().Write() << "Node compression ratio: "
+    util::SimpleLogger().Write() << "Node compression ratio: "
                            << new_node_count / (double)original_number_of_nodes;
-    SimpleLogger().Write() << "Edge compression ratio: "
+    util::SimpleLogger().Write() << "Edge compression ratio: "
                            << new_edge_count / (double)original_number_of_edges;
 }
 }

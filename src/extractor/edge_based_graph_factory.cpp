@@ -243,10 +243,10 @@ void EdgeBasedGraphFactory::Run(const std::string &original_edge_data_filename,
 
     TIMER_STOP(generate_edges);
 
-    SimpleLogger().Write() << "Timing statistics for edge-expanded graph:";
-    SimpleLogger().Write() << "Renumbering edges: " << TIMER_SEC(renumber) << "s";
-    SimpleLogger().Write() << "Generating nodes: " << TIMER_SEC(generate_nodes) << "s";
-    SimpleLogger().Write() << "Generating edges: " << TIMER_SEC(generate_edges) << "s";
+    util::SimpleLogger().Write() << "Timing statistics for edge-expanded graph:";
+    util::SimpleLogger().Write() << "Renumbering edges: " << TIMER_SEC(renumber) << "s";
+    util::SimpleLogger().Write() << "Generating nodes: " << TIMER_SEC(generate_nodes) << "s";
+    util::SimpleLogger().Write() << "Generating edges: " << TIMER_SEC(generate_edges) << "s";
 }
 
 /// Renumbers all _forward_ edges and sets the edge_id.
@@ -320,7 +320,7 @@ void EdgeBasedGraphFactory::GenerateEdgeExpandedNodes()
 
     BOOST_ASSERT(m_edge_based_node_list.size() == m_edge_based_node_is_startpoint.size());
 
-    SimpleLogger().Write() << "Generated " << m_edge_based_node_list.size()
+    util::SimpleLogger().Write() << "Generated " << m_edge_based_node_list.size()
                            << " nodes in edge-expanded graph";
 }
 
@@ -342,7 +342,7 @@ void EdgeBasedGraphFactory::GenerateEdgeExpandedEdges(
     const bool generate_edge_lookup)
 #endif
 {
-    SimpleLogger().Write() << "generating edge-expanded edges";
+    util::SimpleLogger().Write() << "generating edge-expanded edges";
 
     unsigned node_based_edge_counter = 0;
     unsigned original_edges_counter = 0;
@@ -591,15 +591,15 @@ void EdgeBasedGraphFactory::GenerateEdgeExpandedEdges(
     edge_data_file.write((char *)&original_edges_counter, sizeof(unsigned));
     edge_data_file.close();
 
-    SimpleLogger().Write() << "Generated " << m_edge_based_node_list.size() << " edge based nodes";
-    SimpleLogger().Write() << "Node-based graph contains " << node_based_edge_counter << " edges";
-    SimpleLogger().Write() << "Edge-expanded graph ...";
-    SimpleLogger().Write() << "  contains " << m_edge_based_edge_list.size() << " edges";
-    SimpleLogger().Write() << "  skips " << restricted_turns_counter << " turns, "
+    util::SimpleLogger().Write() << "Generated " << m_edge_based_node_list.size() << " edge based nodes";
+    util::SimpleLogger().Write() << "Node-based graph contains " << node_based_edge_counter << " edges";
+    util::SimpleLogger().Write() << "Edge-expanded graph ...";
+    util::SimpleLogger().Write() << "  contains " << m_edge_based_edge_list.size() << " edges";
+    util::SimpleLogger().Write() << "  skips " << restricted_turns_counter << " turns, "
                                                                         "defined by "
                            << m_restriction_map->size() << " restrictions";
-    SimpleLogger().Write() << "  skips " << skipped_uturns_counter << " U turns";
-    SimpleLogger().Write() << "  skips " << skipped_barrier_turns_counter << " turns over barriers";
+    util::SimpleLogger().Write() << "  skips " << skipped_uturns_counter << " U turns";
+    util::SimpleLogger().Write() << "  skips " << skipped_barrier_turns_counter << " turns over barriers";
 }
 
 int EdgeBasedGraphFactory::GetTurnPenalty(double angle, lua_State *lua_state) const
@@ -616,7 +616,7 @@ int EdgeBasedGraphFactory::GetTurnPenalty(double angle, lua_State *lua_state) co
         }
         catch (const luabind::error &er)
         {
-            SimpleLogger().Write(logWARNING) << er.what();
+            util::SimpleLogger().Write(logWARNING) << er.what();
         }
     }
     return 0;

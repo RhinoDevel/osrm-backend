@@ -43,7 +43,7 @@ int luaErrorCallback(lua_State *state)
 
 ScriptingEnvironment::ScriptingEnvironment(const std::string &file_name) : file_name(file_name)
 {
-    SimpleLogger().Write() << "Using script " << file_name;
+    util::SimpleLogger().Write() << "Using script " << file_name;
 }
 
 void ScriptingEnvironment::InitLuaState(lua_State *lua_state)

@@ -63,10 +63,10 @@ class SharedMemory
         {
             if (m_initialized)
             {
-                SimpleLogger().Write(logDEBUG) << "automatic memory deallocation";
+                util::SimpleLogger().Write(logDEBUG) << "automatic memory deallocation";
                 if (!boost::interprocess::xsi_shared_memory::remove(m_shmid))
                 {
-                    SimpleLogger().Write(logDEBUG) << "could not deallocate id " << m_shmid;
+                    util::SimpleLogger().Write(logDEBUG) << "could not deallocate id " << m_shmid;
                 }
             }
         }
@@ -108,14 +108,14 @@ class SharedMemory
             {
                 if (ENOMEM == errno)
                 {
-                    SimpleLogger().Write(logWARNING) << "could not lock shared memory to RAM";
+                    util::SimpleLogger().Write(logWARNING) << "could not lock shared memory to RAM";
                 }
             }
 #endif
             region = boost::interprocess::mapped_region(shm, boost::interprocess::read_write);
 
             remover.SetID(shm.get_shmid());
-            SimpleLogger().Write(logDEBUG) << "writeable memory allocated " << size << " bytes";
+            util::SimpleLogger().Write(logDEBUG) << "writeable memory allocated " << size << " bytes";
         }
     }
 
@@ -162,7 +162,7 @@ class SharedMemory
         bool ret = false;
         try
         {
-            SimpleLogger().Write(logDEBUG) << "deallocating prev memory";
+            util::SimpleLogger().Write(logDEBUG) << "deallocating prev memory";
             boost::interprocess::xsi_shared_memory xsi(boost::interprocess::open_only, key);
             ret = boost::interprocess::xsi_shared_memory::remove(xsi.get_shmid());
         }
@@ -207,10 +207,10 @@ class SharedMemory
         {
             if (m_initialized)
             {
-                SimpleLogger().Write(logDEBUG) << "automatic memory deallocation";
+                util::SimpleLogger().Write(logDEBUG) << "automatic memory deallocation";
                 if (!boost::interprocess::shared_memory_object::remove(m_shmid))
                 {
-                    SimpleLogger().Write(logDEBUG) << "could not deallocate id " << m_shmid;
+                    util::SimpleLogger().Write(logDEBUG) << "could not deallocate id " << m_shmid;
                 }
             }
         }
@@ -247,7 +247,7 @@ class SharedMemory
             region = boost::interprocess::mapped_region(shm, boost::interprocess::read_write);
 
             remover.SetID(key);
-            SimpleLogger().Write(logDEBUG) << "writeable memory allocated " << size << " bytes";
+            util::SimpleLogger().Write(logDEBUG) << "writeable memory allocated " << size << " bytes";
         }
     }
 
@@ -297,7 +297,7 @@ class SharedMemory
         bool ret = false;
         try
         {
-            SimpleLogger().Write(logDEBUG) << "deallocating prev memory";
+            util::SimpleLogger().Write(logDEBUG) << "deallocating prev memory";
             ret = boost::interprocess::shared_memory_object::remove(key);
         }
         catch (const boost::interprocess::interprocess_exception &e)
@@ -345,7 +345,7 @@ template <class LockFileT = OSRMLockFile> class SharedMemoryFactory_tmpl
         }
         catch (const boost::interprocess::interprocess_exception &e)
         {
-            SimpleLogger().Write(logWARNING) << "caught exception: " << e.what() << ", code "
+            util::SimpleLogger().Write(logWARNING) << "caught exception: " << e.what() << ", code "
                                              << e.get_error_code();
             throw osrm::exception(e.what());
         }

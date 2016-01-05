@@ -40,7 +40,7 @@ void RequestHandler::handle_request(const http::request &current_request,
 
         // deactivated as GCC apparently does not implement that, not even in 4.9
         // std::time_t t = std::time(nullptr);
-        // SimpleLogger().Write() << std::put_time(std::localtime(&t), "%m-%d-%Y %H:%M:%S") <<
+        // util::SimpleLogger().Write() << std::put_time(std::localtime(&t), "%m-%d-%Y %H:%M:%S") <<
         //     " " << current_request.endpoint.to_string() << " " <<
         //     current_request.referrer << ( 0 == current_request.referrer.length() ? "- " :" ") <<
         //     current_request.agent << ( 0 == current_request.agent.length() ? "- " :" ") <<
@@ -53,7 +53,7 @@ void RequestHandler::handle_request(const http::request &current_request,
         time_stamp = localtime(&ltime);
 
         // log timestamp
-        SimpleLogger().Write() << (time_stamp->tm_mday < 10 ? "0" : "") << time_stamp->tm_mday
+        util::SimpleLogger().Write() << (time_stamp->tm_mday < 10 ? "0" : "") << time_stamp->tm_mday
                                << "-" << (time_stamp->tm_mon + 1 < 10 ? "0" : "")
                                << (time_stamp->tm_mon + 1) << "-" << 1900 + time_stamp->tm_year
                                << " " << (time_stamp->tm_hour < 10 ? "0" : "")
@@ -150,7 +150,7 @@ void RequestHandler::handle_request(const http::request &current_request,
     {
         current_reply = http::reply::stock_reply(http::reply::internal_server_error);
         ;
-        SimpleLogger().Write(logWARNING) << "[server error] code: " << e.what()
+        util::SimpleLogger().Write(logWARNING) << "[server error] code: " << e.what()
                                          << ", uri: " << current_request.uri;
     }
 }

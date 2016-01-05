@@ -64,7 +64,7 @@ OSRM::OSRM_impl::OSRM_impl(LibOSRMConfig &lib_config)
 void OSRM::OSRM_impl::RegisterPlugin(BasePlugin *raw_plugin_ptr)
 {
     std::unique_ptr<BasePlugin> plugin_ptr(raw_plugin_ptr);
-    SimpleLogger().Write() << "loaded plugin: " << plugin_ptr->GetDescriptor();
+    util::SimpleLogger().Write() << "loaded plugin: " << plugin_ptr->GetDescriptor();
     plugin_map[plugin_ptr->GetDescriptor()] = std::move(plugin_ptr);
 }
 

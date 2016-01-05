@@ -92,13 +92,13 @@ ExtractorOptions::ParseArguments(int argc, char *argv[], ExtractorConfig &extrac
                                       option_variables);
         if (option_variables.count("version"))
         {
-            SimpleLogger().Write() << OSRM_VERSION;
+            util::SimpleLogger().Write() << OSRM_VERSION;
             return return_code::exit;
         }
 
         if (option_variables.count("help"))
         {
-            SimpleLogger().Write() << visible_options;
+            util::SimpleLogger().Write() << visible_options;
             return return_code::exit;
         }
 
@@ -107,7 +107,7 @@ ExtractorOptions::ParseArguments(int argc, char *argv[], ExtractorConfig &extrac
         // parse config file
         if (boost::filesystem::is_regular_file(extractor_config.config_file_path))
         {
-            SimpleLogger().Write() << "Reading options from: "
+            util::SimpleLogger().Write() << "Reading options from: "
                                    << extractor_config.config_file_path.string();
             std::string ini_file_contents =
                 read_file_lower_content(extractor_config.config_file_path);
@@ -119,13 +119,13 @@ ExtractorOptions::ParseArguments(int argc, char *argv[], ExtractorConfig &extrac
 
         if (!option_variables.count("input"))
         {
-            SimpleLogger().Write() << visible_options;
+            util::SimpleLogger().Write() << visible_options;
             return return_code::exit;
         }
     }
     catch (std::exception &e)
     {
-        SimpleLogger().Write(logWARNING) << e.what();
+        util::SimpleLogger().Write(logWARNING) << e.what();
         return return_code::fail;
     }
 

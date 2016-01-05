@@ -132,7 +132,7 @@ void DescriptionFactory::Run(const unsigned zoom_level)
     //                  || std::string::npos != string0.find(string1+" ;")
     //                    || std::string::npos != string0.find("; "+string1)
     //                    ){
-    //                SimpleLogger().Write() << "->next correct: " << string0 << " contains " <<
+    //                util::SimpleLogger().Write() << "->next correct: " << string0 << " contains " <<
     //                string1;
     //                for(; lastTurn != i; ++lastTurn)
     //                    path_description[lastTurn].name_id = path_description[i].name_id;
@@ -142,7 +142,7 @@ void DescriptionFactory::Run(const unsigned zoom_level)
     //                    || std::string::npos != string1.find(string0+" ;")
     //                    || std::string::npos != string1.find("; "+string0)
     //                    ){
-    //                SimpleLogger().Write() << "->prev correct: " << string1 << " contains " <<
+    //                util::SimpleLogger().Write() << "->prev correct: " << string1 << " contains " <<
     //                string0;
     //                path_description[i].name_id = path_description[i-1].name_id;
     //                path_description[i].turn_instruction = TurnInstruction::NoTurn;

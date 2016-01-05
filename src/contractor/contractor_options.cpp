@@ -92,13 +92,13 @@ ContractorOptions::ParseArguments(int argc, char *argv[], ContractorConfig &cont
 
     if (option_variables.count("version"))
     {
-        SimpleLogger().Write() << OSRM_VERSION;
+        util::SimpleLogger().Write() << OSRM_VERSION;
         return return_code::exit;
     }
 
     if (option_variables.count("help"))
     {
-        SimpleLogger().Write() << "\n" << visible_options;
+        util::SimpleLogger().Write() << "\n" << visible_options;
         return return_code::exit;
     }
 
@@ -106,7 +106,7 @@ ContractorOptions::ParseArguments(int argc, char *argv[], ContractorConfig &cont
 
     if (!option_variables.count("input"))
     {
-        SimpleLogger().Write() << "\n" << visible_options;
+        util::SimpleLogger().Write() << "\n" << visible_options;
         return return_code::fail;
     }
 

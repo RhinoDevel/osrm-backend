@@ -52,11 +52,11 @@ void RestrictionParser::ReadUseRestrictionsSetting(lua_State *lua_state)
 
     if (use_turn_restrictions)
     {
-        SimpleLogger().Write() << "Using turn restrictions";
+        util::SimpleLogger().Write() << "Using turn restrictions";
     }
     else
     {
-        SimpleLogger().Write() << "Ignoring turn restrictions";
+        util::SimpleLogger().Write() << "Ignoring turn restrictions";
     }
 }
 
@@ -69,16 +69,16 @@ void RestrictionParser::ReadRestrictionExceptions(lua_State *lua_state)
         luabind::call_function<void>(lua_state, "get_exceptions",
                                      boost::ref(restriction_exceptions));
         const unsigned exception_count = restriction_exceptions.size();
-        SimpleLogger().Write() << "Found " << exception_count
+        util::SimpleLogger().Write() << "Found " << exception_count
                                << " exceptions to turn restrictions:";
         for (const std::string &str : restriction_exceptions)
         {
-            SimpleLogger().Write() << "  " << str;
+            util::SimpleLogger().Write() << "  " << str;
         }
     }
     else
     {
-        SimpleLogger().Write() << "Found no exceptions to turn restrictions";
+        util::SimpleLogger().Write() << "Found no exceptions to turn restrictions";
     }
 }
 
