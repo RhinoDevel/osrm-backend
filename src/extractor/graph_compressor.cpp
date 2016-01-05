@@ -29,7 +29,7 @@ void GraphCompressor::Compress(const std::unordered_set<NodeID> &barrier_nodes,
 
     Percent progress(original_number_of_nodes);
 
-    for (const NodeID node_v : osrm::irange(0u, original_number_of_nodes))
+    for (const NodeID node_v : util::irange(0u, original_number_of_nodes))
     {
         progress.printStatus(node_v);
 
@@ -174,7 +174,7 @@ void GraphCompressor::PrintStatistics(unsigned original_number_of_nodes,
     unsigned new_node_count = 0;
     unsigned new_edge_count = 0;
 
-    for (const auto i : osrm::irange(0u, graph.GetNumberOfNodes()))
+    for (const auto i : util::irange(0u, graph.GetNumberOfNodes()))
     {
         if (graph.GetOutDegree(i) > 0)
         {

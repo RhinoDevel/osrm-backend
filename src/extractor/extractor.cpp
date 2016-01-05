@@ -564,7 +564,7 @@ void extractor::BuildRTree(std::vector<EdgeBasedNode> node_based_edge_list,
     // Filter node based edges based on startpoint
     auto out_iter = node_based_edge_list.begin();
     auto in_iter = node_based_edge_list.begin();
-    for (auto index : osrm::irange<std::size_t>(0, node_is_startpoint.size()))
+    for (auto index : util::irange<std::size_t>(0, node_is_startpoint.size()))
     {
         BOOST_ASSERT(in_iter != node_based_edge_list.end());
         if (node_is_startpoint[index])

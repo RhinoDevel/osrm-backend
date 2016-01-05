@@ -71,7 +71,7 @@ template <typename GraphT> class TarjanSCC
         unsigned component_index = 0, size_of_current_component = 0;
         unsigned index = 0;
         std::vector<bool> processing_node_before_recursion(max_node_id, true);
-        for (const NodeID node : osrm::irange(0u, max_node_id))
+        for (const NodeID node : util::irange(0u, max_node_id))
         {
             if (SPECIAL_NODEID == components_index[node])
             {

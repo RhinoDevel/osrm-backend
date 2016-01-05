@@ -40,7 +40,7 @@ template <unsigned BLOCK_SIZE, bool USE_SHARED_MEMORY> class RangeTable
     using BlockT = std::array<unsigned char, BLOCK_SIZE>;
     using BlockContainerT = typename ShM<BlockT, USE_SHARED_MEMORY>::vector;
     using OffsetContainerT = typename ShM<unsigned, USE_SHARED_MEMORY>::vector;
-    using RangeT = osrm::range<unsigned>;
+    using RangeT = range<unsigned>;
 
     friend std::ostream &operator<<<>(std::ostream &out, const RangeTable &table);
     friend std::istream &operator>><>(std::istream &in, RangeTable &table);
@@ -171,7 +171,7 @@ template <unsigned BLOCK_SIZE, bool USE_SHARED_MEMORY> class RangeTable
         BOOST_ASSERT(begin_idx < sum_lengths && end_idx <= sum_lengths);
         BOOST_ASSERT(begin_idx <= end_idx);
 
-        return osrm::irange(begin_idx, end_idx);
+        return irange(begin_idx, end_idx);
     }
 
   private:

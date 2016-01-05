@@ -416,7 +416,7 @@ class StaticRTree
         LoadLeafFromDisk(leaf_id, current_leaf_node);
 
         // current object represents a block on disk
-        for (const auto i : osrm::irange(0u, current_leaf_node.object_count))
+        for (const auto i : irange(0u, current_leaf_node.object_count))
         {
             auto &current_edge = current_leaf_node.objects[i];
             const float current_perpendicular_distance =

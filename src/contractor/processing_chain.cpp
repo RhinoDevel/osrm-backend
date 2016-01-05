@@ -319,7 +319,7 @@ std::size_t Prepare::WriteContractedGraph(unsigned max_node_id,
     StaticGraph<EdgeData>::EdgeIterator last_edge;
 
     // initializing 'first_edge'-field of nodes:
-    for (const auto node : osrm::irange(0u, max_used_node_id + 1))
+    for (const auto node : util::irange(0u, max_used_node_id + 1))
     {
         last_edge = edge;
         while ((edge < contracted_edge_count) && (contracted_edge_list[edge].source == node))
@@ -331,7 +331,7 @@ std::size_t Prepare::WriteContractedGraph(unsigned max_node_id,
     }
 
     for (const auto sentinel_counter :
-         osrm::irange<unsigned>(max_used_node_id + 1, node_array.size()))
+         util::irange<unsigned>(max_used_node_id + 1, node_array.size()))
     {
         // sentinel element, guarded against underflow
         node_array[sentinel_counter].first_edge = contracted_edge_count;
@@ -362,7 +362,7 @@ std::size_t Prepare::WriteContractedGraph(unsigned max_node_id,
     int number_of_used_edges = 0;
 
     StaticGraph<EdgeData>::EdgeArrayEntry current_edge;
-    for (const auto edge : osrm::irange<std::size_t>(0, contracted_edge_list.size()))
+    for (const auto edge : util::irange<std::size_t>(0, contracted_edge_list.size()))
     {
         // no eigen loops
         BOOST_ASSERT(contracted_edge_list[edge].source != contracted_edge_list[edge].target);
