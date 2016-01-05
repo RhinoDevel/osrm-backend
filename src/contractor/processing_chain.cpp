@@ -30,6 +30,19 @@
 
 #include "util/debug_geometry.hpp"
 
+namespace std
+{
+
+template <> struct hash<std::pair<OSMNodeID, OSMNodeID>>
+{
+    std::size_t operator()(const std::pair<OSMNodeID, OSMNodeID> &k) const
+    {
+        return OSMNodeID_to_uint64_t(k.first) ^ (OSMNodeID_to_uint64_t(k.second) << 12);
+    }
+};
+}
+
+
 namespace osrm
 {
 namespace contractor
@@ -98,18 +111,6 @@ int Prepare::Run()
     util::SimpleLogger().Write() << "finished preprocessing";
 
     return 0;
-}
-
-namespace std
-{
-
-template <> struct hash<std::pair<OSMNodeID, OSMNodeID>>
-{
-    std::size_t operator()(const std::pair<OSMNodeID, OSMNodeID> &k) const
-    {
-        return OSMNodeID_to_uint64_t(k.first) ^ (OSMNodeID_to_uint64_t(k.second) << 12);
-    }
-};
 }
 
 std::size_t Prepare::LoadEdgeExpandedGraph(std::string const &edge_based_graph_filename,
