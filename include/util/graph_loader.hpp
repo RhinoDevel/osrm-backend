@@ -106,14 +106,14 @@ NodeID loadNodesFromFile(std::istream &input_stream,
 /**
  * Reads a .osrm file and produces the edges.
  */
-NodeID loadEdgesFromFile(std::istream &input_stream, std::vector<NodeBasedEdge> &edge_list)
+NodeID loadEdgesFromFile(std::istream &input_stream, std::vector<extractor::NodeBasedEdge> &edge_list)
 {
     EdgeID m;
     input_stream.read(reinterpret_cast<char *>(&m), sizeof(unsigned));
     edge_list.resize(m);
     SimpleLogger().Write() << " and " << m << " edges ";
 
-    input_stream.read((char *)edge_list.data(), m * sizeof(NodeBasedEdge));
+    input_stream.read((char *)edge_list.data(), m * sizeof(extractor::NodeBasedEdge));
 
     BOOST_ASSERT(edge_list.size() > 0);
 
