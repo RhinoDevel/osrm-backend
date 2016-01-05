@@ -1,14 +1,10 @@
 #ifndef TYPEDEFS_H
 #define TYPEDEFS_H
 
-#include <limits>
 #include "osrm/strong_typedef.hpp"
-#include <cstddef>
 
-namespace osrm
-{
-namespace util
-{
+#include <limits>
+#include <cstddef>
 
 // Necessary workaround for Windows as VS doesn't implement C99
 #ifdef _MSC_VER
@@ -42,8 +38,5 @@ static const EdgeID SPECIAL_EDGEID = std::numeric_limits<unsigned>::max();
 static const unsigned INVALID_NAMEID = std::numeric_limits<unsigned>::max();
 static const unsigned INVALID_COMPONENTID = 0;
 static const EdgeWeight INVALID_EDGE_WEIGHT = std::numeric_limits<int>::max();
-
-}
-}
 
 #endif /* TYPEDEFS_H */
