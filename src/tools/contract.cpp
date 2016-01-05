@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) try
 
     if (1 > contractor_config.requested_num_threads)
     {
-        SimpleLogger().Write(logWARNING) << "Number of threads must be 1 or larger";
+        util::SimpleLogger().Write(logWARNING) << "Number of threads must be 1 or larger";
         return EXIT_FAILURE;
     }
 
@@ -45,29 +45,29 @@ int main(int argc, char *argv[]) try
 
     if (recommended_num_threads != contractor_config.requested_num_threads)
     {
-        SimpleLogger().Write(logWARNING) << "The recommended number of threads is "
+        util::SimpleLogger().Write(logWARNING) << "The recommended number of threads is "
                                          << recommended_num_threads
                                          << "! This setting may have performance side-effects.";
     }
 
     if (!boost::filesystem::is_regular_file(contractor_config.osrm_input_path))
     {
-        SimpleLogger().Write(logWARNING)
+        util::SimpleLogger().Write(logWARNING)
             << "Input file " << contractor_config.osrm_input_path.string() << " not found!";
         return EXIT_FAILURE;
     }
 
     if (!boost::filesystem::is_regular_file(contractor_config.profile_path))
     {
-        SimpleLogger().Write(logWARNING) << "Profile " << contractor_config.profile_path.string()
+        util::SimpleLogger().Write(logWARNING) << "Profile " << contractor_config.profile_path.string()
                                          << " not found!";
         return EXIT_FAILURE;
     }
 
-    SimpleLogger().Write() << "Input file: "
+    util::SimpleLogger().Write() << "Input file: "
                            << contractor_config.osrm_input_path.filename().string();
-    SimpleLogger().Write() << "Profile: " << contractor_config.profile_path.filename().string();
-    SimpleLogger().Write() << "Threads: " << contractor_config.requested_num_threads;
+    util::SimpleLogger().Write() << "Profile: " << contractor_config.profile_path.filename().string();
+    util::SimpleLogger().Write() << "Threads: " << contractor_config.requested_num_threads;
 
     tbb::task_scheduler_init init(contractor_config.requested_num_threads);
 
@@ -75,14 +75,14 @@ int main(int argc, char *argv[]) try
 }
 catch (const std::bad_alloc &e)
 {
-    SimpleLogger().Write(logWARNING) << "[exception] " << e.what();
-    SimpleLogger().Write(logWARNING)
+    util::SimpleLogger().Write(logWARNING) << "[exception] " << e.what();
+    util::SimpleLogger().Write(logWARNING)
         << "Please provide more memory or consider using a larger swapfile";
     return EXIT_FAILURE;
 }
 catch (const std::exception &e)
 {
-    SimpleLogger().Write(logWARNING) << "[exception] " << e.what();
+    util::SimpleLogger().Write(logWARNING) << "[exception] " << e.what();
     return EXIT_FAILURE;
 }
 }

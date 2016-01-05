@@ -110,7 +110,7 @@ int main(int argc, char *argv[])
         // enable logging
         if (argc < 2)
         {
-            SimpleLogger().Write(logWARNING) << "usage:\n" << argv[0] << " <osrm>";
+            util::SimpleLogger().Write(logWARNING) << "usage:\n" << argv[0] << " <osrm>";
             return -1;
         }
 
@@ -122,13 +122,13 @@ int main(int argc, char *argv[])
         graph_edge_list.clear();
         graph_edge_list.shrink_to_fit();
 
-        SimpleLogger().Write() << "Starting SCC graph traversal";
+        util::SimpleLogger().Write() << "Starting SCC graph traversal";
 
         auto tarjan = osrm::make_unique<TarjanSCC<TarjanGraph>>(graph);
         tarjan->run();
-        SimpleLogger().Write() << "identified: " << tarjan->get_number_of_components()
+        util::SimpleLogger().Write() << "identified: " << tarjan->get_number_of_components()
                                << " many components";
-        SimpleLogger().Write() << "identified " << tarjan->get_size_one_count() << " size 1 SCCs";
+        util::SimpleLogger().Write() << "identified " << tarjan->get_size_one_count() << " size 1 SCCs";
 
         // output
         TIMER_START(SCC_RUN_SETUP);
@@ -166,7 +166,7 @@ int main(int argc, char *argv[])
             throw osrm::exception("Layer creation failed.");
         }
         TIMER_STOP(SCC_RUN_SETUP);
-        SimpleLogger().Write() << "shapefile setup took " << TIMER_MSEC(SCC_RUN_SETUP) / 1000.
+        util::SimpleLogger().Write() << "shapefile setup took " << TIMER_MSEC(SCC_RUN_SETUP) / 1000.
                                << "s";
 
         uint64_t total_network_length = 0;
@@ -218,18 +218,18 @@ int main(int argc, char *argv[])
         OGRSpatialReference::DestroySpatialReference(po_srs);
         OGRDataSource::DestroyDataSource(po_datasource);
         TIMER_STOP(SCC_OUTPUT);
-        SimpleLogger().Write() << "generating output took: " << TIMER_MSEC(SCC_OUTPUT) / 1000.
+        util::SimpleLogger().Write() << "generating output took: " << TIMER_MSEC(SCC_OUTPUT) / 1000.
                                << "s";
 
-        SimpleLogger().Write() << "total network distance: "
+        util::SimpleLogger().Write() << "total network distance: "
                                << static_cast<uint64_t>(total_network_length / 100 / 1000.)
                                << " km";
 
-        SimpleLogger().Write() << "finished component analysis";
+        util::SimpleLogger().Write() << "finished component analysis";
     }
     catch (const std::exception &e)
     {
-        SimpleLogger().Write(logWARNING) << "[exception] " << e.what();
+        util::SimpleLogger().Write(logWARNING) << "[exception] " << e.what();
     }
     return 0;
 }

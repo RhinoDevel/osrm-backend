@@ -38,7 +38,7 @@ int main(int argc, const char *argv[])
         {
             return 1;
         }
-        SimpleLogger().Write() << "starting up engines, " << OSRM_VERSION;
+        util::SimpleLogger().Write() << "starting up engines, " << OSRM_VERSION;
 
         OSRM routing_machine(lib_config);
 
@@ -63,12 +63,12 @@ int main(int argc, const char *argv[])
                                                   13.415852 * COORDINATE_PRECISION);
         osrm::json::Object json_result;
         const int result_code = routing_machine.RunQuery(route_parameters, json_result);
-        SimpleLogger().Write() << "http code: " << result_code;
-        osrm::json::render(SimpleLogger().Write(), json_result);
+        util::SimpleLogger().Write() << "http code: " << result_code;
+        osrm::json::render(util::SimpleLogger().Write(), json_result);
     }
     catch (std::exception &current_exception)
     {
-        SimpleLogger().Write(logWARNING) << "caught exception: " << current_exception.what();
+        util::SimpleLogger().Write(logWARNING) << "caught exception: " << current_exception.what();
         return -1;
     }
     return 0;

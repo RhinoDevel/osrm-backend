@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
     {
         if (argc != 2)
         {
-            SimpleLogger().Write(logWARNING) << "usage: " << argv[0] << " <file.hsgr>";
+            util::SimpleLogger().Write(logWARNING) << "usage: " << argv[0] << " <file.hsgr>";
             return 1;
         }
 
@@ -35,15 +35,15 @@ int main(int argc, char *argv[])
 
         std::vector<QueryGraph::NodeArrayEntry> node_list;
         std::vector<QueryGraph::EdgeArrayEntry> edge_list;
-        SimpleLogger().Write() << "loading graph from " << hsgr_path.string();
+        util::SimpleLogger().Write() << "loading graph from " << hsgr_path.string();
 
         unsigned m_check_sum = 0;
         unsigned m_number_of_nodes =
             readHSGRFromStream(hsgr_path, node_list, edge_list, &m_check_sum);
-        SimpleLogger().Write() << "expecting " << m_number_of_nodes
+        util::SimpleLogger().Write() << "expecting " << m_number_of_nodes
                                << " nodes, checksum: " << m_check_sum;
         BOOST_ASSERT_MSG(0 != node_list.size(), "node list empty");
-        SimpleLogger().Write() << "loaded " << node_list.size() << " nodes and " << edge_list.size()
+        util::SimpleLogger().Write() << "loaded " << node_list.size() << " nodes and " << edge_list.size()
                                << " edges";
         auto m_query_graph = std::make_shared<QueryGraph>(node_list, edge_list);
 
@@ -81,11 +81,11 @@ int main(int argc, char *argv[])
             progress.printStatus(node_u);
         }
         m_query_graph.reset();
-        SimpleLogger().Write() << "Data file " << argv[0] << " appears to be OK";
+        util::SimpleLogger().Write() << "Data file " << argv[0] << " appears to be OK";
     }
     catch (const std::exception &e)
     {
-        SimpleLogger().Write(logWARNING) << "[exception] " << e.what();
+        util::SimpleLogger().Write(logWARNING) << "[exception] " << e.what();
     }
     return 0;
 }

@@ -34,20 +34,20 @@ int main(int argc, char *argv[]) try
 
     if (1 > extractor_config.requested_num_threads)
     {
-        SimpleLogger().Write(logWARNING) << "Number of threads must be 1 or larger";
+        util::SimpleLogger().Write(logWARNING) << "Number of threads must be 1 or larger";
         return EXIT_FAILURE;
     }
 
     if (!boost::filesystem::is_regular_file(extractor_config.input_path))
     {
-        SimpleLogger().Write(logWARNING) << "Input file " << extractor_config.input_path.string()
+        util::SimpleLogger().Write(logWARNING) << "Input file " << extractor_config.input_path.string()
                                          << " not found!";
         return EXIT_FAILURE;
     }
 
     if (!boost::filesystem::is_regular_file(extractor_config.profile_path))
     {
-        SimpleLogger().Write(logWARNING) << "Profile " << extractor_config.profile_path.string()
+        util::SimpleLogger().Write(logWARNING) << "Profile " << extractor_config.profile_path.string()
                                          << " not found!";
         return EXIT_FAILURE;
     }
@@ -55,14 +55,14 @@ int main(int argc, char *argv[]) try
 }
 catch (const std::bad_alloc &e)
 {
-    SimpleLogger().Write(logWARNING) << "[exception] " << e.what();
-    SimpleLogger().Write(logWARNING)
+    util::SimpleLogger().Write(logWARNING) << "[exception] " << e.what();
+    util::SimpleLogger().Write(logWARNING)
         << "Please provide more memory or consider using a larger swapfile";
     return EXIT_FAILURE;
 }
 catch (const std::exception &e)
 {
-    SimpleLogger().Write(logWARNING) << "[exception] " << e.what();
+    util::SimpleLogger().Write(logWARNING) << "[exception] " << e.what();
     return EXIT_FAILURE;
 }
 }

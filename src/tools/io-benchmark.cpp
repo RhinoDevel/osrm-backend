@@ -50,11 +50,11 @@ int main(int argc, char *argv[])
 {
 
 #ifdef __FreeBSD__
-    SimpleLogger().Write() << "Not supported on FreeBSD";
+    util::SimpleLogger().Write() << "Not supported on FreeBSD";
     return 0;
 #endif
 #ifdef _WIN32
-    SimpleLogger().Write() << "Not supported on Windows";
+    util::SimpleLogger().Write() << "Not supported on Windows";
     return 0;
 #else
 
@@ -62,17 +62,17 @@ int main(int argc, char *argv[])
     boost::filesystem::path test_path;
     try
     {
-        SimpleLogger().Write() << "starting up engines, " << OSRM_VERSION;
+        util::SimpleLogger().Write() << "starting up engines, " << OSRM_VERSION;
 
         if (1 == argc)
         {
-            SimpleLogger().Write(logWARNING) << "usage: " << argv[0] << " /path/on/device";
+            util::SimpleLogger().Write(logWARNING) << "usage: " << argv[0] << " /path/on/device";
             return -1;
         }
 
         test_path = boost::filesystem::path(argv[1]);
         test_path /= "osrm.tst";
-        SimpleLogger().Write(logDEBUG) << "temporary file: " << test_path.string();
+        util::SimpleLogger().Write(logDEBUG) << "temporary file: " << test_path.string();
 
         // create files for testing
         if (2 == argc)
@@ -111,12 +111,12 @@ int main(int argc, char *argv[])
             close(file_desc);
 #endif
             delete[] random_array;
-            SimpleLogger().Write(logDEBUG) << "writing raw 1GB took " << TIMER_SEC(write_1gb)
+            util::SimpleLogger().Write(logDEBUG) << "writing raw 1GB took " << TIMER_SEC(write_1gb)
                                            << "s";
-            SimpleLogger().Write() << "raw write performance: " << std::setprecision(5)
+            util::SimpleLogger().Write() << "raw write performance: " << std::setprecision(5)
                                    << std::fixed << 1024 * 1024 / TIMER_SEC(write_1gb) << "MB/sec";
 
-            SimpleLogger().Write(logDEBUG)
+            util::SimpleLogger().Write(logDEBUG)
                 << "finished creation of random data. Flush disk cache now!";
         }
         else
@@ -143,7 +143,7 @@ int main(int argc, char *argv[])
             int file_desc = open(test_path.string().c_str(), O_RDONLY | O_DIRECT | O_SYNC);
             if (-1 == file_desc)
             {
-                SimpleLogger().Write(logDEBUG) << "opened, error: " << strerror(errno);
+                util::SimpleLogger().Write(logDEBUG) << "opened, error: " << strerror(errno);
                 return -1;
             }
             char *raw_array = (char *)memalign(512, number_of_elements * sizeof(unsigned));
@@ -156,20 +156,20 @@ int main(int argc, char *argv[])
 #endif
 #ifdef __linux__
             int ret = read(file_desc, raw_array, number_of_elements * sizeof(unsigned));
-            SimpleLogger().Write(logDEBUG) << "read " << ret
+            util::SimpleLogger().Write(logDEBUG) << "read " << ret
                                            << " bytes, error: " << strerror(errno);
             close(file_desc);
             file_desc = open(test_path.string().c_str(), O_RDONLY | O_DIRECT | O_SYNC);
-            SimpleLogger().Write(logDEBUG) << "opened, error: " << strerror(errno);
+            util::SimpleLogger().Write(logDEBUG) << "opened, error: " << strerror(errno);
 #endif
             TIMER_STOP(read_1gb);
 
-            SimpleLogger().Write(logDEBUG) << "reading raw 1GB took " << TIMER_SEC(read_1gb) << "s";
-            SimpleLogger().Write() << "raw read performance: " << std::setprecision(5) << std::fixed
+            util::SimpleLogger().Write(logDEBUG) << "reading raw 1GB took " << TIMER_SEC(read_1gb) << "s";
+            util::SimpleLogger().Write() << "raw read performance: " << std::setprecision(5) << std::fixed
                                    << 1024 * 1024 / TIMER_SEC(read_1gb) << "MB/sec";
 
             std::vector<double> timing_results_raw_random;
-            SimpleLogger().Write(logDEBUG) << "running 1000 random I/Os of 4KB";
+            util::SimpleLogger().Write(logDEBUG) << "running 1000 random I/Os of 4KB";
 
 #ifdef __APPLE__
             fseek(fd, 0, SEEK_SET);
@@ -204,21 +204,21 @@ int main(int argc, char *argv[])
                 TIMER_STOP(random_access);
                 if (((off_t)-1) == ret1)
                 {
-                    SimpleLogger().Write(logWARNING) << "offset: " << current_offset;
-                    SimpleLogger().Write(logWARNING) << "seek error " << strerror(errno);
+                    util::SimpleLogger().Write(logWARNING) << "offset: " << current_offset;
+                    util::SimpleLogger().Write(logWARNING) << "seek error " << strerror(errno);
                     throw osrm::exception("seek error");
                 }
                 if (-1 == ret2)
                 {
-                    SimpleLogger().Write(logWARNING) << "offset: " << current_offset;
-                    SimpleLogger().Write(logWARNING) << "read error " << strerror(errno);
+                    util::SimpleLogger().Write(logWARNING) << "offset: " << current_offset;
+                    util::SimpleLogger().Write(logWARNING) << "read error " << strerror(errno);
                     throw osrm::exception("read error");
                 }
                 timing_results_raw_random.push_back(TIMER_SEC(random_access));
             }
 
             // Do statistics
-            SimpleLogger().Write(logDEBUG) << "running raw random I/O statistics";
+            util::SimpleLogger().Write(logDEBUG) << "running raw random I/O statistics";
             std::ofstream random_csv("random.csv", std::ios::trunc);
             for (unsigned i = 0; i < timing_results_raw_random.size(); ++i)
             {
@@ -227,7 +227,7 @@ int main(int argc, char *argv[])
             random_csv.close();
             runStatistics(timing_results_raw_random, stats);
 
-            SimpleLogger().Write() << "raw random I/O: " << std::setprecision(5) << std::fixed
+            util::SimpleLogger().Write() << "raw random I/O: " << std::setprecision(5) << std::fixed
                                    << "min: " << stats.min << "ms, "
                                    << "mean: " << stats.mean << "ms, "
                                    << "med: " << stats.med << "ms, "
@@ -265,14 +265,14 @@ int main(int argc, char *argv[])
                 TIMER_STOP(read_every_100);
                 if (((off_t)-1) == ret1)
                 {
-                    SimpleLogger().Write(logWARNING) << "offset: " << current_offset;
-                    SimpleLogger().Write(logWARNING) << "seek error " << strerror(errno);
+                    util::SimpleLogger().Write(logWARNING) << "offset: " << current_offset;
+                    util::SimpleLogger().Write(logWARNING) << "seek error " << strerror(errno);
                     throw osrm::exception("seek error");
                 }
                 if (-1 == ret2)
                 {
-                    SimpleLogger().Write(logWARNING) << "offset: " << current_offset;
-                    SimpleLogger().Write(logWARNING) << "read error " << strerror(errno);
+                    util::SimpleLogger().Write(logWARNING) << "offset: " << current_offset;
+                    util::SimpleLogger().Write(logWARNING) << "read error " << strerror(errno);
                     throw osrm::exception("read error");
                 }
                 timing_results_raw_seq.push_back(TIMER_SEC(read_every_100));
@@ -287,7 +287,7 @@ int main(int argc, char *argv[])
             close(file_desc);
 #endif
             // Do statistics
-            SimpleLogger().Write(logDEBUG) << "running sequential I/O statistics";
+            util::SimpleLogger().Write(logDEBUG) << "running sequential I/O statistics";
             // print simple statistics: min, max, median, variance
             std::ofstream seq_csv("sequential.csv", std::ios::trunc);
             for (unsigned i = 0; i < timing_results_raw_seq.size(); ++i)
@@ -296,7 +296,7 @@ int main(int argc, char *argv[])
             }
             seq_csv.close();
             runStatistics(timing_results_raw_seq, stats);
-            SimpleLogger().Write() << "raw sequential I/O: " << std::setprecision(5) << std::fixed
+            util::SimpleLogger().Write() << "raw sequential I/O: " << std::setprecision(5) << std::fixed
                                    << "min: " << stats.min << "ms, "
                                    << "mean: " << stats.mean << "ms, "
                                    << "med: " << stats.med << "ms, "
@@ -306,18 +306,18 @@ int main(int argc, char *argv[])
             if (boost::filesystem::exists(test_path))
             {
                 boost::filesystem::remove(test_path);
-                SimpleLogger().Write(logDEBUG) << "removing temporary files";
+                util::SimpleLogger().Write(logDEBUG) << "removing temporary files";
             }
         }
     }
     catch (const std::exception &e)
     {
-        SimpleLogger().Write(logWARNING) << "caught exception: " << e.what();
-        SimpleLogger().Write(logWARNING) << "cleaning up, and exiting";
+        util::SimpleLogger().Write(logWARNING) << "caught exception: " << e.what();
+        util::SimpleLogger().Write(logWARNING) << "cleaning up, and exiting";
         if (boost::filesystem::exists(test_path))
         {
             boost::filesystem::remove(test_path);
-            SimpleLogger().Write(logWARNING) << "removing temporary files";
+            util::SimpleLogger().Write(logWARNING) << "removing temporary files";
         }
         return -1;
     }

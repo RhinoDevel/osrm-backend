@@ -67,7 +67,7 @@ void deleteRegion(const SharedDataType region)
             }
         }();
 
-        SimpleLogger().Write(logWARNING) << "could not delete shared memory region " << name;
+        util::SimpleLogger().Write(logWARNING) << "could not delete shared memory region " << name;
     }
 }
 
@@ -81,7 +81,7 @@ int main(const int argc, const char *argv[]) try
     const bool lock_flags = MCL_CURRENT | MCL_FUTURE;
     if (-1 == mlockall(lock_flags))
     {
-        SimpleLogger().Write(logWARNING) << "Process " << argv[0] << " could not request RAM lock";
+        util::SimpleLogger().Write(logWARNING) << "Process " << argv[0] << " could not request RAM lock";
     }
 #endif
 
@@ -96,7 +96,7 @@ int main(const int argc, const char *argv[]) try
         barrier.pending_update_mutex.unlock();
     }
 
-    SimpleLogger().Write(logDEBUG) << "Checking input parameters";
+    util::SimpleLogger().Write(logDEBUG) << "Checking input parameters";
 
     std::unordered_map<std::string, boost::filesystem::path> server_paths;
     if (!GenerateDataStoreOptions(argc, argv, server_paths))
@@ -203,7 +203,7 @@ int main(const int argc, const char *argv[]) try
                                           file_index_path.length() + 1);
 
     // collect number of elements to store in shared memory object
-    SimpleLogger().Write() << "load names from: " << names_data_path;
+    util::SimpleLogger().Write() << "load names from: " << names_data_path;
     // number of entries in name index
     boost::filesystem::ifstream name_stream(names_data_path, std::ios::binary);
     unsigned name_blocks = 0;
@@ -211,7 +211,7 @@ int main(const int argc, const char *argv[]) try
     shared_layout_ptr->SetBlockSize<unsigned>(SharedDataLayout::NAME_OFFSETS, name_blocks);
     shared_layout_ptr->SetBlockSize<typename RangeTable<16, true>::BlockT>(
         SharedDataLayout::NAME_BLOCKS, name_blocks);
-    SimpleLogger().Write() << "name offsets size: " << name_blocks;
+    util::SimpleLogger().Write() << "name offsets size: " << name_blocks;
     BOOST_ASSERT_MSG(0 != name_blocks, "name file broken");
 
     unsigned number_of_chars = 0;
@@ -243,11 +243,11 @@ int main(const int argc, const char *argv[]) try
     hsgr_input_stream.read((char *)&fingerprint_loaded, sizeof(util::FingerPrint));
     if (fingerprint_loaded.TestGraphUtil(fingerprint_valid))
     {
-        SimpleLogger().Write(logDEBUG) << "Fingerprint checked out ok";
+        util::SimpleLogger().Write(logDEBUG) << "Fingerprint checked out ok";
     }
     else
     {
-        SimpleLogger().Write(logWARNING) << ".hsgr was prepared with different build. "
+        util::SimpleLogger().Write(logWARNING) << ".hsgr was prepared with different build. "
                                             "Reprocess to get rid of this warning.";
     }
 
@@ -284,7 +284,7 @@ int main(const int argc, const char *argv[]) try
         boost::filesystem::ifstream timestamp_stream(timestamp_path);
         if (!timestamp_stream)
         {
-            SimpleLogger().Write(logWARNING) << timestamp_path << " not found. setting to default";
+            util::SimpleLogger().Write(logWARNING) << timestamp_path << " not found. setting to default";
         }
         else
         {
@@ -331,7 +331,7 @@ int main(const int argc, const char *argv[]) try
     shared_layout_ptr->SetBlockSize<unsigned>(SharedDataLayout::GEOMETRIES_LIST,
                                               number_of_compressed_geometries);
     // allocate shared memory block
-    SimpleLogger().Write() << "allocating shared memory of " << shared_layout_ptr->GetSizeOfLayout()
+    util::SimpleLogger().Write() << "allocating shared memory of " << shared_layout_ptr->GetSizeOfLayout()
                            << " bytes";
     SharedMemory *shared_memory =
         SharedMemoryFactory::Get(data_region, shared_layout_ptr->GetSizeOfLayout());
@@ -559,20 +559,20 @@ int main(const int argc, const char *argv[]) try
     data_timestamp_ptr->timestamp += 1;
     deleteRegion(previous_data_region);
     deleteRegion(previous_layout_region);
-    SimpleLogger().Write() << "all data loaded";
+    util::SimpleLogger().Write() << "all data loaded";
 
     shared_layout_ptr->PrintInformation();
 }
 catch (const std::bad_alloc &e)
 {
-    SimpleLogger().Write(logWARNING) << "[exception] " << e.what();
-    SimpleLogger().Write(logWARNING) << "Please provide more memory or disable locking the virtual "
+    util::SimpleLogger().Write(logWARNING) << "[exception] " << e.what();
+    util::SimpleLogger().Write(logWARNING) << "Please provide more memory or disable locking the virtual "
                                         "address space (note: this makes OSRM swap, i.e. slow)";
     return EXIT_FAILURE;
 }
 catch (const std::exception &e)
 {
-    SimpleLogger().Write(logWARNING) << "caught exception: " << e.what();
+    util::SimpleLogger().Write(logWARNING) << "caught exception: " << e.what();
 }
 }
 }
