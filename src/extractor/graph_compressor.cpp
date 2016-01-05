@@ -27,7 +27,7 @@ void GraphCompressor::Compress(const std::unordered_set<NodeID> &barrier_nodes,
     const unsigned original_number_of_nodes = graph.GetNumberOfNodes();
     const unsigned original_number_of_edges = graph.GetNumberOfEdges();
 
-    Percent progress(original_number_of_nodes);
+    util::Percent progress(original_number_of_nodes);
 
     for (const NodeID node_v : util::irange(0u, original_number_of_nodes))
     {

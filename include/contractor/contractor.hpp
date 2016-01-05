@@ -286,7 +286,7 @@ class Contractor
         constexpr size_t DeleteGrainSize = 1;
 
         const NodeID number_of_nodes = contractor_graph->GetNumberOfNodes();
-        Percent p(number_of_nodes);
+        util::Percent p(number_of_nodes);
 
         ThreadDataContainer thread_data_list(number_of_nodes);
 
@@ -656,7 +656,7 @@ class Contractor
 
     template <class Edge> inline void GetEdges(DeallocatingVector<Edge> &edges)
     {
-        Percent p(contractor_graph->GetNumberOfNodes());
+        util::Percent p(contractor_graph->GetNumberOfNodes());
         SimpleLogger().Write() << "Getting edges of minimized graph";
         const NodeID number_of_nodes = contractor_graph->GetNumberOfNodes();
         if (contractor_graph->GetNumberOfNodes())

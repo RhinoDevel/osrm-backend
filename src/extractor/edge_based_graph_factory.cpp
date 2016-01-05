@@ -282,7 +282,7 @@ unsigned EdgeBasedGraphFactory::RenumberEdges()
 /// Creates the nodes in the edge expanded graph from edges in the node-based graph.
 void EdgeBasedGraphFactory::GenerateEdgeExpandedNodes()
 {
-    Percent progress(m_node_based_graph->GetNumberOfNodes());
+    util::Percent progress(m_node_based_graph->GetNumberOfNodes());
 
     // loop over all edges and generate new set of nodes
     for (const auto node_u : util::irange(0u, m_node_based_graph->GetNumberOfNodes()))
@@ -371,7 +371,7 @@ void EdgeBasedGraphFactory::GenerateEdgeExpandedEdges(
     unsigned skipped_barrier_turns_counter = 0;
     unsigned compressed = 0;
 
-    Percent progress(m_node_based_graph->GetNumberOfNodes());
+    util::Percent progress(m_node_based_graph->GetNumberOfNodes());
 
 #ifdef DEBUG_GEOMETRY
     DEBUG_TURNS_START(debug_turns_path);
