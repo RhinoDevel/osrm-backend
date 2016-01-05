@@ -1,8 +1,6 @@
 #ifndef POLYLINECOMPRESSOR_H_
 #define POLYLINECOMPRESSOR_H_
 
-struct SegmentInformation;
-
 #include "osrm/coordinate.hpp"
 
 #include <string>
@@ -12,6 +10,8 @@ namespace osrm
 {
 namespace engine
 {
+
+struct SegmentInformation;
 
 class PolylineCompressor
 {
