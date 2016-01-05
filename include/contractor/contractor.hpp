@@ -70,7 +70,7 @@ class Contractor
         ContractorHeapData(short h, bool t) : hop(h), target(t) {}
     };
 
-    using ContractorGraph = DynamicGraph<ContractorEdgeData>;
+    using ContractorGraph = util::DynamicGraph<ContractorEdgeData>;
     //    using ContractorHeap = BinaryHeap<NodeID, NodeID, int, ContractorHeapData,
     //    ArrayStorage<NodeID, NodeID>
     //    >;
@@ -394,7 +394,7 @@ class Contractor
                         else
                         {
                             // node is not yet contracted.
-                            // add (renumbered) outgoing edges to new DynamicGraph.
+                            // add (renumbered) outgoing edges to new util::DynamicGraph.
                             ContractorEdge new_edge = {new_node_id_from_orig_id_map[source],
                                                        new_node_id_from_orig_id_map[target], data};
 
