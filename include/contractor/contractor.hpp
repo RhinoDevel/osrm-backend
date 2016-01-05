@@ -75,7 +75,7 @@ class Contractor
     //    ArrayStorage<NodeID, NodeID>
     //    >;
     using ContractorHeap =
-        util::BinaryHeap<NodeID, NodeID, int, ContractorHeapData, XORFastHashStorage<NodeID, NodeID>>;
+        util::BinaryHeap<NodeID, NodeID, int, ContractorHeapData, util::XORFastHashStorage<NodeID, NodeID>>;
     using ContractorEdge = ContractorGraph::InputEdge;
 
     struct ContractorThreadData
