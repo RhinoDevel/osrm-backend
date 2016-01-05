@@ -33,7 +33,7 @@ namespace util
  * we need to renumber it to the new internal id.
 */
 unsigned loadRestrictionsFromFile(std::istream &input_stream,
-                                  std::vector<TurnRestriction> &restriction_list)
+                                  std::vector<extractor::TurnRestriction> &restriction_list)
 {
     const FingerPrint fingerprint_valid = FingerPrint::GetValid();
     FingerPrint fingerprint_loaded;
@@ -50,7 +50,7 @@ unsigned loadRestrictionsFromFile(std::istream &input_stream,
     if (number_of_usable_restrictions > 0)
     {
         input_stream.read((char *)restriction_list.data(),
-                          number_of_usable_restrictions * sizeof(TurnRestriction));
+                          number_of_usable_restrictions * sizeof(extractor::TurnRestriction));
     }
 
     return number_of_usable_restrictions;
