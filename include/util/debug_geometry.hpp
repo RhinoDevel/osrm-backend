@@ -6,6 +6,11 @@
 
 #ifndef DEBUG_GEOMETRY
 
+namespace osrm
+{
+namespace util
+{
+
 inline void DEBUG_GEOMETRY_START(ContractorConfig & /* config */) {}
 inline void DEBUG_GEOMETRY_EDGE(int /* new_segment_weight */,
                                 double /* segment_length */,
@@ -36,6 +41,9 @@ inline void DEBUG_SIGNAL(const NodeID /* node */,
 
 inline void DEBUG_TURNS_STOP() {}
 
+}
+}
+
 #else // DEBUG_GEOMETRY
 
 #include <boost/filesystem.hpp>
@@ -51,6 +59,7 @@ namespace osrm
 {
 namespace util
 {
+
 
 boost::filesystem::ofstream debug_geometry_file;
 bool dg_output_debug_geometry = false;
@@ -199,9 +208,9 @@ inline void DEBUG_TURNS_STOP()
     }
 }
 
-#endif // DEBUG_GEOMETRY
+}
+}
 
-}
-}
+#endif // DEBUG_GEOMETRY
 
 #endif // DEBUG_GEOMETRY_H
