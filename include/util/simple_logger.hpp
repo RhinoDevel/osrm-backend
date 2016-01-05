@@ -5,17 +5,17 @@
 #include <mutex>
 #include <sstream>
 
-namespace osrm
-{
-namespace util
-{
-
 enum LogLevel
 {
     logINFO,
     logWARNING,
     logDEBUG
 };
+
+namespace osrm
+{
+namespace util
+{
 
 class LogPolicy
 {
