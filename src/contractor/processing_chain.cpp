@@ -59,7 +59,7 @@ int Prepare::Run()
 
     SimpleLogger().Write() << "Loading edge-expanded graph representation";
 
-    DeallocatingVector<EdgeBasedEdge> edge_based_edge_list;
+    util::DeallocatingVector<EdgeBasedEdge> edge_based_edge_list;
 
     size_t max_edge_id = LoadEdgeExpandedGraph(
         config.edge_based_graph_path, edge_based_edge_list, config.edge_segment_lookup_path,
@@ -74,7 +74,7 @@ int Prepare::Run()
     {
         ReadNodeLevels(node_levels);
     }
-    DeallocatingVector<QueryEdge> contracted_edge_list;
+    util::DeallocatingVector<QueryEdge> contracted_edge_list;
     ContractGraph(max_edge_id, edge_based_edge_list, contracted_edge_list, is_core_node,
                   node_levels);
     TIMER_STOP(contraction);
@@ -113,7 +113,7 @@ template <> struct hash<std::pair<OSMNodeID, OSMNodeID>>
 }
 
 std::size_t Prepare::LoadEdgeExpandedGraph(std::string const &edge_based_graph_filename,
-                                           DeallocatingVector<EdgeBasedEdge> &edge_based_edge_list,
+                                           util::DeallocatingVector<EdgeBasedEdge> &edge_based_edge_list,
                                            const std::string &edge_segment_lookup_filename,
                                            const std::string &edge_penalty_filename,
                                            const std::string &segment_speed_filename)
@@ -170,7 +170,7 @@ std::size_t Prepare::LoadEdgeExpandedGraph(std::string const &edge_based_graph_f
 
     DEBUG_GEOMETRY_START(config);
 
-    // TODO: can we read this in bulk?  DeallocatingVector isn't necessarily
+    // TODO: can we read this in bulk?  util::DeallocatingVector isn't necessarily
     // all stored contiguously
     for (; number_of_edges > 0; --number_of_edges)
     {
@@ -282,7 +282,7 @@ void Prepare::WriteCoreNodeMarker(std::vector<bool> &&in_is_core_node) const
 }
 
 std::size_t Prepare::WriteContractedGraph(unsigned max_node_id,
-                                          const DeallocatingVector<QueryEdge> &contracted_edge_list)
+                                          const util::DeallocatingVector<QueryEdge> &contracted_edge_list)
 {
     // Sorting contracted edges in a way that the static query graph can read some in in-place.
     tbb::parallel_sort(contracted_edge_list.begin(), contracted_edge_list.end());
@@ -398,8 +398,8 @@ std::size_t Prepare::WriteContractedGraph(unsigned max_node_id,
  \brief Build contracted graph.
  */
 void Prepare::ContractGraph(const unsigned max_edge_id,
-                            DeallocatingVector<EdgeBasedEdge> &edge_based_edge_list,
-                            DeallocatingVector<QueryEdge> &contracted_edge_list,
+                            util::DeallocatingVector<EdgeBasedEdge> &edge_based_edge_list,
+                            util::DeallocatingVector<QueryEdge> &contracted_edge_list,
                             std::vector<bool> &is_core_node,
                             std::vector<float> &inout_node_levels) const
 {

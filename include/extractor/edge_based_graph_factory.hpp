@@ -81,7 +81,7 @@ class EdgeBasedGraphFactory
     std::vector<bool> m_edge_based_node_is_startpoint;
     //! list of edge based nodes (compressed segments)
     std::vector<EdgeBasedNode> m_edge_based_node_list;
-    DeallocatingVector<EdgeBasedEdge> m_edge_based_edge_list;
+    util::DeallocatingVector<EdgeBasedEdge> m_edge_based_edge_list;
     unsigned m_max_edge_id;
 
     const std::vector<QueryNode> &m_node_info_list;

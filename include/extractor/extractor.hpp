@@ -23,10 +23,10 @@ class extractor
     BuildEdgeExpandedGraph(std::vector<QueryNode> &internal_to_external_node_map,
                            std::vector<EdgeBasedNode> &node_based_edge_list,
                            std::vector<bool> &node_is_startpoint,
-                           DeallocatingVector<EdgeBasedEdge> &edge_based_edge_list);
+                           util::DeallocatingVector<EdgeBasedEdge> &edge_based_edge_list);
     void WriteNodeMapping(const std::vector<QueryNode> &internal_to_external_node_map);
     void FindComponents(unsigned max_edge_id,
-                        const DeallocatingVector<EdgeBasedEdge> &edges,
+                        const util::DeallocatingVector<EdgeBasedEdge> &edges,
                         std::vector<EdgeBasedNode> &nodes) const;
     void BuildRTree(std::vector<EdgeBasedNode> node_based_edge_list,
                     std::vector<bool> node_is_startpoint,
@@ -39,7 +39,7 @@ class extractor
 
     void WriteEdgeBasedGraph(std::string const &output_file_filename,
                              size_t const max_edge_id,
-                             DeallocatingVector<EdgeBasedEdge> const &edge_based_edge_list);
+                             util::DeallocatingVector<EdgeBasedEdge> const &edge_based_edge_list);
 };
 }
 }

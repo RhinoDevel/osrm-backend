@@ -260,7 +260,7 @@ int extractor::run()
         TIMER_START(expansion);
 
         std::vector<EdgeBasedNode> node_based_edge_list;
-        DeallocatingVector<EdgeBasedEdge> edge_based_edge_list;
+        util::DeallocatingVector<EdgeBasedEdge> edge_based_edge_list;
         std::vector<bool> node_is_startpoint;
         std::vector<QueryNode> internal_to_external_node_map;
         auto graph_size =
@@ -346,7 +346,7 @@ void extractor::SetupScriptingEnvironment(lua_State *lua_state,
 }
 
 void extractor::FindComponents(unsigned max_edge_id,
-                               const DeallocatingVector<EdgeBasedEdge> &input_edge_list,
+                               const util::DeallocatingVector<EdgeBasedEdge> &input_edge_list,
                                std::vector<EdgeBasedNode> &input_nodes) const
 {
     struct UncontractedEdgeData
@@ -484,7 +484,7 @@ std::pair<std::size_t, std::size_t>
 extractor::BuildEdgeExpandedGraph(std::vector<QueryNode> &internal_to_external_node_map,
                                   std::vector<EdgeBasedNode> &node_based_edge_list,
                                   std::vector<bool> &node_is_startpoint,
-                                  DeallocatingVector<EdgeBasedEdge> &edge_based_edge_list)
+                                  util::DeallocatingVector<EdgeBasedEdge> &edge_based_edge_list)
 {
     lua_State *lua_state = luaL_newstate();
     luabind::open(lua_state);
@@ -588,7 +588,7 @@ void extractor::BuildRTree(std::vector<EdgeBasedNode> node_based_edge_list,
 
 void extractor::WriteEdgeBasedGraph(std::string const &output_file_filename,
                                     size_t const max_edge_id,
-                                    DeallocatingVector<EdgeBasedEdge> const &edge_based_edge_list)
+                                    util::DeallocatingVector<EdgeBasedEdge> const &edge_based_edge_list)
 {
 
     std::ofstream file_out_stream;

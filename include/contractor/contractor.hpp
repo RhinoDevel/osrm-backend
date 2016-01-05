@@ -345,7 +345,7 @@ class Contractor
             if (!flushed_contractor && (number_of_contracted_nodes >
                                         static_cast<NodeID>(number_of_nodes * 0.65 * core_factor)))
             {
-                DeallocatingVector<ContractorEdge> new_edge_set; // this one is not explicitely
+                util::DeallocatingVector<ContractorEdge> new_edge_set; // this one is not explicitely
                                                                  // cleared since it goes out of
                                                                  // scope anywa
                 std::cout << " [flush " << number_of_contracted_nodes << " nodes] " << std::flush;
