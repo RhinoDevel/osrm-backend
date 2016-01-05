@@ -11,7 +11,7 @@ namespace osrm
 namespace util
 {
 
-inline void DEBUG_GEOMETRY_START(ContractorConfig & /* config */) {}
+inline void DEBUG_GEOMETRY_START(const contractor::ContractorConfig & /* config */) {}
 inline void DEBUG_GEOMETRY_EDGE(int /* new_segment_weight */,
                                 double /* segment_length */,
                                 OSMNodeID /* previous_osm_node_id */,
@@ -70,7 +70,7 @@ boost::filesystem::ofstream dg_debug_turns_file;
 bool dg_output_turn_debug = false;
 bool dg_first_turn_debug = true;
 
-inline void DEBUG_GEOMETRY_START(const ContractorConfig &config)
+inline void DEBUG_GEOMETRY_START(const contractor::ContractorConfig &config)
 {
     time_t raw_time;
     struct tm *timeinfo;
