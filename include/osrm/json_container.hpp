@@ -41,6 +41,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 namespace osrm
 {
 
+namespace util
+{
+
 namespace json
 {
 
@@ -93,6 +96,12 @@ struct Array
 };
 
 } // namespace JSON
+} // namespace util
+
+namespace json {
+    using namespace osrm::util::json;
+}
+
 } // namespace osrm
 
 #endif // JSON_CONTAINER_HPP

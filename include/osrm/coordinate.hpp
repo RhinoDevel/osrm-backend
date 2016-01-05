@@ -40,6 +40,9 @@ namespace
 constexpr static const double COORDINATE_PRECISION = 1000000.0;
 }
 
+namespace util
+{
+
 struct FixedPointCoordinate
 {
     int lat;
@@ -64,6 +67,9 @@ struct FixedPointCoordinate
 };
 
 std::ostream &operator<<(std::ostream &out, const FixedPointCoordinate &coordinate);
+}
+
+using util::FixedPointCoordinate;
 
 }
 

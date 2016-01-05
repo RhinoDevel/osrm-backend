@@ -38,6 +38,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace osrm
 {
+namespace engine
+{
 
 struct RouteParameters
 {
@@ -117,6 +119,10 @@ struct RouteParameters
     std::vector<bool> is_destination;
     std::vector<bool> is_source;
 };
+
+}
+
+using engine::RouteParameters;
 
 }
 
