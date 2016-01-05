@@ -50,7 +50,7 @@ int Prepare::Run()
 
     if (config.core_factor > 1.0 || config.core_factor < 0)
     {
-        throw osrm::exception("Core factor must be between 0.0 to 1.0 (inclusive)");
+        throw util::exception("Core factor must be between 0.0 to 1.0 (inclusive)");
     }
 
     TIMER_START(preparing);
@@ -132,7 +132,7 @@ std::size_t Prepare::LoadEdgeExpandedGraph(std::string const &edge_based_graph_f
         edge_fixed_penalties_input_stream.open(edge_penalty_filename, std::ios::binary);
         if (!edge_segment_input_stream || !edge_fixed_penalties_input_stream)
         {
-            throw osrm::exception("Could not load .edge_segment_lookup or .edge_penalties, did you "
+            throw util::exception("Could not load .edge_segment_lookup or .edge_penalties, did you "
                                   "run osrm-extract with '--generate-edge-lookup'?");
         }
     }

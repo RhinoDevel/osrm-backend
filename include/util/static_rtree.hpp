@@ -270,11 +270,11 @@ class StaticRTree
 
         if (!boost::filesystem::exists(node_file))
         {
-            throw osrm::exception("ram index file does not exist");
+            throw exception("ram index file does not exist");
         }
         if (0 == boost::filesystem::file_size(node_file))
         {
-            throw osrm::exception("ram index file is empty");
+            throw exception("ram index file is empty");
         }
         boost::filesystem::ifstream tree_node_file(node_file, std::ios::binary);
 
@@ -290,11 +290,11 @@ class StaticRTree
         // open leaf node file and store thread specific pointer
         if (!boost::filesystem::exists(leaf_file))
         {
-            throw osrm::exception("mem index file does not exist");
+            throw exception("mem index file does not exist");
         }
         if (0 == boost::filesystem::file_size(leaf_file))
         {
-            throw osrm::exception("mem index file is empty");
+            throw exception("mem index file is empty");
         }
 
         leaves_stream.open(leaf_file, std::ios::binary);
@@ -311,11 +311,11 @@ class StaticRTree
         // open leaf node file and store thread specific pointer
         if (!boost::filesystem::exists(leaf_file))
         {
-            throw osrm::exception("mem index file does not exist");
+            throw exception("mem index file does not exist");
         }
         if (0 == boost::filesystem::file_size(leaf_file))
         {
-            throw osrm::exception("mem index file is empty");
+            throw exception("mem index file is empty");
         }
 
         leaves_stream.open(leaf_file, std::ios::binary);
@@ -454,7 +454,7 @@ class StaticRTree
         }
         if (!leaves_stream.good())
         {
-            throw osrm::exception("Could not read from leaf file.");
+            throw exception("Could not read from leaf file.");
         }
         const uint64_t seek_pos = sizeof(uint64_t) + leaf_id * sizeof(LeafNode);
         leaves_stream.seekg(seek_pos);

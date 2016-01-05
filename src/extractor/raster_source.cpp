@@ -105,7 +105,7 @@ int SourceContainer::loadRasterSource(const std::string &path_string,
     boost::filesystem::path filepath(path_string);
     if (!boost::filesystem::exists(filepath))
     {
-        throw osrm::exception("error reading: no such path");
+        throw util::exception("error reading: no such path");
     }
 
     RasterGrid rasterData{filepath, ncols, nrows};
@@ -125,7 +125,7 @@ RasterDatum SourceContainer::getRasterDataFromSource(unsigned int source_id, int
 {
     if (LoadedSources.size() < source_id + 1)
     {
-        throw osrm::exception("error reading: no such loaded source");
+        throw util::exception("error reading: no such loaded source");
     }
 
     BOOST_ASSERT(lat < (90 * COORDINATE_PRECISION));
@@ -143,7 +143,7 @@ SourceContainer::getRasterInterpolateFromSource(unsigned int source_id, int lon,
 {
     if (LoadedSources.size() < source_id + 1)
     {
-        throw osrm::exception("error reading: no such loaded source");
+        throw util::exception("error reading: no such loaded source");
     }
 
     BOOST_ASSERT(lat < (90 * COORDINATE_PRECISION));

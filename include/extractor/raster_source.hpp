@@ -45,7 +45,7 @@ class RasterGrid
         boost::filesystem::ifstream stream(filepath);
         if (!stream)
         {
-            throw osrm::exception("Unable to open raster file.");
+            throw util::exception("Unable to open raster file.");
         }
 
         stream.seekg(0, std::ios_base::end);
@@ -70,13 +70,13 @@ class RasterGrid
         }
         catch (std::exception const &ex)
         {
-            throw osrm::exception(
+            throw util::exception(
                 std::string("Failed to read from raster source with exception: ") + ex.what());
         }
 
         if (!r || itr != end)
         {
-            throw osrm::exception("Failed to parse raster source correctly.");
+            throw util::exception("Failed to parse raster source correctly.");
         }
     }
 

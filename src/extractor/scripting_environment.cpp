@@ -37,7 +37,7 @@ int luaErrorCallback(lua_State *state)
     std::string error_msg = lua_tostring(state, -1);
     std::ostringstream error_stream;
     error_stream << error_msg;
-    throw osrm::exception("ERROR occurred in profile script:\n" + error_stream.str());
+    throw util::exception("ERROR occurred in profile script:\n" + error_stream.str());
 }
 }
 
@@ -127,7 +127,7 @@ void ScriptingEnvironment::InitLuaState(lua_State *lua_state)
         luabind::object error_msg(luabind::from_stack(lua_state, -1));
         std::ostringstream error_stream;
         error_stream << error_msg;
-        throw osrm::exception("ERROR occurred in profile script:\n" + error_stream.str());
+        throw util::exception("ERROR occurred in profile script:\n" + error_stream.str());
     }
 }
 

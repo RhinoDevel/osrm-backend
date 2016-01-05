@@ -333,7 +333,7 @@ template <class LockFileT = OSRMLockFile> class SharedMemoryFactory_tmpl
             {
                 if (0 == size)
                 {
-                    throw osrm::exception("lock file does not exist, exiting");
+                    throw util::exception("lock file does not exist, exiting");
                 }
                 else
                 {
@@ -347,7 +347,7 @@ template <class LockFileT = OSRMLockFile> class SharedMemoryFactory_tmpl
         {
             util::SimpleLogger().Write(logWARNING) << "caught exception: " << e.what() << ", code "
                                              << e.get_error_code();
-            throw osrm::exception(e.what());
+            throw util::exception(e.what());
         }
     }
 

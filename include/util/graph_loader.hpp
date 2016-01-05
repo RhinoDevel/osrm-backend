@@ -153,11 +153,11 @@ unsigned readHSGRFromStream(const boost::filesystem::path &hsgr_file,
 {
     if (!boost::filesystem::exists(hsgr_file))
     {
-        throw osrm::exception("hsgr file does not exist");
+        throw exception("hsgr file does not exist");
     }
     if (0 == boost::filesystem::file_size(hsgr_file))
     {
-        throw osrm::exception("hsgr file is empty");
+        throw exception("hsgr file is empty");
     }
 
     boost::filesystem::ifstream hsgr_input_stream(hsgr_file, std::ios::binary);
