@@ -1065,7 +1065,7 @@ class Contractor
     std::vector<NodeID> orig_node_id_from_new_node_id_map;
     std::vector<float> node_levels;
     std::vector<bool> is_core_node;
-    XORFastHash fast_hash;
+    util::XORFastHash fast_hash;
 };
 
 }
