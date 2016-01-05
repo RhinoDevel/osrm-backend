@@ -65,7 +65,7 @@ unsigned loadRestrictionsFromFile(std::istream &input_stream,
 NodeID loadNodesFromFile(std::istream &input_stream,
                          std::vector<NodeID> &barrier_node_list,
                          std::vector<NodeID> &traffic_light_node_list,
-                         std::vector<QueryNode> &node_array)
+                         std::vector<extractor::QueryNode> &node_array)
 {
     const FingerPrint fingerprint_valid = FingerPrint::GetValid();
     FingerPrint fingerprint_loaded;

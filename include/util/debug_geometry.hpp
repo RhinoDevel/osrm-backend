@@ -17,19 +17,19 @@ inline void DEBUG_GEOMETRY_STOP() {}
 
 inline void DEBUG_TURNS_START(const std::string & /* debug_turns_filename */) {}
 inline void DEBUG_TURN(const NodeID /* node */,
-                       const std::vector<QueryNode> & /* m_node_info_list */,
+                       const std::vector<extractor::QueryNode> & /* m_node_info_list */,
                        const FixedPointCoordinate & /* first_coordinate */,
                        const int /* turn_angle */,
                        const int /* turn_penalty */)
 {
 }
 inline void DEBUG_UTURN(const NodeID /* node */,
-                        const std::vector<QueryNode> & /* m_node_info_list */,
+                        const std::vector<extractor::QueryNode> & /* m_node_info_list */,
                         const int /* uturn_penalty */)
 {
 }
 inline void DEBUG_SIGNAL(const NodeID /* node */,
-                         const std::vector<QueryNode> & /* m_node_info_list */,
+                         const std::vector<extractor::QueryNode> & /* m_node_info_list */,
                          const int /* signal_penalty */)
 {
 }
@@ -123,7 +123,7 @@ inline void DEBUG_TURNS_START(const std::string &debug_turns_path)
 }
 
 inline void DEBUG_SIGNAL(const NodeID node,
-                         const std::vector<QueryNode> &m_node_info_list,
+                         const std::vector<extractor::QueryNode> &m_node_info_list,
                          const int traffic_signal_penalty)
 {
     if (dg_output_turn_debug)
@@ -142,7 +142,7 @@ inline void DEBUG_SIGNAL(const NodeID node,
 }
 
 inline void DEBUG_UTURN(const NodeID node,
-                        const std::vector<QueryNode> &m_node_info_list,
+                        const std::vector<extractor::QueryNode> &m_node_info_list,
                         const int traffic_signal_penalty)
 {
     if (dg_output_turn_debug)
@@ -161,7 +161,7 @@ inline void DEBUG_UTURN(const NodeID node,
 }
 
 inline void DEBUG_TURN(const NodeID node,
-                       const std::vector<QueryNode> &m_node_info_list,
+                       const std::vector<extractor::QueryNode> &m_node_info_list,
                        const FixedPointCoordinate &first_coordinate,
                        const int turn_angle,
                        const int turn_penalty)
