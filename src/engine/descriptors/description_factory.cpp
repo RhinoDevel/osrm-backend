@@ -63,7 +63,7 @@ void DescriptionFactory::AppendSegment(const util::FixedPointCoordinate &coordin
     }
 
     // make sure mode changes are announced, even when there otherwise is no turn
-    const extractor::TurnInstruction turn = [&]() -> TurnInstruction
+    const extractor::TurnInstruction turn = [&]() -> extractor::TurnInstruction
     {
         if (extractor::TurnInstruction::NoTurn == path_point.turn_instruction &&
             path_description.front().travel_mode != path_point.travel_mode &&
