@@ -43,7 +43,7 @@ OSRM::OSRM_impl::OSRM_impl(LibOSRMConfig &lib_config)
     else
     {
         // populate base path
-        populate_base_path(lib_config.server_paths);
+        util::populate_base_path(lib_config.server_paths);
         query_data_facade = new datafacade::InternalDataFacade<contractor::QueryEdge::EdgeData>(lib_config.server_paths);
     }
 
