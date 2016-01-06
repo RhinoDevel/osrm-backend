@@ -37,7 +37,7 @@ OSRM::OSRM_impl::OSRM_impl(LibOSRMConfig &lib_config)
 {
     if (lib_config.use_shared_memory)
     {
-        barrier = util::make_unique<SharedBarriers>();
+        barrier = util::make_unique<datafacade::SharedBarriers>();
         query_data_facade = new SharedDataFacade<QueryEdge::EdgeData>();
     }
     else
