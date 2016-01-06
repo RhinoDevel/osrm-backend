@@ -404,10 +404,10 @@ int main(const int argc, const char *argv[]) try
     unsigned *geometries_indicator_ptr = shared_layout_ptr->GetBlockPtr<unsigned, true>(
         shared_memory_ptr, SharedDataLayout::GEOMETRIES_INDICATORS);
 
-    OriginalEdgeData current_edge_data;
+    extractor::OriginalEdgeData current_edge_data;
     for (unsigned i = 0; i < number_of_original_edges; ++i)
     {
-        edges_input_stream.read((char *)&(current_edge_data), sizeof(OriginalEdgeData));
+        edges_input_stream.read((char *)&(current_edge_data), sizeof(extractor::OriginalEdgeData));
         via_node_ptr[i] = current_edge_data.via_node;
         name_id_ptr[i] = current_edge_data.name_id;
         travel_mode_ptr[i] = current_edge_data.travel_mode;

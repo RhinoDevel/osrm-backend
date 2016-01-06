@@ -137,10 +137,10 @@ template <class EdgeDataT> class InternalDataFacade final : public BaseDataFacad
 
         unsigned compressed = 0;
 
-        OriginalEdgeData current_edge_data;
+        extractor::OriginalEdgeData current_edge_data;
         for (unsigned i = 0; i < number_of_edges; ++i)
         {
-            edges_input_stream.read((char *)&(current_edge_data), sizeof(OriginalEdgeData));
+            edges_input_stream.read((char *)&(current_edge_data), sizeof(extractor::OriginalEdgeData));
             m_via_node_list[i] = current_edge_data.via_node;
             m_name_ID_list[i] = current_edge_data.name_id;
             m_turn_instruction_list[i] = current_edge_data.turn_instruction;
