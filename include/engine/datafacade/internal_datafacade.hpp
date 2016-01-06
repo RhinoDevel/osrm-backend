@@ -37,7 +37,7 @@ template <class EdgeDataT> class InternalDataFacade final : public BaseDataFacad
     using QueryGraph = util::StaticGraph<typename super::EdgeData>;
     using InputEdge = typename QueryGraph::InputEdge;
     using RTreeLeaf = typename super::RTreeLeaf;
-    using InternalRTree = StaticRTree<RTreeLeaf, ShM<FixedPointCoordinate, false>::vector, false>;
+    using InternalRTree = util::StaticRTree<RTreeLeaf, ShM<FixedPointCoordinate, false>::vector, false>;
     using InternalGeospatialQuery = GeospatialQuery<InternalRTree>;
 
     InternalDataFacade() {}
