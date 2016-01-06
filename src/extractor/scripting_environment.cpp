@@ -58,7 +58,7 @@ void ScriptingEnvironment::InitLuaState(lua_State *lua_state)
 
     // Add our function to the state's global scope
     luabind::module(lua_state)
-        [luabind::def("print", LUA_print<std::string>),
+        [luabind::def("print", util::LUA_print<std::string>),
          luabind::def("durationIsValid", durationIsValid),
          luabind::def("parseDuration", parseDuration),
          luabind::class_<SourceContainer>("sources")
