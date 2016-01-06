@@ -19,6 +19,14 @@ namespace plugin
 class BasePlugin;
 }
 
+namespace util
+{
+namespace json
+{
+struct Object;
+}
+}
+
 namespace engine
 {
 struct RouteParameters;
@@ -36,7 +44,7 @@ class OSRM::OSRM_impl final
   public:
     OSRM_impl(LibOSRMConfig &lib_config);
     OSRM_impl(const OSRM_impl &) = delete;
-    int RunQuery(const RouteParameters &route_parameters, osrm::json::Object &json_result);
+    int RunQuery(const RouteParameters &route_parameters, util::json::Object &json_result);
 
   private:
     void RegisterPlugin(plugin::BasePlugin *plugin);

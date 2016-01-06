@@ -118,7 +118,7 @@ class MapMatching final : public BasicRoutingInterface<DataFacadeT, MapMatching<
             return;
         }
 
-        util::MatchingDebugInfo matching_debug(osrm::json::Logger::get());
+        util::MatchingDebugInfo matching_debug(util::json::Logger::get());
         matching_debug.initialize(candidates_list);
 
         engine_working_data.InitializeOrClearFirstThreadLocalStorage(

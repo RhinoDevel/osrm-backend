@@ -15,9 +15,9 @@ namespace engine
 
 struct PolylineFormatter
 {
-    osrm::json::String printEncodedString(const std::vector<SegmentInformation> &polyline) const;
+    util::json::String printEncodedString(const std::vector<SegmentInformation> &polyline) const;
 
-    osrm::json::Array printUnencodedString(const std::vector<SegmentInformation> &polyline) const;
+    util::json::Array printUnencodedString(const std::vector<SegmentInformation> &polyline) const;
 };
 
 }

@@ -48,7 +48,7 @@ template <class DataFacadeT> class DistanceTablePlugin final : public BasePlugin
     const std::string GetDescriptor() const override final { return descriptor_string; }
 
     Status HandleRequest(const RouteParameters &route_parameters,
-                         osrm::json::Object &json_result) override final
+                         util::json::Object &json_result) override final
     {
         if (!check_all_coordinates(route_parameters.coordinates))
         {
@@ -189,10 +189,10 @@ template <class DataFacadeT> class DistanceTablePlugin final : public BasePlugin
             return Status::EmptyResult;
         }
 
-        osrm::json::Array matrix_json_array;
+        util::json::Array matrix_json_array;
         for (const auto row : util::irange<std::size_t>(0, number_of_sources))
         {
-            osrm::json::Array json_row;
+            util::json::Array json_row;
             auto row_begin_iterator = result_table->begin() + (row * number_of_destination);
             auto row_end_iterator = result_table->begin() + ((row + 1) * number_of_destination);
             json_row.values.insert(json_row.values.end(), row_begin_iterator, row_end_iterator);
@@ -200,19 +200,19 @@ template <class DataFacadeT> class DistanceTablePlugin final : public BasePlugin
         }
         json_result.values["distance_table"] = matrix_json_array;
 
-        osrm::json::Array target_coord_json_array;
+        util::json::Array target_coord_json_array;
         for (const auto &phantom : snapped_target_phantoms)
         {
-            osrm::json::Array json_coord;
+            util::json::Array json_coord;
             json_coord.values.push_back(phantom.location.lat / COORDINATE_PRECISION);
             json_coord.values.push_back(phantom.location.lon / COORDINATE_PRECISION);
             target_coord_json_array.values.push_back(json_coord);
         }
         json_result.values["destination_coordinates"] = target_coord_json_array;
-        osrm::json::Array source_coord_json_array;
+        util::json::Array source_coord_json_array;
         for (const auto &phantom : snapped_source_phantoms)
         {
-            osrm::json::Array json_coord;
+            util::json::Array json_coord;
             json_coord.values.push_back(phantom.location.lat / COORDINATE_PRECISION);
             json_coord.values.push_back(phantom.location.lon / COORDINATE_PRECISION);
             source_coord_json_array.values.push_back(json_coord);

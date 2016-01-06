@@ -181,11 +181,11 @@ template <class DataFacadeT> class MapMatchingPlugin : public BasePlugin
         return candidates_lists;
     }
 
-    osrm::json::Object submatchingToJSON(const map_matching::SubMatching &sub,
+    util::json::Object submatchingToJSON(const map_matching::SubMatching &sub,
                                          const RouteParameters &route_parameters,
                                          const InternalRouteResult &raw_route)
     {
-        osrm::json::Object subtrace;
+        util::json::Object subtrace;
 
         if (route_parameters.classify)
         {
@@ -238,24 +238,24 @@ template <class DataFacadeT> class MapMatchingPlugin : public BasePlugin
             }
 
             factory.BuildRouteSummary(factory.get_entire_length(), raw_route.shortest_path_length);
-            osrm::json::Object json_route_summary;
+            util::json::Object json_route_summary;
             json_route_summary.values["total_distance"] = factory.summary.distance;
             json_route_summary.values["total_time"] = factory.summary.duration;
             subtrace.values["route_summary"] = json_route_summary;
         }
 
-        subtrace.values["indices"] = osrm::json::make_array(sub.indices);
+        subtrace.values["indices"] = util::json::make_array(sub.indices);
 
-        osrm::json::Array points;
+        util::json::Array points;
         for (const auto &node : sub.nodes)
         {
             points.values.emplace_back(
-                osrm::json::make_array(node.location.lat / COORDINATE_PRECISION,
+                util::json::make_array(node.location.lat / COORDINATE_PRECISION,
                                        node.location.lon / COORDINATE_PRECISION));
         }
         subtrace.values["matched_points"] = points;
 
-        osrm::json::Array names;
+        util::json::Array names;
         for (const auto &node : sub.nodes)
         {
             names.values.emplace_back(facade->get_name_for_id(node.name_id));
@@ -266,7 +266,7 @@ template <class DataFacadeT> class MapMatchingPlugin : public BasePlugin
     }
 
     Status HandleRequest(const RouteParameters &route_parameters,
-                         osrm::json::Object &json_result) final override
+                         util::json::Object &json_result) final override
     {
         // enforce maximum number of locations for performance reasons
         if (max_locations_map_matching > 0 &&
@@ -320,8 +320,8 @@ template <class DataFacadeT> class MapMatchingPlugin : public BasePlugin
         }
 
         // setup logging if enabled
-        if (osrm::json::Logger::get())
-            osrm::json::Logger::get()->initialize("matching");
+        if (util::json::Logger::get())
+            util::json::Logger::get()->initialize("matching");
 
         // call the actual map matching
         map_matching::SubMatchingList sub_matchings;
@@ -329,7 +329,7 @@ template <class DataFacadeT> class MapMatchingPlugin : public BasePlugin
                                         route_parameters.matching_beta,
                                         route_parameters.gps_precision, sub_matchings);
 
-        osrm::json::Array matchings;
+        util::json::Array matchings;
         for (auto &sub : sub_matchings)
         {
             // classify result
@@ -373,8 +373,8 @@ template <class DataFacadeT> class MapMatchingPlugin : public BasePlugin
             matchings.values.emplace_back(submatchingToJSON(sub, route_parameters, raw_route));
         }
 
-        if (osrm::json::Logger::get())
-            osrm::json::Logger::get()->render("matching", json_result);
+        if (util::json::Logger::get())
+            util::json::Logger::get()->render("matching", json_result);
         json_result.values["matchings"] = matchings;
 
         if (sub_matchings.empty())

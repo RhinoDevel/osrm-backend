@@ -141,7 +141,7 @@ template <class DataFacadeT> class RoundTripPlugin final : public BasePlugin
     // identifies and splits the graph in its strongly connected components (scc)
     // and returns an SCC_Component
     SCC_Component SplitUnaccessibleLocations(const std::size_t number_of_locations,
-                                             const DistTableWrapper<EdgeWeight> &result_table)
+                                             const util::DistTableWrapper<EdgeWeight> &result_table)
     {
 
         if (std::find(std::begin(result_table), std::end(result_table), INVALID_EDGE_WEIGHT) ==
@@ -186,9 +186,9 @@ template <class DataFacadeT> class RoundTripPlugin final : public BasePlugin
     }
 
     void SetLocPermutationOutput(const std::vector<NodeID> &permutation,
-                                 osrm::json::Object &json_result)
+                                 util::json::Object &json_result)
     {
-        osrm::json::Array json_permutation;
+        util::json::Array json_permutation;
         json_permutation.values.insert(std::end(json_permutation.values), std::begin(permutation),
                                        std::end(permutation));
         json_result.values["permutation"] = json_permutation;
@@ -230,7 +230,7 @@ template <class DataFacadeT> class RoundTripPlugin final : public BasePlugin
     }
 
     Status HandleRequest(const RouteParameters &route_parameters,
-                         osrm::json::Object &json_result) override final
+                         util::json::Object &json_result) override final
     {
         if (max_locations_trip > 0 &&
             (static_cast<int>(route_parameters.coordinates.size()) > max_locations_trip))
@@ -271,7 +271,7 @@ template <class DataFacadeT> class RoundTripPlugin final : public BasePlugin
         const auto number_of_locations = phantom_node_list.size();
 
         // compute the distance table of all phantom nodes
-        const auto result_table = DistTableWrapper<EdgeWeight>(
+        const auto result_table = util::DistTableWrapper<EdgeWeight>(
             *search_engine_ptr->distance_table(phantom_node_list, phantom_node_list),
             number_of_locations);
 
@@ -348,14 +348,14 @@ template <class DataFacadeT> class RoundTripPlugin final : public BasePlugin
 
         // prepare JSON output
         // create a json object for every trip
-        osrm::json::Array trip;
+        util::json::Array trip;
         for (std::size_t i = 0; i < route_result.size(); ++i)
         {
             std::unique_ptr<BaseDescriptor<DataFacadeT>> descriptor =
                 util::make_unique<JSONDescriptor<DataFacadeT>>(facade);
             descriptor->SetConfig(route_parameters);
 
-            osrm::json::Object scc_trip;
+            util::json::Object scc_trip;
 
             // set permutation output
             SetLocPermutationOutput(route_result[i], scc_trip);

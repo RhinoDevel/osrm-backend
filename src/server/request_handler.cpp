@@ -30,7 +30,7 @@ RequestHandler::RequestHandler() : routing_machine(nullptr) {}
 void RequestHandler::handle_request(const http::request &current_request,
                                     http::reply &current_reply)
 {
-    osrm::json::Object json_result;
+    util::json::Object json_result;
 
     // parse command
     try
@@ -121,7 +121,7 @@ void RequestHandler::handle_request(const http::request &current_request,
                                            std::to_string(current_reply.content.size()));
         if ("gpx" == route_parameters.output_format)
         { // gpx file
-            osrm::json::gpx_render(current_reply.content, json_result.values["route"]);
+            util::json::gpx_render(current_reply.content, json_result.values["route"]);
             current_reply.headers.emplace_back("Content-Type",
                                                "application/gpx+xml; charset=UTF-8");
             current_reply.headers.emplace_back("Content-Disposition",
@@ -129,14 +129,14 @@ void RequestHandler::handle_request(const http::request &current_request,
         }
         else if (route_parameters.jsonp_parameter.empty())
         { // json file
-            osrm::json::render(current_reply.content, json_result);
+            util::json::render(current_reply.content, json_result);
             current_reply.headers.emplace_back("Content-Type", "application/json; charset=UTF-8");
             current_reply.headers.emplace_back("Content-Disposition",
                                                "inline; filename=\"response.json\"");
         }
         else
         { // jsonp
-            osrm::json::render(current_reply.content, json_result);
+            util::json::render(current_reply.content, json_result);
             current_reply.headers.emplace_back("Content-Type", "text/javascript; charset=UTF-8");
             current_reply.headers.emplace_back("Content-Disposition",
                                                "inline; filename=\"response.js\"");

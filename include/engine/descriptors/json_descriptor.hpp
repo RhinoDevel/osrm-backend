@@ -77,7 +77,7 @@ template <class DataFacadeT> class JSONDescriptor final : public BaseDescriptor<
     }
 
     virtual void Run(const InternalRouteResult &raw_route,
-                     osrm::json::Object &json_result) override final
+                     util::json::Object &json_result) override final
     {
         if (INVALID_EDGE_WEIGHT == raw_route.shortest_path_length)
         {
@@ -108,19 +108,19 @@ template <class DataFacadeT> class JSONDescriptor final : public BaseDescriptor<
 
         if (config.geometry)
         {
-            osrm::json::Value route_geometry =
+            util::json::Value route_geometry =
                 description_factory.AppendGeometryString(config.encode_geometry);
             json_result.values["route_geometry"] = route_geometry;
         }
         if (config.instructions)
         {
-            osrm::json::Array json_route_instructions =
+            util::json::Array json_route_instructions =
                 BuildTextualDescription(description_factory, shortest_path_segments);
             json_result.values["route_instructions"] = json_route_instructions;
         }
         description_factory.BuildRouteSummary(description_factory.get_entire_length(),
                                               raw_route.shortest_path_length);
-        osrm::json::Object json_route_summary;
+        util::json::Object json_route_summary;
         json_route_summary.values["total_distance"] = description_factory.summary.distance;
         json_route_summary.values["total_time"] = description_factory.summary.duration;
         json_route_summary.values["start_point"] =
@@ -131,8 +131,8 @@ template <class DataFacadeT> class JSONDescriptor final : public BaseDescriptor<
 
         BOOST_ASSERT(!raw_route.segment_end_coordinates.empty());
 
-        osrm::json::Array json_via_points_array;
-        osrm::json::Array json_first_coordinate;
+        util::json::Array json_via_points_array;
+        util::json::Array json_first_coordinate;
         json_first_coordinate.values.push_back(
             raw_route.segment_end_coordinates.front().source_phantom.location.lat /
             COORDINATE_PRECISION);
@@ -143,7 +143,7 @@ template <class DataFacadeT> class JSONDescriptor final : public BaseDescriptor<
         for (const PhantomNodes &nodes : raw_route.segment_end_coordinates)
         {
             std::string tmp;
-            osrm::json::Array json_coordinate;
+            util::json::Array json_coordinate;
             json_coordinate.values.push_back(nodes.target_phantom.location.lat /
                                              COORDINATE_PRECISION);
             json_coordinate.values.push_back(nodes.target_phantom.location.lon /
@@ -152,7 +152,7 @@ template <class DataFacadeT> class JSONDescriptor final : public BaseDescriptor<
         }
         json_result.values["via_points"] = json_via_points_array;
 
-        osrm::json::Array json_via_indices_array;
+        util::json::Array json_via_indices_array;
 
         std::vector<unsigned> const &shortest_leg_end_indices = description_factory.GetViaIndices();
         json_via_indices_array.values.insert(json_via_indices_array.values.end(),
@@ -163,7 +163,7 @@ template <class DataFacadeT> class JSONDescriptor final : public BaseDescriptor<
         // only one alternative route is computed at this time, so this is hardcoded
         if (INVALID_EDGE_WEIGHT != raw_route.alternative_path_length)
         {
-            json_result.values["found_alternative"] = osrm::json::True();
+            json_result.values["found_alternative"] = util::json::True();
             BOOST_ASSERT(!raw_route.alt_source_traversed_in_reverse.empty());
             alternate_description_factory.SetStartSegment(
                 raw_route.segment_end_coordinates.front().source_phantom,
@@ -181,15 +181,15 @@ template <class DataFacadeT> class JSONDescriptor final : public BaseDescriptor<
 
             if (config.geometry)
             {
-                osrm::json::Value alternate_geometry_string =
+                util::json::Value alternate_geometry_string =
                     alternate_description_factory.AppendGeometryString(config.encode_geometry);
-                osrm::json::Array json_alternate_geometries_array;
+                util::json::Array json_alternate_geometries_array;
                 json_alternate_geometries_array.values.push_back(alternate_geometry_string);
                 json_result.values["alternative_geometries"] = json_alternate_geometries_array;
             }
             // Generate instructions for each alternative (simulated here)
-            osrm::json::Array json_alt_instructions;
-            osrm::json::Array json_current_alt_instructions;
+            util::json::Array json_alt_instructions;
+            util::json::Array json_current_alt_instructions;
             if (config.instructions)
             {
                 json_current_alt_instructions = BuildTextualDescription(
@@ -201,8 +201,8 @@ template <class DataFacadeT> class JSONDescriptor final : public BaseDescriptor<
                 alternate_description_factory.get_entire_length(),
                 raw_route.alternative_path_length);
 
-            osrm::json::Object json_alternate_route_summary;
-            osrm::json::Array json_alternate_route_summary_array;
+            util::json::Object json_alternate_route_summary;
+            util::json::Array json_alternate_route_summary_array;
             json_alternate_route_summary.values["total_distance"] =
                 alternate_description_factory.summary.distance;
             json_alternate_route_summary.values["total_time"] =
@@ -216,7 +216,7 @@ template <class DataFacadeT> class JSONDescriptor final : public BaseDescriptor<
 
             std::vector<unsigned> const &alternate_leg_end_indices =
                 alternate_description_factory.GetViaIndices();
-            osrm::json::Array json_altenative_indices_array;
+            util::json::Array json_altenative_indices_array;
             json_altenative_indices_array.values.insert(json_altenative_indices_array.values.end(),
                                                         alternate_leg_end_indices.begin(),
                                                         alternate_leg_end_indices.end());
@@ -224,21 +224,21 @@ template <class DataFacadeT> class JSONDescriptor final : public BaseDescriptor<
         }
         else
         {
-            json_result.values["found_alternative"] = osrm::json::False();
+            json_result.values["found_alternative"] = util::json::False();
         }
 
         // Get Names for both routes
         RouteNames route_names =
             GenerateRouteNames(shortest_path_segments, alternative_path_segments, facade);
-        osrm::json::Array json_route_names;
+        util::json::Array json_route_names;
         json_route_names.values.push_back(route_names.shortest_path_name_1);
         json_route_names.values.push_back(route_names.shortest_path_name_2);
         json_result.values["route_name"] = json_route_names;
 
         if (INVALID_EDGE_WEIGHT != raw_route.alternative_path_length)
         {
-            osrm::json::Array json_alternate_names_array;
-            osrm::json::Array json_alternate_names;
+            util::json::Array json_alternate_names_array;
+            util::json::Array json_alternate_names;
             json_alternate_names.values.push_back(route_names.alternative_path_name_1);
             json_alternate_names.values.push_back(route_names.alternative_path_name_2);
             json_alternate_names_array.values.push_back(json_alternate_names);
@@ -248,11 +248,11 @@ template <class DataFacadeT> class JSONDescriptor final : public BaseDescriptor<
         json_result.values["hint_data"] = BuildHintData(raw_route);
     }
 
-    inline osrm::json::Object BuildHintData(const InternalRouteResult &raw_route) const
+    inline util::json::Object BuildHintData(const InternalRouteResult &raw_route) const
     {
-        osrm::json::Object json_hint_object;
+        util::json::Object json_hint_object;
         json_hint_object.values["checksum"] = facade->GetCheckSum();
-        osrm::json::Array json_location_hint_array;
+        util::json::Array json_location_hint_array;
         std::string hint;
         for (const auto i : util::irange<std::size_t>(0, raw_route.segment_end_coordinates.size()))
         {
@@ -268,11 +268,11 @@ template <class DataFacadeT> class JSONDescriptor final : public BaseDescriptor<
         return json_hint_object;
     }
 
-    inline osrm::json::Array
+    inline util::json::Array
     BuildTextualDescription(const DescriptionFactory &description_factory,
                             std::vector<Segment> &route_segments_list) const
     {
-        osrm::json::Array json_instruction_array;
+        util::json::Array json_instruction_array;
         // Segment information has following format:
         //["instruction id","streetname",length,position,time,"length","earth_direction",azimuth]
         unsigned necessary_segments_running_index = 0;
@@ -296,7 +296,7 @@ template <class DataFacadeT> class JSONDescriptor final : public BaseDescriptor<
         // Fetch data from Factory and generate a string from it.
         for (const SegmentInformation &segment : description_factory.path_description)
         {
-            osrm::json::Array json_instruction_row;
+            util::json::Array json_instruction_row;
             TurnInstruction current_instruction = segment.turn_instruction;
             if (TurnInstructionsClass::TurnIsNecessary(current_instruction))
             {
@@ -364,7 +364,7 @@ template <class DataFacadeT> class JSONDescriptor final : public BaseDescriptor<
             }
         }
 
-        osrm::json::Array json_last_instruction_row;
+        util::json::Array json_last_instruction_row;
         temp_instruction =
             std::to_string(cast::enum_to_underlying(TurnInstruction::ReachedYourDestination));
         json_last_instruction_row.values.push_back(temp_instruction);

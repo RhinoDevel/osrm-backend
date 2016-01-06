@@ -27,7 +27,7 @@ class HelloWorldPlugin final : public BasePlugin
     const std::string GetDescriptor() const override final { return descriptor_string; }
 
     Status HandleRequest(const RouteParameters &routeParameters,
-                         osrm::json::Object &json_result) override final
+                         util::json::Object &json_result) override final
     {
         std::string temp_string;
         json_result.values["title"] = "Hello World";
@@ -50,12 +50,12 @@ class HelloWorldPlugin final : public BasePlugin
         temp_string = std::to_string(routeParameters.coordinates.size());
         json_result.values["location_count"] = temp_string;
 
-        osrm::json::Array json_locations;
+        util::json::Array json_locations;
         unsigned counter = 0;
         for (const FixedPointCoordinate &coordinate : routeParameters.coordinates)
         {
-            osrm::json::Object json_location;
-            osrm::json::Array json_coordinates;
+            util::json::Object json_location;
+            util::json::Array json_coordinates;
 
             json_coordinates.values.push_back(
                 static_cast<double>(coordinate.lat / COORDINATE_PRECISION));
@@ -68,7 +68,7 @@ class HelloWorldPlugin final : public BasePlugin
         json_result.values["locations"] = json_locations;
         json_result.values["hint_count"] = routeParameters.hints.size();
 
-        osrm::json::Array json_hints;
+        util::json::Array json_hints;
         counter = 0;
         for (const std::string &current_hint : routeParameters.hints)
         {

@@ -32,11 +32,11 @@ template <class DataFacadeT> class GPXDescriptor final : public BaseDescriptor<D
         output = printInt<11, 6>(buffer, value);
     }
 
-    void AddRoutePoint(const FixedPointCoordinate &coordinate, osrm::json::Array &json_route)
+    void AddRoutePoint(const FixedPointCoordinate &coordinate, util::json::Array &json_route)
     {
-        osrm::json::Object json_lat;
-        osrm::json::Object json_lon;
-        osrm::json::Array json_row;
+        util::json::Object json_lat;
+        util::json::Object json_lon;
+        util::json::Array json_row;
 
         std::string tmp;
 
@@ -48,7 +48,7 @@ template <class DataFacadeT> class GPXDescriptor final : public BaseDescriptor<D
 
         json_row.values.push_back(json_lat);
         json_row.values.push_back(json_lon);
-        osrm::json::Object entry;
+        util::json::Object entry;
         entry.values["rtept"] = json_row;
         json_route.values.push_back(entry);
     }
@@ -58,9 +58,9 @@ template <class DataFacadeT> class GPXDescriptor final : public BaseDescriptor<D
 
     virtual void SetConfig(const DescriptorConfig &c) final { config = c; }
 
-    virtual void Run(const InternalRouteResult &raw_route, osrm::json::Object &json_result) final
+    virtual void Run(const InternalRouteResult &raw_route, util::json::Object &json_result) final
     {
-        osrm::json::Array json_route;
+        util::json::Array json_route;
         if (raw_route.shortest_path_length != INVALID_EDGE_WEIGHT)
         {
             AddRoutePoint(raw_route.segment_end_coordinates.front().source_phantom.location,
@@ -78,7 +78,7 @@ template <class DataFacadeT> class GPXDescriptor final : public BaseDescriptor<D
             AddRoutePoint(raw_route.segment_end_coordinates.back().target_phantom.location,
                           json_route);
         }
-        // osrm::json::gpx_render(reply.content, json_route);
+        // util::json::gpx_render(reply.content, json_route);
         json_result.values["route"] = json_route;
     }
 };

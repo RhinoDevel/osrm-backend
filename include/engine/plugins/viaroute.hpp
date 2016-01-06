@@ -56,7 +56,7 @@ template <class DataFacadeT> class ViaRoutePlugin final : public BasePlugin
     const std::string GetDescriptor() const override final { return descriptor_string; }
 
     Status HandleRequest(const RouteParameters &route_parameters,
-                         osrm::json::Object &json_result) override final
+                         util::json::Object &json_result) override final
     {
         if (max_locations_viaroute > 0 &&
             (static_cast<int>(route_parameters.coordinates.size()) > max_locations_viaroute))

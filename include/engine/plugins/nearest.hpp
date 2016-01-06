@@ -30,7 +30,7 @@ template <class DataFacadeT> class NearestPlugin final : public BasePlugin
     const std::string GetDescriptor() const override final { return descriptor_string; }
 
     Status HandleRequest(const RouteParameters &route_parameters,
-                         osrm::json::Object &json_result) override final
+                         util::json::Object &json_result) override final
     {
         // check number of parameters
         if (route_parameters.coordinates.empty() ||
@@ -68,15 +68,15 @@ template <class DataFacadeT> class NearestPlugin final : public BasePlugin
             json_result.values["status_message"] = "Found nearest edge";
             if (number_of_results > 1)
             {
-                osrm::json::Array results;
+                util::json::Array results;
 
                 auto vector_length = phantom_node_vector.size();
                 for (const auto i :
                      util::irange<std::size_t>(0, std::min(number_of_results, vector_length)))
                 {
                     const auto &node = phantom_node_vector[i].phantom_node;
-                    osrm::json::Array json_coordinate;
-                    osrm::json::Object result;
+                    util::json::Array json_coordinate;
+                    util::json::Object result;
                     json_coordinate.values.push_back(node.location.lat / COORDINATE_PRECISION);
                     json_coordinate.values.push_back(node.location.lon / COORDINATE_PRECISION);
                     result.values["mapped coordinate"] = json_coordinate;
@@ -87,7 +87,7 @@ template <class DataFacadeT> class NearestPlugin final : public BasePlugin
             }
             else
             {
-                osrm::json::Array json_coordinate;
+                util::json::Array json_coordinate;
                 json_coordinate.values.push_back(
                     phantom_node_vector.front().phantom_node.location.lat / COORDINATE_PRECISION);
                 json_coordinate.values.push_back(

@@ -69,7 +69,7 @@ void OSRM::OSRM_impl::RegisterPlugin(BasePlugin *raw_plugin_ptr)
 }
 
 int OSRM::OSRM_impl::RunQuery(const RouteParameters &route_parameters,
-                              osrm::json::Object &json_result)
+                              util::json::Object &json_result)
 {
     const auto &plugin_iterator = plugin_map.find(route_parameters.service);
 
@@ -139,7 +139,7 @@ OSRM::OSRM(LibOSRMConfig &lib_config) : OSRM_pimpl_(util::make_unique<OSRM_impl>
 // needed because unique_ptr needs the size of OSRM_impl for delete
 OSRM::~OSRM() {}
 
-int OSRM::RunQuery(const RouteParameters &route_parameters, osrm::json::Object &json_result)
+int OSRM::RunQuery(const RouteParameters &route_parameters, util::json::Object &json_result)
 {
     return OSRM_pimpl_->RunQuery(route_parameters, json_result);
 }
