@@ -465,10 +465,10 @@ int main(const int argc, const char *argv[]) try
         shared_layout_ptr->GetBlockPtr<util::FixedPointCoordinate, true>(
             shared_memory_ptr, SharedDataLayout::COORDINATE_LIST);
 
-    QueryNode current_node;
+    extractor::QueryNode current_node;
     for (unsigned i = 0; i < coordinate_list_size; ++i)
     {
-        nodes_input_stream.read((char *)&current_node, sizeof(QueryNode));
+        nodes_input_stream.read((char *)&current_node, sizeof(extractor::QueryNode));
         coordinates_ptr[i] = util::FixedPointCoordinate(current_node.lat, current_node.lon);
     }
     nodes_input_stream.close();

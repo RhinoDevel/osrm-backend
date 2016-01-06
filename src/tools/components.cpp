@@ -55,7 +55,7 @@ void deleteFileIfExists(const std::string &file_name)
 }
 
 std::size_t loadGraph(const char *path,
-                      std::vector<QueryNode> &coordinate_list,
+                      std::vector<extractor::QueryNode> &coordinate_list,
                       std::vector<TarjanEdge> &graph_edge_list)
 {
     std::ifstream input_stream(path, std::ifstream::in | std::ifstream::binary);
@@ -102,7 +102,7 @@ std::size_t loadGraph(const char *path,
 
 int main(int argc, char *argv[])
 {
-    std::vector<QueryNode> coordinate_list;
+    std::vector<extractor::QueryNode> coordinate_list;
 
     LogPolicy::GetInstance().Unmute();
     try

@@ -137,7 +137,7 @@ inline void DEBUG_SIGNAL(const NodeID node,
 {
     if (dg_output_turn_debug)
     {
-        const QueryNode &nodeinfo = m_node_info_list[node];
+        const extractor::QueryNode &nodeinfo = m_node_info_list[node];
         if (!dg_first_turn_debug)
             dg_debug_turns_file << "," << std::endl;
         dg_debug_turns_file
@@ -156,7 +156,7 @@ inline void DEBUG_UTURN(const NodeID node,
 {
     if (dg_output_turn_debug)
     {
-        const QueryNode &nodeinfo = m_node_info_list[node];
+        const extractor::QueryNode &nodeinfo = m_node_info_list[node];
         if (!dg_first_turn_debug)
             dg_debug_turns_file << "," << std::endl;
         dg_debug_turns_file
@@ -177,7 +177,7 @@ inline void DEBUG_TURN(const NodeID node,
 {
     if (turn_penalty > 0 && dg_output_turn_debug)
     {
-        const QueryNode &v = m_node_info_list[node];
+        const extractor::QueryNode &v = m_node_info_list[node];
 
         const float bearing_uv = coordinate_calculation::bearing(first_coordinate, v);
         float uvw_normal = bearing_uv + turn_angle / 2;
