@@ -474,7 +474,7 @@ extractor::LoadNodeBasedGraph(std::unordered_set<NodeID> &barrier_nodes,
         return std::shared_ptr<util::NodeBasedDynamicGraph>();
     }
 
-    return NodeBasedDynamicGraphFromEdges(number_of_node_based_nodes, edge_list);
+    return util::NodeBasedDynamicGraphFromEdges(number_of_node_based_nodes, edge_list);
 }
 
 /**
