@@ -71,7 +71,7 @@ template <class CandidateLists> struct HiddenMarkovModel
         suspicious.resize(candidates_list.size());
         pruned.resize(candidates_list.size());
         breakage.resize(candidates_list.size());
-        for (const auto i : osrm::irange<std::size_t>(0u, candidates_list.size()))
+        for (const auto i : util::irange<std::size_t>(0u, candidates_list.size()))
         {
             const auto &num_candidates = candidates_list[i].size();
             // add empty vectors
@@ -93,7 +93,7 @@ template <class CandidateLists> struct HiddenMarkovModel
         BOOST_ASSERT(viterbi.size() == parents.size() && parents.size() == path_lengths.size() &&
                      path_lengths.size() == pruned.size() && pruned.size() == breakage.size());
 
-        for (const auto t : osrm::irange(initial_timestamp, viterbi.size()))
+        for (const auto t : util::irange(initial_timestamp, viterbi.size()))
         {
             std::fill(viterbi[t].begin(), viterbi[t].end(), osrm::matching::IMPOSSIBLE_LOG_PROB);
             std::fill(parents[t].begin(), parents[t].end(), std::make_pair(0u, 0u));
@@ -111,7 +111,7 @@ template <class CandidateLists> struct HiddenMarkovModel
         {
             BOOST_ASSERT(initial_timestamp < num_points);
 
-            for (const auto s : osrm::irange<std::size_t>(0u, viterbi[initial_timestamp].size()))
+            for (const auto s : util::irange<std::size_t>(0u, viterbi[initial_timestamp].size()))
             {
                 viterbi[initial_timestamp][s] =
                     emission_log_probability(candidates_list[initial_timestamp][s].distance);

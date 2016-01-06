@@ -85,7 +85,7 @@ template <class DataFacadeT> class ViaRoutePlugin final : public BasePlugin
         std::vector<PhantomNodePair> phantom_node_pair_list(route_parameters.coordinates.size());
         const bool checksum_OK = (route_parameters.check_sum == facade->GetCheckSum());
 
-        for (const auto i : osrm::irange<std::size_t>(0, route_parameters.coordinates.size()))
+        for (const auto i : util::irange<std::size_t>(0, route_parameters.coordinates.size()))
         {
             if (checksum_OK && i < route_parameters.hints.size() &&
                 !route_parameters.hints[i].empty())

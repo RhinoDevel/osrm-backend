@@ -172,7 +172,7 @@ int main(int argc, char *argv[])
         uint64_t total_network_length = 0;
         percentage.reinit(graph->GetNumberOfNodes());
         TIMER_START(SCC_OUTPUT);
-        for (const NodeID source : osrm::irange(0u, graph->GetNumberOfNodes()))
+        for (const NodeID source : util::irange(0u, graph->GetNumberOfNodes()))
         {
             percentage.printIncrement();
             for (const auto current_edge : graph->GetAdjacentEdgeRange(source))

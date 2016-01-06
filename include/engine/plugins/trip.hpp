@@ -63,7 +63,7 @@ template <class DataFacadeT> class RoundTripPlugin final : public BasePlugin
         phantom_node_list.reserve(route_parameters.coordinates.size());
 
         // find phantom nodes for all input coords
-        for (const auto i : osrm::irange<std::size_t>(0, route_parameters.coordinates.size()))
+        for (const auto i : util::irange<std::size_t>(0, route_parameters.coordinates.size()))
         {
             // if client hints are helpful, encode hints
             if (checksum_OK && i < route_parameters.hints.size() &&

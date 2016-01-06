@@ -199,14 +199,14 @@ class MapMatching final : public BasicRoutingInterface<DataFacadeT, MapMatching<
                 util::coordinate_calculation::haversineDistance(prev_coordinate, current_coordinate);
 
             // compute d_t for this timestamp and the next one
-            for (const auto s : osrm::irange<std::size_t>(0u, prev_viterbi.size()))
+            for (const auto s : util::irange<std::size_t>(0u, prev_viterbi.size()))
             {
                 if (prev_pruned[s])
                 {
                     continue;
                 }
 
-                for (const auto s_prime : osrm::irange<std::size_t>(0u, current_viterbi.size()))
+                for (const auto s_prime : util::irange<std::size_t>(0u, current_viterbi.size()))
                 {
                     // how likely is candidate s_prime at time t to be emitted?
                     // FIXME this can be pre-computed
@@ -338,7 +338,7 @@ class MapMatching final : public BasicRoutingInterface<DataFacadeT, MapMatching<
             matching.length = 0.0;
             matching.nodes.resize(reconstructed_indices.size());
             matching.indices.resize(reconstructed_indices.size());
-            for (const auto i : osrm::irange<std::size_t>(0u, reconstructed_indices.size()))
+            for (const auto i : util::irange<std::size_t>(0u, reconstructed_indices.size()))
             {
                 const auto timestamp_index = reconstructed_indices[i].first;
                 const auto location_index = reconstructed_indices[i].second;

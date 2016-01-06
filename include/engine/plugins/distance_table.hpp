@@ -95,7 +95,7 @@ template <class DataFacadeT> class DistanceTablePlugin final : public BasePlugin
         std::vector<PhantomNodePair> phantom_node_target_vector(number_of_destination);
         auto phantom_node_source_out_iter = phantom_node_source_vector.begin();
         auto phantom_node_target_out_iter = phantom_node_target_vector.begin();
-        for (const auto i : osrm::irange<std::size_t>(0u, route_parameters.coordinates.size()))
+        for (const auto i : util::irange<std::size_t>(0u, route_parameters.coordinates.size()))
         {
             if (checksum_OK && i < route_parameters.hints.size() &&
                 !route_parameters.hints[i].empty())
@@ -190,7 +190,7 @@ template <class DataFacadeT> class DistanceTablePlugin final : public BasePlugin
         }
 
         osrm::json::Array matrix_json_array;
-        for (const auto row : osrm::irange<std::size_t>(0, number_of_sources))
+        for (const auto row : util::irange<std::size_t>(0, number_of_sources))
         {
             osrm::json::Array json_row;
             auto row_begin_iterator = result_table->begin() + (row * number_of_destination);

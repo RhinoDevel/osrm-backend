@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
         BOOST_ASSERT_MSG(0 == edge_list.size(), "edge list not flushed");
 
         Percent progress(m_query_graph->GetNumberOfNodes());
-        for (const auto node_u : osrm::irange(0u, m_query_graph->GetNumberOfNodes()))
+        for (const auto node_u : util::irange(0u, m_query_graph->GetNumberOfNodes()))
         {
             for (const auto eid : m_query_graph->GetAdjacentEdgeRange(node_u))
             {

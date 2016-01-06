@@ -87,7 +87,7 @@ template <class DataFacadeT> class MapMatchingPlugin : public BasePlugin
 
         sub_trace_lengths.resize(input_coords.size());
         sub_trace_lengths[0] = 0;
-        for (const auto current_coordinate : osrm::irange<std::size_t>(0, input_coords.size()))
+        for (const auto current_coordinate : util::irange<std::size_t>(0, input_coords.size()))
         {
             bool allow_uturn = false;
             if (0 < current_coordinate)
@@ -152,7 +152,7 @@ template <class DataFacadeT> class MapMatchingPlugin : public BasePlugin
             if (!allow_uturn)
             {
                 const auto compact_size = candidates.size();
-                for (const auto i : osrm::irange<std::size_t>(0, compact_size))
+                for (const auto i : util::irange<std::size_t>(0, compact_size))
                 {
                     // Split edge if it is bidirectional and append reverse direction to end of list
                     if (candidates[i].phantom_node.forward_node_id != SPECIAL_NODEID &&
@@ -204,7 +204,7 @@ template <class DataFacadeT> class MapMatchingPlugin : public BasePlugin
             factory.SetStartSegment(raw_route.segment_end_coordinates.front().source_phantom,
                                     raw_route.source_traversed_in_reverse.front());
             for (const auto i :
-                 osrm::irange<std::size_t>(0, raw_route.unpacked_path_segments.size()))
+                 util::irange<std::size_t>(0, raw_route.unpacked_path_segments.size()))
             {
                 for (const PathData &path_data : raw_route.unpacked_path_segments[i])
                 {

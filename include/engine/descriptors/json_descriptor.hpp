@@ -94,7 +94,7 @@ template <class DataFacadeT> class JSONDescriptor final : public BaseDescriptor<
             raw_route.source_traversed_in_reverse.front());
 
         // for each unpacked segment add the leg to the description
-        for (const auto i : osrm::irange<std::size_t>(0, raw_route.unpacked_path_segments.size()))
+        for (const auto i : util::irange<std::size_t>(0, raw_route.unpacked_path_segments.size()))
         {
 #ifndef NDEBUG
             const int added_segments =
@@ -254,7 +254,7 @@ template <class DataFacadeT> class JSONDescriptor final : public BaseDescriptor<
         json_hint_object.values["checksum"] = facade->GetCheckSum();
         osrm::json::Array json_location_hint_array;
         std::string hint;
-        for (const auto i : osrm::irange<std::size_t>(0, raw_route.segment_end_coordinates.size()))
+        for (const auto i : util::irange<std::size_t>(0, raw_route.segment_end_coordinates.size()))
         {
             ObjectEncoder::EncodeToBase64(raw_route.segment_end_coordinates[i].source_phantom,
                                           hint);
