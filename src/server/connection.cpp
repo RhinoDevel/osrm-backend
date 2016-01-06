@@ -44,13 +44,13 @@ void Connection::handle_read(const boost::system::error_code &error, std::size_t
 
     // no error detected, let's parse the request
     compression_type compression_type(no_compression);
-    osrm::tribool result;
+    util::tribool result;
     std::tie(result, compression_type) =
         request_parser.parse(current_request, incoming_data_buffer.data(),
                              incoming_data_buffer.data() + bytes_transferred);
 
     // the request has been parsed
-    if (result == osrm::tribool::yes)
+    if (result == util::tribool::yes)
     {
         current_request.endpoint = TCP_socket.remote_endpoint().address();
         request_handler.handle_request(current_request, current_reply);
@@ -91,7 +91,7 @@ void Connection::handle_read(const boost::system::error_code &error, std::size_t
             strand.wrap(boost::bind(&Connection::handle_write, this->shared_from_this(),
                                     boost::asio::placeholders::error)));
     }
-    else if (result == osrm::tribool::no)
+    else if (result == util::tribool::no)
     { // request is not parseable
         current_reply = reply::stock_reply(reply::bad_request);
 

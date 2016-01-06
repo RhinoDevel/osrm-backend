@@ -22,11 +22,11 @@ class RequestParser
   public:
     RequestParser();
 
-    std::tuple<osrm::tribool, compression_type>
+    std::tuple<util::tribool, compression_type>
     parse(request &current_request, char *begin, char *end);
 
   private:
-    osrm::tribool consume(request &current_request, const char input);
+    util::tribool consume(request &current_request, const char input);
 
     bool is_char(const int character) const;
 
