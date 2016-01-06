@@ -6,12 +6,12 @@
 #include <mutex>
 #include <tbb/enumerable_thread_specific.h>
 
+struct lua_State;
+
 namespace osrm
 {
 namespace extractor
 {
-
-struct lua_State;
 
 /**
  * Creates a lua context and binds osmium way, node and relation objects and
