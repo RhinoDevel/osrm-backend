@@ -150,13 +150,13 @@ template <class DataFacadeT> class ViaRoutePlugin final : public BasePlugin
         switch (descriptor_table.get_id(route_parameters.output_format))
         {
         case 1:
-            descriptor = util::make_unique<GPXDescriptor<DataFacadeT>>(facade);
+            descriptor = util::make_unique<descriptors::GPXDescriptor<DataFacadeT>>(facade);
             break;
         // case 2:
         //      descriptor = util::make_unique<GEOJSONDescriptor<DataFacadeT>>();
         //      break;
         default:
-            descriptor = util::make_unique<JSONDescriptor<DataFacadeT>>(facade);
+            descriptor = util::make_unique<descriptors::JSONDescriptor<DataFacadeT>>(facade);
             break;
         }
 

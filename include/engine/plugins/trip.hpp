@@ -352,7 +352,7 @@ template <class DataFacadeT> class RoundTripPlugin final : public BasePlugin
         for (std::size_t i = 0; i < route_result.size(); ++i)
         {
             std::unique_ptr<descriptors::BaseDescriptor<DataFacadeT>> descriptor =
-                util::make_unique<JSONDescriptor<DataFacadeT>>(facade);
+                util::make_unique<descriptors::JSONDescriptor<DataFacadeT>>(facade);
             descriptor->SetConfig(route_parameters);
 
             util::json::Object scc_trip;

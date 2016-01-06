@@ -192,7 +192,7 @@ template <class DataFacadeT> class MapMatchingPlugin : public BasePlugin
             subtrace.values["confidence"] = sub.confidence;
         }
 
-        JSONDescriptor<DataFacadeT> json_descriptor(facade);
+        descriptors::JSONDescriptor<DataFacadeT> json_descriptor(facade);
         json_descriptor.SetConfig(route_parameters);
 
         subtrace.values["hint_data"] = json_descriptor.BuildHintData(raw_route);
@@ -232,7 +232,7 @@ template <class DataFacadeT> class MapMatchingPlugin : public BasePlugin
 
             if (route_parameters.print_instructions)
             {
-                std::vector<typename JSONDescriptor<DataFacadeT>::Segment> temp_segments;
+                std::vector<typename descriptors::JSONDescriptor<DataFacadeT>::Segment> temp_segments;
                 subtrace.values["instructions"] =
                     json_descriptor.BuildTextualDescription(factory, temp_segments);
             }
