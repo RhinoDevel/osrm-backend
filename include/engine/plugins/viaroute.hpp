@@ -33,7 +33,7 @@ namespace plugins
 template <class DataFacadeT> class ViaRoutePlugin final : public BasePlugin
 {
   private:
-    DescriptorTable descriptor_table;
+    descriptors::DescriptorTable descriptor_table;
     std::string descriptor_string;
     std::unique_ptr<SearchEngine<DataFacadeT>> search_engine_ptr;
     DataFacadeT *facade;

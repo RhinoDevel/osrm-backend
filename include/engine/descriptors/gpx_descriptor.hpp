@@ -29,7 +29,7 @@ template <class DataFacadeT> class GPXDescriptor final : public BaseDescriptor<D
     {
         char buffer[digits];
         buffer[digits-1] = 0; // zero termination
-        output = printInt<11, 6>(buffer, value);
+        output = util::printInt<11, 6>(buffer, value);
     }
 
     void AddRoutePoint(const FixedPointCoordinate &coordinate, util::json::Array &json_route)
