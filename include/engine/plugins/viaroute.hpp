@@ -123,7 +123,7 @@ template <class DataFacadeT> class ViaRoutePlugin final : public BasePlugin
         {
             raw_route.segment_end_coordinates.push_back(PhantomNodes{first_node, second_node});
         };
-        osrm::for_each_pair(snapped_phantoms, build_phantom_pairs);
+        util::for_each_pair(snapped_phantoms, build_phantom_pairs);
 
         if (1 == raw_route.segment_end_coordinates.size())
         {

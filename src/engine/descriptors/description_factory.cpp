@@ -202,7 +202,7 @@ void DescriptionFactory::Run(const unsigned zoom_level)
 
     // fix what needs to be fixed else
     unsigned necessary_segments = 0; // a running index that counts the necessary pieces
-    osrm::for_each_pair(path_description,
+    util::for_each_pair(path_description,
                         [&](SegmentInformation &first, const SegmentInformation &second)
                         {
                             if (!first.necessary)

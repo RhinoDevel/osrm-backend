@@ -164,7 +164,7 @@ void ExtractorCallbacks::ProcessWay(const osmium::Way &input_way, const Extracti
     {
         BOOST_ASSERT(split_edge == false);
         BOOST_ASSERT(parsed_way.backward_travel_mode != TRAVEL_MODE_INACCESSIBLE);
-        osrm::for_each_pair(input_way.nodes().crbegin(), input_way.nodes().crend(),
+        util::for_each_pair(input_way.nodes().crbegin(), input_way.nodes().crend(),
                             [&](const osmium::NodeRef &first_node, const osmium::NodeRef &last_node)
                             {
                                 external_memory.all_edges_list.push_back(InternalExtractorEdge(
@@ -184,7 +184,7 @@ void ExtractorCallbacks::ProcessWay(const osmium::Way &input_way, const Extracti
     {
         const bool forward_only =
             split_edge || TRAVEL_MODE_INACCESSIBLE == parsed_way.backward_travel_mode;
-        osrm::for_each_pair(input_way.nodes().cbegin(), input_way.nodes().cend(),
+        util::for_each_pair(input_way.nodes().cbegin(), input_way.nodes().cend(),
                             [&](const osmium::NodeRef &first_node, const osmium::NodeRef &last_node)
                             {
                                 external_memory.all_edges_list.push_back(InternalExtractorEdge(
@@ -197,7 +197,7 @@ void ExtractorCallbacks::ProcessWay(const osmium::Way &input_way, const Extracti
         if (split_edge)
         {
             BOOST_ASSERT(parsed_way.backward_travel_mode != TRAVEL_MODE_INACCESSIBLE);
-            osrm::for_each_pair(
+            util::for_each_pair(
                 input_way.nodes().cbegin(), input_way.nodes().cend(),
                 [&](const osmium::NodeRef &first_node, const osmium::NodeRef &last_node)
                 {
