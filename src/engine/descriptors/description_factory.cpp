@@ -107,7 +107,7 @@ void DescriptionFactory::Run(const unsigned zoom_level)
     {
         // move down names by one, q&d hack
         path_description[i - 1].name_id = path_description[i].name_id;
-        path_description[i].length = coordinate_calculation::greatCircleDistance(
+        path_description[i].length = util::coordinate_calculation::greatCircleDistance(
             path_description[i - 1].location, path_description[i].location);
     }
 
@@ -216,9 +216,9 @@ void DescriptionFactory::Run(const unsigned zoom_level)
                             }
 
                             const double post_turn_bearing =
-                                coordinate_calculation::bearing(first.location, second.location);
+                                util::coordinate_calculation::bearing(first.location, second.location);
                             const double pre_turn_bearing =
-                                coordinate_calculation::bearing(second.location, first.location);
+                                util::coordinate_calculation::bearing(second.location, first.location);
                             first.post_turn_bearing = static_cast<short>(post_turn_bearing * 10);
                             first.pre_turn_bearing = static_cast<short>(pre_turn_bearing * 10);
 

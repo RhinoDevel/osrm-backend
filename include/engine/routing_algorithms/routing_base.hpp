@@ -657,11 +657,11 @@ template <class DataFacadeT, class Derived> class BasicRoutingInterface
             for (const auto &p : unpacked_path)
             {
                 current_coordinate = facade->GetCoordinateOfNode(p.node);
-                distance += coordinate_calculation::haversineDistance(previous_coordinate,
+                distance += util::coordinate_calculation::haversineDistance(previous_coordinate,
                                                                        current_coordinate);
                 previous_coordinate = current_coordinate;
             }
-            distance += coordinate_calculation::haversineDistance(previous_coordinate,
+            distance += util::coordinate_calculation::haversineDistance(previous_coordinate,
                                                                    target_phantom.location);
         }
         return distance;

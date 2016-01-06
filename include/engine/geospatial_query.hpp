@@ -138,7 +138,7 @@ template <typename RTreeT> class GeospatialQuery
     {
         FixedPointCoordinate point_on_segment;
         double ratio;
-        const auto current_perpendicular_distance = coordinate_calculation::perpendicularDistance(
+        const auto current_perpendicular_distance = util::coordinate_calculation::perpendicularDistance(
             coordinates->at(data.u), coordinates->at(data.v), input_coordinate, point_on_segment,
             ratio);
 
@@ -163,7 +163,7 @@ template <typename RTreeT> class GeospatialQuery
                                               const int filter_bearing_range)
     {
         const double forward_edge_bearing =
-            coordinate_calculation::bearing(coordinates->at(segment.u), coordinates->at(segment.v));
+            util::coordinate_calculation::bearing(coordinates->at(segment.u), coordinates->at(segment.v));
 
         const double backward_edge_bearing = (forward_edge_bearing + 180) > 360
                                                  ? (forward_edge_bearing - 180)
