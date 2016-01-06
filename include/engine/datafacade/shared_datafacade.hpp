@@ -221,7 +221,7 @@ template <class EdgeDataT> class SharedDataFacade final : public BaseDataFacade<
 
     SharedDataFacade()
     {
-        data_timestamp_ptr = (SharedDataTimestamp *)SharedMemoryFactory::Get(
+        data_timestamp_ptr = (SharedDataTimestamp *)datastore::SharedMemoryFactory::Get(
                                  CURRENT_REGIONS, sizeof(SharedDataTimestamp), false, false)
                                  ->Ptr();
         CURRENT_LAYOUT = LAYOUT_NONE;
@@ -246,11 +246,11 @@ template <class EdgeDataT> class SharedDataFacade final : public BaseDataFacade<
             CURRENT_DATA = data_timestamp_ptr->data;
             CURRENT_TIMESTAMP = data_timestamp_ptr->timestamp;
 
-            m_layout_memory.reset(SharedMemoryFactory::Get(CURRENT_LAYOUT));
+            m_layout_memory.reset(datastore::SharedMemoryFactory::Get(CURRENT_LAYOUT));
 
             data_layout = (SharedDataLayout *)(m_layout_memory->Ptr());
 
-            m_large_memory.reset(SharedMemoryFactory::Get(CURRENT_DATA));
+            m_large_memory.reset(datastore::SharedMemoryFactory::Get(CURRENT_DATA));
             shared_memory = (char *)(m_large_memory->Ptr());
 
             const char *file_index_ptr =

@@ -196,7 +196,7 @@ int main(const int argc, const char *argv[]) try
     }();
 
     // Allocate a memory layout in shared memory, deallocate previous
-    auto *layout_memory = SharedMemoryFactory::Get(layout_region, sizeof(SharedDataLayout));
+    auto *layout_memory = datastore::SharedMemoryFactory::Get(layout_region, sizeof(SharedDataLayout));
     auto *shared_layout_ptr = new (layout_memory->Ptr()) SharedDataLayout();
 
     shared_layout_ptr->SetBlockSize<char>(SharedDataLayout::FILE_INDEX_PATH,
@@ -334,7 +334,7 @@ int main(const int argc, const char *argv[]) try
     util::SimpleLogger().Write() << "allocating shared memory of " << shared_layout_ptr->GetSizeOfLayout()
                            << " bytes";
     datastore::SharedMemory *shared_memory =
-        SharedMemoryFactory::Get(data_region, shared_layout_ptr->GetSizeOfLayout());
+        datastore::SharedMemoryFactory::Get(data_region, shared_layout_ptr->GetSizeOfLayout());
     char *shared_memory_ptr = static_cast<char *>(shared_memory->Ptr());
 
     // read actual data into shared memory object //
@@ -541,7 +541,7 @@ int main(const int argc, const char *argv[]) try
 
     // acquire lock
     datastore::SharedMemory *data_type_memory =
-        SharedMemoryFactory::Get(CURRENT_REGIONS, sizeof(SharedDataTimestamp), true, false);
+        datastore::SharedMemoryFactory::Get(CURRENT_REGIONS, sizeof(SharedDataTimestamp), true, false);
     SharedDataTimestamp *data_timestamp_ptr =
         static_cast<SharedDataTimestamp *>(data_type_memory->Ptr());
 
