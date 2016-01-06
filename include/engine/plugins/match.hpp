@@ -35,7 +35,10 @@ template <class DataFacadeT> class MapMatchingPlugin : public BasePlugin
 
     std::shared_ptr<SearchEngine<DataFacadeT>> search_engine_ptr;
 
-    using ClassifierT = BayesClassifier<LaplaceDistribution, LaplaceDistribution, double>;
+    using SubMatching = routing_algorithms::SubMatching;
+    using SubMatchingList = routing_algorithms::SubMatchingList;
+    using CandidateLists = routing_algorithms::CandidateLists;
+    using ClassifierT = map_matching::BayesClassifier<map_matching::LaplaceDistribution, map_matching::LaplaceDistribution, double>;
     using TraceClassification = ClassifierT::ClassificationT;
 
   public:
@@ -44,8 +47,8 @@ template <class DataFacadeT> class MapMatchingPlugin : public BasePlugin
           max_locations_map_matching(max_locations_map_matching),
           // the values where derived from fitting a laplace distribution
           // to the values of manually classified traces
-          classifier(LaplaceDistribution(0.005986, 0.016646),
-                     LaplaceDistribution(0.054385, 0.458432),
+          classifier(map_matching::LaplaceDistribution(0.005986, 0.016646),
+                     map_matching::LaplaceDistribution(0.054385, 0.458432),
                      0.696774) // valid apriori probability
     {
         search_engine_ptr = std::make_shared<SearchEngine<DataFacadeT>>(facade);
@@ -73,13 +76,13 @@ template <class DataFacadeT> class MapMatchingPlugin : public BasePlugin
         return label_with_confidence;
     }
 
-    map_matching::CandidateLists getCandidates(
+    CandidateLists getCandidates(
         const std::vector<FixedPointCoordinate> &input_coords,
         const std::vector<std::pair<const int, const boost::optional<int>>> &input_bearings,
         const double gps_precision,
         std::vector<double> &sub_trace_lengths)
     {
-        map_matching::CandidateLists candidates_lists;
+        CandidateLists candidates_lists;
 
         double query_radius = 10 * gps_precision;
         double last_distance =
@@ -101,7 +104,7 @@ template <class DataFacadeT> class MapMatchingPlugin : public BasePlugin
 
             if (input_coords.size() - 1 > current_coordinate && 0 < current_coordinate)
             {
-                double turn_angle = ComputeAngle::OfThreeFixedPointCoordinates(
+                double turn_angle = util::ComputeAngle::OfThreeFixedPointCoordinates(
                     input_coords[current_coordinate - 1], input_coords[current_coordinate],
                     input_coords[current_coordinate + 1]);
 
@@ -181,7 +184,7 @@ template <class DataFacadeT> class MapMatchingPlugin : public BasePlugin
         return candidates_lists;
     }
 
-    util::json::Object submatchingToJSON(const map_matching::SubMatching &sub,
+    util::json::Object submatchingToJSON(const SubMatching &sub,
                                          const RouteParameters &route_parameters,
                                          const InternalRouteResult &raw_route)
     {
@@ -199,7 +202,7 @@ template <class DataFacadeT> class MapMatchingPlugin : public BasePlugin
 
         if (route_parameters.geometry || route_parameters.print_instructions)
         {
-            DescriptionFactory factory;
+            descriptors::DescriptionFactory factory;
             FixedPointCoordinate current_coordinate;
             factory.SetStartSegment(raw_route.segment_end_coordinates.front().source_phantom,
                                     raw_route.source_traversed_in_reverse.front());
@@ -324,7 +327,7 @@ template <class DataFacadeT> class MapMatchingPlugin : public BasePlugin
             util::json::Logger::get()->initialize("matching");
 
         // call the actual map matching
-        map_matching::SubMatchingList sub_matchings;
+        SubMatchingList sub_matchings;
         search_engine_ptr->map_matching(candidates_lists, input_coords, input_timestamps,
                                         route_parameters.matching_beta,
                                         route_parameters.gps_precision, sub_matchings);
