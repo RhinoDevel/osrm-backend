@@ -298,10 +298,10 @@ template <class DataFacadeT> class JSONDescriptor final : public BaseDescriptor<
         for (const SegmentInformation &segment : description_factory.path_description)
         {
             util::json::Array json_instruction_row;
-            TurnInstruction current_instruction = segment.turn_instruction;
-            if (TurnInstructionsClass::TurnIsNecessary(current_instruction))
+            extractor::TurnInstruction current_instruction = segment.turn_instruction;
+            if (extractor::TurnInstructionsClass::TurnIsNecessary(current_instruction))
             {
-                if (TurnInstruction::EnterRoundAbout == current_instruction)
+                if (extractor::TurnInstruction::EnterRoundAbout == current_instruction)
                 {
                     round_about.name_id = segment.name_id;
                     round_about.start_index = necessary_segments_running_index;
@@ -309,10 +309,10 @@ template <class DataFacadeT> class JSONDescriptor final : public BaseDescriptor<
                 else
                 {
                     std::string current_turn_instruction;
-                    if (TurnInstruction::LeaveRoundAbout == current_instruction)
+                    if (extractor::TurnInstruction::LeaveRoundAbout == current_instruction)
                     {
                         temp_instruction = std::to_string(
-                            cast::enum_to_underlying(TurnInstruction::EnterRoundAbout));
+                            cast::enum_to_underlying(extractor::TurnInstruction::EnterRoundAbout));
                         current_turn_instruction += temp_instruction;
                         current_turn_instruction += "-";
                         temp_instruction = std::to_string(round_about.leave_at_exit + 1);
@@ -355,7 +355,7 @@ template <class DataFacadeT> class JSONDescriptor final : public BaseDescriptor<
                         static_cast<unsigned>(route_segments_list.size()));
                 }
             }
-            else if (TurnInstruction::StayOnRoundAbout == current_instruction)
+            else if (extractor::TurnInstruction::StayOnRoundAbout == current_instruction)
             {
                 ++round_about.leave_at_exit;
             }
@@ -367,7 +367,7 @@ template <class DataFacadeT> class JSONDescriptor final : public BaseDescriptor<
 
         util::json::Array json_last_instruction_row;
         temp_instruction =
-            std::to_string(cast::enum_to_underlying(TurnInstruction::ReachedYourDestination));
+            std::to_string(cast::enum_to_underlying(extractor::TurnInstruction::ReachedYourDestination));
         json_last_instruction_row.values.push_back(temp_instruction);
         json_last_instruction_row.values.push_back("");
         json_last_instruction_row.values.push_back(0);

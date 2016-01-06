@@ -228,9 +228,9 @@ int main(const int argc, const char *argv[]) try
                                             number_of_original_edges);
     shared_layout_ptr->SetBlockSize<unsigned>(SharedDataLayout::NAME_ID_LIST,
                                               number_of_original_edges);
-    shared_layout_ptr->SetBlockSize<TravelMode>(SharedDataLayout::TRAVEL_MODE,
+    shared_layout_ptr->SetBlockSize<extractor::TravelMode>(SharedDataLayout::TRAVEL_MODE,
                                                 number_of_original_edges);
-    shared_layout_ptr->SetBlockSize<TurnInstruction>(SharedDataLayout::TURN_INSTRUCTION,
+    shared_layout_ptr->SetBlockSize<extractor::TurnInstruction>(SharedDataLayout::TURN_INSTRUCTION,
                                                      number_of_original_edges);
     // note: there are 32 geometry indicators in one unsigned block
     shared_layout_ptr->SetBlockSize<unsigned>(SharedDataLayout::GEOMETRIES_INDICATORS,
@@ -395,10 +395,10 @@ int main(const int argc, const char *argv[]) try
     unsigned *name_id_ptr = shared_layout_ptr->GetBlockPtr<unsigned, true>(
         shared_memory_ptr, SharedDataLayout::NAME_ID_LIST);
 
-    TravelMode *travel_mode_ptr = shared_layout_ptr->GetBlockPtr<TravelMode, true>(
+    extractor::TravelMode *travel_mode_ptr = shared_layout_ptr->GetBlockPtr<extractor::TravelMode, true>(
         shared_memory_ptr, SharedDataLayout::TRAVEL_MODE);
 
-    TurnInstruction *turn_instructions_ptr = shared_layout_ptr->GetBlockPtr<TurnInstruction, true>(
+    extractor::TurnInstruction *turn_instructions_ptr = shared_layout_ptr->GetBlockPtr<extractor::TurnInstruction, true>(
         shared_memory_ptr, SharedDataLayout::TURN_INSTRUCTION);
 
     unsigned *geometries_indicator_ptr = shared_layout_ptr->GetBlockPtr<unsigned, true>(

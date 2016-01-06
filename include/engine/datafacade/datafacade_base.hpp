@@ -69,9 +69,9 @@ template <class EdgeDataT> class BaseDataFacade
     virtual void GetUncompressedGeometry(const unsigned id,
                                          std::vector<unsigned> &result_nodes) const = 0;
 
-    virtual TurnInstruction GetTurnInstructionForEdgeID(const unsigned id) const = 0;
+    virtual extractor::TurnInstruction GetTurnInstructionForEdgeID(const unsigned id) const = 0;
 
-    virtual TravelMode GetTravelModeForEdgeID(const unsigned id) const = 0;
+    virtual extractor::TravelMode GetTravelModeForEdgeID(const unsigned id) const = 0;
 
     virtual std::vector<PhantomNodeWithDistance>
     NearestPhantomNodesInRange(const FixedPointCoordinate &input_coordinate,

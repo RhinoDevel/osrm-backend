@@ -60,8 +60,8 @@ template <class EdgeDataT> class SharedDataFacade final : public BaseDataFacade<
     std::shared_ptr<ShM<FixedPointCoordinate, true>::vector> m_coordinate_list;
     ShM<NodeID, true>::vector m_via_node_list;
     ShM<unsigned, true>::vector m_name_ID_list;
-    ShM<TurnInstruction, true>::vector m_turn_instruction_list;
-    ShM<TravelMode, true>::vector m_travel_mode_list;
+    ShM<extractor::TurnInstruction, true>::vector m_turn_instruction_list;
+    ShM<extractor::TravelMode, true>::vector m_travel_mode_list;
     ShM<char, true>::vector m_names_char_list;
     ShM<unsigned, true>::vector m_name_begin_indices;
     ShM<bool, true>::vector m_edge_is_compressed;
@@ -130,15 +130,15 @@ template <class EdgeDataT> class SharedDataFacade final : public BaseDataFacade<
         m_coordinate_list = util::make_unique<ShM<FixedPointCoordinate, true>::vector>(
             coordinate_list_ptr, data_layout->num_entries[SharedDataLayout::COORDINATE_LIST]);
 
-        TravelMode *travel_mode_list_ptr =
-            data_layout->GetBlockPtr<TravelMode>(shared_memory, SharedDataLayout::TRAVEL_MODE);
-        typename ShM<TravelMode, true>::vector travel_mode_list(
+        extractor::TravelMode *travel_mode_list_ptr =
+            data_layout->GetBlockPtr<extractor::TravelMode>(shared_memory, SharedDataLayout::TRAVEL_MODE);
+        typename ShM<extractor::TravelMode, true>::vector travel_mode_list(
             travel_mode_list_ptr, data_layout->num_entries[SharedDataLayout::TRAVEL_MODE]);
         m_travel_mode_list.swap(travel_mode_list);
 
-        TurnInstruction *turn_instruction_list_ptr = data_layout->GetBlockPtr<TurnInstruction>(
+        extractor::TurnInstruction *turn_instruction_list_ptr = data_layout->GetBlockPtr<extractor::TurnInstruction>(
             shared_memory, SharedDataLayout::TURN_INSTRUCTION);
-        typename ShM<TurnInstruction, true>::vector turn_instruction_list(
+        typename ShM<extractor::TurnInstruction, true>::vector turn_instruction_list(
             turn_instruction_list_ptr,
             data_layout->num_entries[SharedDataLayout::TURN_INSTRUCTION]);
         m_turn_instruction_list.swap(turn_instruction_list);
@@ -355,12 +355,12 @@ template <class EdgeDataT> class SharedDataFacade final : public BaseDataFacade<
         return m_via_node_list.at(id);
     }
 
-    TurnInstruction GetTurnInstructionForEdgeID(const unsigned id) const override final
+    extractor::TurnInstruction GetTurnInstructionForEdgeID(const unsigned id) const override final
     {
         return m_turn_instruction_list.at(id);
     }
 
-    TravelMode GetTravelModeForEdgeID(const unsigned id) const override final
+    extractor::TravelMode GetTravelModeForEdgeID(const unsigned id) const override final
     {
         return m_travel_mode_list.at(id);
     }

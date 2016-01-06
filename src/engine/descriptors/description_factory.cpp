@@ -26,7 +26,7 @@ void DescriptionFactory::SetStartSegment(const PhantomNode &source, const bool t
         (traversed_in_reverse ? source.reverse_weight : source.forward_weight);
     const extractor::TravelMode travel_mode =
         (traversed_in_reverse ? source.backward_travel_mode : source.forward_travel_mode);
-    AppendSegment(source.location, PathData(0, source.name_id, TurnInstruction::HeadOn,
+    AppendSegment(source.location, PathData(0, source.name_id, extractor::TurnInstruction::HeadOn,
                                             segment_duration, travel_mode));
     BOOST_ASSERT(path_description.back().duration == segment_duration);
 }
@@ -41,8 +41,8 @@ void DescriptionFactory::SetEndSegment(const PhantomNode &target,
     const extractor::TravelMode travel_mode =
         (traversed_in_reverse ? target.backward_travel_mode : target.forward_travel_mode);
     path_description.emplace_back(target.location, target.name_id, segment_duration, 0.f,
-                                  is_via_location ? TurnInstruction::ReachViaLocation
-                                                  : TurnInstruction::NoTurn,
+                                  is_via_location ? extractor::TurnInstruction::ReachViaLocation
+                                                  : extractor::TurnInstruction::NoTurn,
                                   true, true, travel_mode);
     BOOST_ASSERT(path_description.back().duration == segment_duration);
 }
@@ -63,13 +63,13 @@ void DescriptionFactory::AppendSegment(const FixedPointCoordinate &coordinate,
     }
 
     // make sure mode changes are announced, even when there otherwise is no turn
-    const TurnInstruction turn = [&]() -> TurnInstruction
+    const extractor::TurnInstruction turn = [&]() -> TurnInstruction
     {
-        if (TurnInstruction::NoTurn == path_point.turn_instruction &&
+        if (extractor::TurnInstruction::NoTurn == path_point.turn_instruction &&
             path_description.front().travel_mode != path_point.travel_mode &&
             path_point.segment_duration > 0)
         {
-            return TurnInstruction::GoStraight;
+            return extractor::TurnInstruction::GoStraight;
         }
         return path_point.turn_instruction;
     }();
@@ -126,7 +126,7 @@ void DescriptionFactory::Run(const unsigned zoom_level)
     //    unsigned lastTurn = 0;
     //    for(unsigned i = 1; i < path_description.size(); ++i) {
     //        string1 = sEngine.GetEscapedNameForNameID(path_description[i].name_id);
-    //        if(TurnInstruction::GoStraight == path_description[i].turn_instruction) {
+    //        if(extractor::TurnInstruction::GoStraight == path_description[i].turn_instruction) {
     //            if(std::string::npos != string0.find(string1+";")
     //                  || std::string::npos != string0.find(";"+string1)
     //                  || std::string::npos != string0.find(string1+" ;")
@@ -136,7 +136,7 @@ void DescriptionFactory::Run(const unsigned zoom_level)
     //                string1;
     //                for(; lastTurn != i; ++lastTurn)
     //                    path_description[lastTurn].name_id = path_description[i].name_id;
-    //                path_description[i].turn_instruction = TurnInstruction::NoTurn;
+    //                path_description[i].turn_instruction = extractor::TurnInstruction::NoTurn;
     //            } else if(std::string::npos != string1.find(string0+";")
     //                  || std::string::npos != string1.find(";"+string0)
     //                    || std::string::npos != string1.find(string0+" ;")
@@ -145,10 +145,10 @@ void DescriptionFactory::Run(const unsigned zoom_level)
     //                util::SimpleLogger().Write() << "->prev correct: " << string1 << " contains " <<
     //                string0;
     //                path_description[i].name_id = path_description[i-1].name_id;
-    //                path_description[i].turn_instruction = TurnInstruction::NoTurn;
+    //                path_description[i].turn_instruction = extractor::TurnInstruction::NoTurn;
     //            }
     //        }
-    //        if (TurnInstruction::NoTurn != path_description[i].turn_instruction) {
+    //        if (extractor::TurnInstruction::NoTurn != path_description[i].turn_instruction) {
     //            lastTurn = i;
     //        }
     //        string0 = string1;
@@ -167,7 +167,7 @@ void DescriptionFactory::Run(const unsigned zoom_level)
         path_description[segment_start_index].length = segment_length;
         path_description[segment_start_index].duration = segment_duration;
 
-        if (TurnInstruction::NoTurn != path_description[i].turn_instruction)
+        if (extractor::TurnInstruction::NoTurn != path_description[i].turn_instruction)
         {
             BOOST_ASSERT(path_description[i].necessary);
             segment_length = 0;
@@ -183,7 +183,7 @@ void DescriptionFactory::Run(const unsigned zoom_level)
     {
         path_description.pop_back();
         path_description.back().necessary = true;
-        path_description.back().turn_instruction = TurnInstruction::NoTurn;
+        path_description.back().turn_instruction = extractor::TurnInstruction::NoTurn;
         target_phantom.name_id = (path_description.end() - 2)->name_id;
     }
 
@@ -192,7 +192,7 @@ void DescriptionFactory::Run(const unsigned zoom_level)
         !(path_description.begin() + 1)->is_via_location)
     {
         path_description.erase(path_description.begin());
-        path_description.front().turn_instruction = TurnInstruction::HeadOn;
+        path_description.front().turn_instruction = extractor::TurnInstruction::HeadOn;
         path_description.front().necessary = true;
         start_phantom.name_id = path_description.front().name_id;
     }
