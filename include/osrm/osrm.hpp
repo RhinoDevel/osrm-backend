@@ -35,9 +35,12 @@ namespace osrm
 
 struct LibOSRMConfig;
 
+namespace util
+{
 namespace json
 {
 struct Object;
+}
 }
 
 namespace engine {
@@ -51,7 +54,7 @@ class OSRM
   public:
     OSRM(LibOSRMConfig &lib_config);
     ~OSRM(); // needed because we need to define it with the implementation of OSRM_impl
-    int RunQuery(const RouteParameters &route_parameters, json::Object &json_result);
+    int RunQuery(const RouteParameters &route_parameters, util::json::Object &json_result);
 };
 }
 

@@ -14,11 +14,6 @@
 namespace osrm
 {
 
-namespace plugin
-{
-class BasePlugin;
-}
-
 namespace util
 {
 namespace json
@@ -30,6 +25,11 @@ struct Object;
 namespace engine
 {
 struct RouteParameters;
+namespace plugins
+{
+class BasePlugin;
+}
+
 namespace datafacade
 {
 struct SharedBarriers;
@@ -39,7 +39,7 @@ template <class EdgeDataT> class BaseDataFacade;
 class OSRM::OSRM_impl final
 {
   private:
-    using PluginMap = std::unordered_map<std::string, std::unique_ptr<plugin::BasePlugin>>;
+    using PluginMap = std::unordered_map<std::string, std::unique_ptr<plugins::BasePlugin>>;
 
   public:
     OSRM_impl(LibOSRMConfig &lib_config);
@@ -47,7 +47,7 @@ class OSRM::OSRM_impl final
     int RunQuery(const RouteParameters &route_parameters, util::json::Object &json_result);
 
   private:
-    void RegisterPlugin(plugin::BasePlugin *plugin);
+    void RegisterPlugin(plugins::BasePlugin *plugin);
     PluginMap plugin_map;
     // will only be initialized if shared memory is used
     std::unique_ptr<datafacade::SharedBarriers> barrier;
