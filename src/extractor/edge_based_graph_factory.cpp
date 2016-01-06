@@ -374,7 +374,7 @@ void EdgeBasedGraphFactory::GenerateEdgeExpandedEdges(
     util::Percent progress(m_node_based_graph->GetNumberOfNodes());
 
 #ifdef DEBUG_GEOMETRY
-    DEBUG_TURNS_START(debug_turns_path);
+    util::DEBUG_TURNS_START(debug_turns_path);
 #endif
 
     for (const auto node_u : util::irange(0u, m_node_based_graph->GetNumberOfNodes()))
@@ -451,7 +451,7 @@ void EdgeBasedGraphFactory::GenerateEdgeExpandedEdges(
                 {
                     distance += speed_profile.traffic_signal_penalty;
 
-                    DEBUG_SIGNAL(node_v, m_node_info_list, speed_profile.traffic_signal_penalty);
+                    util::DEBUG_SIGNAL(node_v, m_node_info_list, speed_profile.traffic_signal_penalty);
                 }
 
                 // unpack last node of first segment if packed
@@ -466,7 +466,7 @@ void EdgeBasedGraphFactory::GenerateEdgeExpandedEdges(
                                           ? m_compressed_edge_container.GetFirstEdgeTargetID(e2)
                                           : node_w)];
 
-                const double turn_angle = ComputeAngle::OfThreeFixedPointCoordinates(
+                const double turn_angle = util::ComputeAngle::OfThreeFixedPointCoordinates(
                     first_coordinate, m_node_info_list[node_v], third_coordinate);
 
                 const int turn_penalty = GetTurnPenalty(turn_angle, lua_state);
@@ -475,10 +475,10 @@ void EdgeBasedGraphFactory::GenerateEdgeExpandedEdges(
                 {
                     distance += speed_profile.u_turn_penalty;
 
-                    DEBUG_UTURN(node_v, m_node_info_list, speed_profile.u_turn_penalty);
+                    util::DEBUG_UTURN(node_v, m_node_info_list, speed_profile.u_turn_penalty);
                 }
 
-                DEBUG_TURN(node_v, m_node_info_list, first_coordinate, turn_angle, turn_penalty);
+                util::DEBUG_TURN(node_v, m_node_info_list, first_coordinate, turn_angle, turn_penalty);
 
                 distance += turn_penalty;
 
@@ -583,7 +583,7 @@ void EdgeBasedGraphFactory::GenerateEdgeExpandedEdges(
         }
     }
 
-    DEBUG_TURNS_STOP();
+    util::DEBUG_TURNS_STOP();
 
     FlushVectorToStream(edge_data_file, original_edge_data_vector);
 

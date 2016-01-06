@@ -25,12 +25,12 @@
 
 #include <boost/filesystem/fstream.hpp>
 
+struct lua_State;
+
 namespace osrm
 {
 namespace extractor
 {
-
-struct lua_State;
 
 class EdgeBasedGraphFactory
 {
