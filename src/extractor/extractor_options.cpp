@@ -110,7 +110,7 @@ ExtractorOptions::ParseArguments(int argc, char *argv[], ExtractorConfig &extrac
             util::SimpleLogger().Write() << "Reading options from: "
                                    << extractor_config.config_file_path.string();
             std::string ini_file_contents =
-                read_file_lower_content(extractor_config.config_file_path);
+                util::read_file_lower_content(extractor_config.config_file_path);
             std::stringstream config_stream(ini_file_contents);
             boost::program_options::store(parse_config_file(config_stream, config_file_options),
                                           option_variables);
