@@ -311,7 +311,7 @@ void ExtractionContainers::PrepareEdges(lua_State *segment_state)
             edge_iterator->source_coordinate.lat, edge_iterator->source_coordinate.lon,
             node_iterator->lat, node_iterator->lon);
 
-        if (lua_function_exists(segment_state, "segment_function"))
+        if (util::lua_function_exists(segment_state, "segment_function"))
         {
             luabind::call_function<void>(
                 segment_state, "segment_function", boost::cref(edge_iterator->source_coordinate),

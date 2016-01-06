@@ -106,7 +106,7 @@ int extractor::run()
 
         lua_State *segment_state = scripting_environment.GetLuaState();
 
-        if (lua_function_exists(segment_state, "source_function"))
+        if (util::lua_function_exists(segment_state, "source_function"))
         {
             // bind a single instance of SourceContainer class to relevant lua state
             SourceContainer sources;
@@ -342,7 +342,7 @@ void extractor::SetupScriptingEnvironment(lua_State *lua_state,
     }
 
     speed_profile.u_turn_penalty = 10 * lua_tointeger(lua_state, -1);
-    speed_profile.has_turn_penalty_function = lua_function_exists(lua_state, "turn_function");
+    speed_profile.has_turn_penalty_function = util::lua_function_exists(lua_state, "turn_function");
 }
 
 void extractor::FindComponents(unsigned max_edge_id,
