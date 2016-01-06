@@ -49,7 +49,7 @@ template <class DataFacadeT> class RoundTripPlugin final : public BasePlugin
     explicit RoundTripPlugin(DataFacadeT *facade, int max_locations_trip)
         : descriptor_string("trip"), facade(facade), max_locations_trip(max_locations_trip)
     {
-        search_engine_ptr = osrm::make_unique<SearchEngine<DataFacadeT>>(facade);
+        search_engine_ptr = util::make_unique<SearchEngine<DataFacadeT>>(facade);
     }
 
     const std::string GetDescriptor() const override final { return descriptor_string; }
@@ -352,7 +352,7 @@ template <class DataFacadeT> class RoundTripPlugin final : public BasePlugin
         for (std::size_t i = 0; i < route_result.size(); ++i)
         {
             std::unique_ptr<BaseDescriptor<DataFacadeT>> descriptor =
-                osrm::make_unique<JSONDescriptor<DataFacadeT>>(facade);
+                util::make_unique<JSONDescriptor<DataFacadeT>>(facade);
             descriptor->SetConfig(route_parameters);
 
             osrm::json::Object scc_trip;

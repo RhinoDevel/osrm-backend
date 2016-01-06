@@ -44,7 +44,7 @@ template <class DataFacadeT> class ViaRoutePlugin final : public BasePlugin
         : descriptor_string("viaroute"), facade(facade),
           max_locations_viaroute(max_locations_viaroute)
     {
-        search_engine_ptr = osrm::make_unique<SearchEngine<DataFacadeT>>(facade);
+        search_engine_ptr = util::make_unique<SearchEngine<DataFacadeT>>(facade);
 
         descriptor_table.emplace("json", 0);
         descriptor_table.emplace("gpx", 1);
@@ -150,13 +150,13 @@ template <class DataFacadeT> class ViaRoutePlugin final : public BasePlugin
         switch (descriptor_table.get_id(route_parameters.output_format))
         {
         case 1:
-            descriptor = osrm::make_unique<GPXDescriptor<DataFacadeT>>(facade);
+            descriptor = util::make_unique<GPXDescriptor<DataFacadeT>>(facade);
             break;
         // case 2:
-        //      descriptor = osrm::make_unique<GEOJSONDescriptor<DataFacadeT>>();
+        //      descriptor = util::make_unique<GEOJSONDescriptor<DataFacadeT>>();
         //      break;
         default:
-            descriptor = osrm::make_unique<JSONDescriptor<DataFacadeT>>(facade);
+            descriptor = util::make_unique<JSONDescriptor<DataFacadeT>>(facade);
             break;
         }
 

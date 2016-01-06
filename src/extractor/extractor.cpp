@@ -90,7 +90,7 @@ int extractor::run()
         ScriptingEnvironment scripting_environment(config.profile_path.string().c_str());
 
         ExtractionContainers extraction_containers;
-        auto extractor_callbacks = osrm::make_unique<ExtractorCallbacks>(extraction_containers);
+        auto extractor_callbacks = util::make_unique<ExtractorCallbacks>(extraction_containers);
 
         const osmium::io::File input_file(config.input_path.string());
         osmium::io::Reader reader(input_file);

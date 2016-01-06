@@ -37,7 +37,7 @@ OSRM::OSRM_impl::OSRM_impl(LibOSRMConfig &lib_config)
 {
     if (lib_config.use_shared_memory)
     {
-        barrier = osrm::make_unique<SharedBarriers>();
+        barrier = util::make_unique<SharedBarriers>();
         query_data_facade = new SharedDataFacade<QueryEdge::EdgeData>();
     }
     else
@@ -134,7 +134,7 @@ void OSRM::OSRM_impl::increase_concurrent_query_count()
 }
 
 // proxy code for compilation firewall
-OSRM::OSRM(LibOSRMConfig &lib_config) : OSRM_pimpl_(osrm::make_unique<OSRM_impl>(lib_config)) {}
+OSRM::OSRM(LibOSRMConfig &lib_config) : OSRM_pimpl_(util::make_unique<OSRM_impl>(lib_config)) {}
 
 // needed because unique_ptr needs the size of OSRM_impl for delete
 OSRM::~OSRM() {}

@@ -100,7 +100,7 @@ template <class EdgeDataT> class SharedDataFacade final : public BaseDataFacade<
             data_layout->GetBlockPtr<RTreeNode>(shared_memory, SharedDataLayout::R_SEARCH_TREE);
         m_static_rtree.reset(new TimeStampedRTreePair(
             CURRENT_TIMESTAMP,
-            osrm::make_unique<SharedRTree>(
+            util::make_unique<SharedRTree>(
                 tree_ptr, data_layout->num_entries[SharedDataLayout::R_SEARCH_TREE],
                 file_index_path, m_coordinate_list)));
         m_geospatial_query.reset(
@@ -127,7 +127,7 @@ template <class EdgeDataT> class SharedDataFacade final : public BaseDataFacade<
 
         FixedPointCoordinate *coordinate_list_ptr = data_layout->GetBlockPtr<FixedPointCoordinate>(
             shared_memory, SharedDataLayout::COORDINATE_LIST);
-        m_coordinate_list = osrm::make_unique<ShM<FixedPointCoordinate, true>::vector>(
+        m_coordinate_list = util::make_unique<ShM<FixedPointCoordinate, true>::vector>(
             coordinate_list_ptr, data_layout->num_entries[SharedDataLayout::COORDINATE_LIST]);
 
         TravelMode *travel_mode_list_ptr =
@@ -174,7 +174,7 @@ template <class EdgeDataT> class SharedDataFacade final : public BaseDataFacade<
             data_layout->GetBlockPtr<char>(shared_memory, SharedDataLayout::NAME_CHAR_LIST);
         typename ShM<char, true>::vector names_char_list(
             names_list_ptr, data_layout->num_entries[SharedDataLayout::NAME_CHAR_LIST]);
-        m_name_table = osrm::make_unique<RangeTable<16, true>>(
+        m_name_table = util::make_unique<RangeTable<16, true>>(
             name_offsets, name_blocks, static_cast<unsigned>(names_char_list.size()));
 
         m_names_char_list.swap(names_char_list);

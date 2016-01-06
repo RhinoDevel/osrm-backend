@@ -40,7 +40,7 @@ template <class DataFacadeT> class DistanceTablePlugin final : public BasePlugin
         : max_locations_distance_table(max_locations_distance_table), descriptor_string("table"),
           facade(facade)
     {
-        search_engine_ptr = osrm::make_unique<SearchEngine<DataFacadeT>>(facade);
+        search_engine_ptr = util::make_unique<SearchEngine<DataFacadeT>>(facade);
     }
 
     virtual ~DistanceTablePlugin() {}
