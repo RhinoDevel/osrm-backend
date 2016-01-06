@@ -44,7 +44,7 @@ using QueryGraph = util::StaticGraph<contractor::QueryEdge::EdgeData>;
 // delete a shared memory region. report warning if it could not be deleted
 void deleteRegion(const SharedDataType region)
 {
-    if (SharedMemory::RegionExists(region) && !SharedMemory::Remove(region))
+    if (datastore::SharedMemory::RegionExists(region) && !datastore::SharedMemory::Remove(region))
     {
         const std::string name = [&]
         {
@@ -177,7 +177,7 @@ int main(const int argc, const char *argv[]) try
     const boost::filesystem::path &core_marker_path = paths_iterator->second;
 
     // determine segment to use
-    bool segment2_in_use = SharedMemory::RegionExists(LAYOUT_2);
+    bool segment2_in_use = datastore::SharedMemory::RegionExists(LAYOUT_2);
     const SharedDataType layout_region = [&]
     {
         return segment2_in_use ? LAYOUT_1 : LAYOUT_2;
@@ -333,7 +333,7 @@ int main(const int argc, const char *argv[]) try
     // allocate shared memory block
     util::SimpleLogger().Write() << "allocating shared memory of " << shared_layout_ptr->GetSizeOfLayout()
                            << " bytes";
-    SharedMemory *shared_memory =
+    datastore::SharedMemory *shared_memory =
         SharedMemoryFactory::Get(data_region, shared_layout_ptr->GetSizeOfLayout());
     char *shared_memory_ptr = static_cast<char *>(shared_memory->Ptr());
 
@@ -540,7 +540,7 @@ int main(const int argc, const char *argv[]) try
     hsgr_input_stream.close();
 
     // acquire lock
-    SharedMemory *data_type_memory =
+    datastore::SharedMemory *data_type_memory =
         SharedMemoryFactory::Get(CURRENT_REGIONS, sizeof(SharedDataTimestamp), true, false);
     SharedDataTimestamp *data_timestamp_ptr =
         static_cast<SharedDataTimestamp *>(data_type_memory->Ptr());

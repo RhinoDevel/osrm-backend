@@ -53,8 +53,8 @@ template <class EdgeDataT> class SharedDataFacade final : public BaseDataFacade<
 
     unsigned m_check_sum;
     std::unique_ptr<QueryGraph> m_query_graph;
-    std::unique_ptr<SharedMemory> m_layout_memory;
-    std::unique_ptr<SharedMemory> m_large_memory;
+    std::unique_ptr<datastore::SharedMemory> m_layout_memory;
+    std::unique_ptr<datastore::SharedMemory> m_large_memory;
     std::string m_timestamp;
 
     std::shared_ptr<util::ShM<util::FixedPointCoordinate, true>::vector> m_coordinate_list;
@@ -239,8 +239,8 @@ template <class EdgeDataT> class SharedDataFacade final : public BaseDataFacade<
             CURRENT_TIMESTAMP != data_timestamp_ptr->timestamp)
         {
             // release the previous shared memory segments
-            SharedMemory::Remove(CURRENT_LAYOUT);
-            SharedMemory::Remove(CURRENT_DATA);
+            datastore::SharedMemory::Remove(CURRENT_LAYOUT);
+            datastore::SharedMemory::Remove(CURRENT_DATA);
 
             CURRENT_LAYOUT = data_timestamp_ptr->layout;
             CURRENT_DATA = data_timestamp_ptr->data;

@@ -12,7 +12,7 @@ namespace tools
 
 void deleteRegion(const SharedDataType region)
 {
-    if (SharedMemory::RegionExists(region) && !SharedMemory::Remove(region))
+    if (datastore::SharedMemory::RegionExists(region) && !datastore::SharedMemory::Remove(region))
     {
         const std::string name = [&]
         {
