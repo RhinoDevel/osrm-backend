@@ -308,11 +308,11 @@ template <class DataFacadeT> class RoundTripPlugin final : public BasePlugin
                 if (component_size < BF_MAX_FEASABLE)
                 {
                     scc_route =
-                        osrm::trip::BruteForceTrip(start, end, number_of_locations, result_table);
+                        trip::BruteForceTrip(start, end, number_of_locations, result_table);
                 }
                 else
                 {
-                    scc_route = osrm::trip::FarthestInsertionTrip(start, end, number_of_locations,
+                    scc_route = trip::FarthestInsertionTrip(start, end, number_of_locations,
                                                                   result_table);
                 }
 
