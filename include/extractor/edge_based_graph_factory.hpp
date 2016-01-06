@@ -38,7 +38,7 @@ class EdgeBasedGraphFactory
     EdgeBasedGraphFactory() = delete;
     EdgeBasedGraphFactory(const EdgeBasedGraphFactory &) = delete;
 
-    explicit EdgeBasedGraphFactory(std::shared_ptr<NodeBasedDynamicGraph> node_based_graph,
+    explicit EdgeBasedGraphFactory(std::shared_ptr<util::NodeBasedDynamicGraph> node_based_graph,
                                    const CompressedEdgeContainer &compressed_edge_container,
                                    const std::unordered_set<NodeID> &barrier_nodes,
                                    const std::unordered_set<NodeID> &traffic_lights,
@@ -74,7 +74,7 @@ class EdgeBasedGraphFactory
     int GetTurnPenalty(double angle, lua_State *lua_state) const;
 
   private:
-    using EdgeData = NodeBasedDynamicGraph::EdgeData;
+    using EdgeData = util::NodeBasedDynamicGraph::EdgeData;
 
     //! maps index from m_edge_based_node_list to ture/false if the node is an entry point to the
     //! graph
@@ -85,7 +85,7 @@ class EdgeBasedGraphFactory
     unsigned m_max_edge_id;
 
     const std::vector<QueryNode> &m_node_info_list;
-    std::shared_ptr<NodeBasedDynamicGraph> m_node_based_graph;
+    std::shared_ptr<util::NodeBasedDynamicGraph> m_node_based_graph;
     std::shared_ptr<RestrictionMap const> m_restriction_map;
 
     const std::unordered_set<NodeID> &m_barrier_nodes;

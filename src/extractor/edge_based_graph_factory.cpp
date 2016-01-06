@@ -22,7 +22,7 @@ namespace extractor
 {
 
 EdgeBasedGraphFactory::EdgeBasedGraphFactory(
-    std::shared_ptr<NodeBasedDynamicGraph> node_based_graph,
+    std::shared_ptr<util::NodeBasedDynamicGraph> node_based_graph,
     const CompressedEdgeContainer &compressed_edge_container,
     const std::unordered_set<NodeID> &barrier_nodes,
     const std::unordered_set<NodeID> &traffic_lights,

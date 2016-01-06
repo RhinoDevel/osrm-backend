@@ -21,7 +21,7 @@ GraphCompressor::GraphCompressor(SpeedProfileProperties speed_profile)
 void GraphCompressor::Compress(const std::unordered_set<NodeID> &barrier_nodes,
                                const std::unordered_set<NodeID> &traffic_lights,
                                RestrictionMap &restriction_map,
-                               NodeBasedDynamicGraph &graph,
+                               util::NodeBasedDynamicGraph &graph,
                                CompressedEdgeContainer &geometry_compressor)
 {
     const unsigned original_number_of_nodes = graph.GetNumberOfNodes();
@@ -168,7 +168,7 @@ void GraphCompressor::Compress(const std::unordered_set<NodeID> &barrier_nodes,
 
 void GraphCompressor::PrintStatistics(unsigned original_number_of_nodes,
                                       unsigned original_number_of_edges,
-                                      const NodeBasedDynamicGraph &graph) const
+                                      const util::NodeBasedDynamicGraph &graph) const
 {
 
     unsigned new_node_count = 0;

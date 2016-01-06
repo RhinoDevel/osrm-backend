@@ -32,7 +32,7 @@ class extractor
                     std::vector<bool> node_is_startpoint,
                     const std::vector<QueryNode> &internal_to_external_node_map);
     std::shared_ptr<RestrictionMap> LoadRestrictionMap();
-    std::shared_ptr<NodeBasedDynamicGraph>
+    std::shared_ptr<util::NodeBasedDynamicGraph>
     LoadNodeBasedGraph(std::unordered_set<NodeID> &barrier_nodes,
                        std::unordered_set<NodeID> &traffic_lights,
                        std::vector<QueryNode> &internal_to_external_node_map);

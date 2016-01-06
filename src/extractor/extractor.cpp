@@ -439,7 +439,7 @@ std::shared_ptr<RestrictionMap> extractor::LoadRestrictionMap()
 /**
   \brief Load node based graph from .osrm file
   */
-std::shared_ptr<NodeBasedDynamicGraph>
+std::shared_ptr<util::NodeBasedDynamicGraph>
 extractor::LoadNodeBasedGraph(std::unordered_set<NodeID> &barrier_nodes,
                               std::unordered_set<NodeID> &traffic_lights,
                               std::vector<QueryNode> &internal_to_external_node_map)
@@ -471,7 +471,7 @@ extractor::LoadNodeBasedGraph(std::unordered_set<NodeID> &barrier_nodes,
     if (edge_list.empty())
     {
         util::SimpleLogger().Write(logWARNING) << "The input data is empty, exiting.";
-        return std::shared_ptr<NodeBasedDynamicGraph>();
+        return std::shared_ptr<util::NodeBasedDynamicGraph>();
     }
 
     return NodeBasedDynamicGraphFromEdges(number_of_node_based_nodes, edge_list);
