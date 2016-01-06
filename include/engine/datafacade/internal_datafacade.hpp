@@ -249,7 +249,7 @@ template <class EdgeDataT> class InternalDataFacade final : public BaseDataFacad
         {
             const auto it = server_paths.find(path);
             if (it == end_it || !boost::filesystem::is_regular_file(it->second))
-                throw osrm::exception("no valid " + path + " file given in ini file");
+                throw util::exception("no valid " + path + " file given in ini file");
             return it->second;
         };
 

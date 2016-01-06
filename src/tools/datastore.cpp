@@ -106,35 +106,35 @@ int main(const int argc, const char *argv[]) try
 
     if (server_paths.find("hsgrdata") == server_paths.end())
     {
-        throw osrm::exception("no hsgr file found");
+        throw util::exception("no hsgr file found");
     }
     if (server_paths.find("ramindex") == server_paths.end())
     {
-        throw osrm::exception("no ram index file found");
+        throw util::exception("no ram index file found");
     }
     if (server_paths.find("fileindex") == server_paths.end())
     {
-        throw osrm::exception("no leaf index file found");
+        throw util::exception("no leaf index file found");
     }
     if (server_paths.find("nodesdata") == server_paths.end())
     {
-        throw osrm::exception("no nodes file found");
+        throw util::exception("no nodes file found");
     }
     if (server_paths.find("edgesdata") == server_paths.end())
     {
-        throw osrm::exception("no edges file found");
+        throw util::exception("no edges file found");
     }
     if (server_paths.find("namesdata") == server_paths.end())
     {
-        throw osrm::exception("no names file found");
+        throw util::exception("no names file found");
     }
     if (server_paths.find("geometry") == server_paths.end())
     {
-        throw osrm::exception("no geometry file found");
+        throw util::exception("no geometry file found");
     }
     if (server_paths.find("core") == server_paths.end())
     {
-        throw osrm::exception("no core file found");
+        throw util::exception("no core file found");
     }
 
     auto paths_iterator = server_paths.find("hsgrdata");

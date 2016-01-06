@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
                 const EdgeID edge_id_1 = m_query_graph->FindEdgeInEitherDirection(node_u, data.id);
                 if (SPECIAL_EDGEID == edge_id_1)
                 {
-                    throw osrm::exception("cannot find first segment of edge (" +
+                    throw util::exception("cannot find first segment of edge (" +
                                           std::to_string(node_u) + "," + std::to_string(data.id) +
                                           "," + std::to_string(node_v) + "), eid: " +
                                           std::to_string(eid));
@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
                 const EdgeID edge_id_2 = m_query_graph->FindEdgeInEitherDirection(data.id, node_v);
                 if (SPECIAL_EDGEID == edge_id_2)
                 {
-                    throw osrm::exception("cannot find second segment of edge (" +
+                    throw util::exception("cannot find second segment of edge (" +
                                           std::to_string(node_u) + "," + std::to_string(data.id) +
                                           "," + std::to_string(node_v) + "), eid: " +
                                           std::to_string(eid));

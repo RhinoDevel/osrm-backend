@@ -61,7 +61,7 @@ std::size_t loadGraph(const char *path,
     std::ifstream input_stream(path, std::ifstream::in | std::ifstream::binary);
     if (!input_stream.is_open())
     {
-        throw osrm::exception("Cannot open osrm file");
+        throw util::exception("Cannot open osrm file");
     }
 
     // load graph data
@@ -147,13 +147,13 @@ int main(int argc, char *argv[])
             OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(psz_driver_name);
         if (nullptr == po_driver)
         {
-            throw osrm::exception("ESRI Shapefile driver not available");
+            throw util::exception("ESRI Shapefile driver not available");
         }
         auto *po_datasource = po_driver->CreateDataSource("component.shp", nullptr);
 
         if (nullptr == po_datasource)
         {
-            throw osrm::exception("Creation of output file failed");
+            throw util::exception("Creation of output file failed");
         }
 
         auto *po_srs = new OGRSpatialReference();
@@ -163,7 +163,7 @@ int main(int argc, char *argv[])
 
         if (nullptr == po_layer)
         {
-            throw osrm::exception("Layer creation failed.");
+            throw util::exception("Layer creation failed.");
         }
         TIMER_STOP(SCC_RUN_SETUP);
         util::SimpleLogger().Write() << "shapefile setup took " << TIMER_MSEC(SCC_RUN_SETUP) / 1000.
@@ -208,7 +208,7 @@ int main(int argc, char *argv[])
                         po_feature->SetGeometry(&line_string);
                         if (OGRERR_NONE != po_layer->CreateFeature(po_feature))
                         {
-                            throw osrm::exception("Failed to create feature in shapefile.");
+                            throw util::exception("Failed to create feature in shapefile.");
                         }
                         OGRFeature::DestroyFeature(po_feature);
                     }

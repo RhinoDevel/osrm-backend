@@ -142,11 +142,11 @@ struct SharedDataLayout
             bool end_canary_alive = std::equal(CANARY, CANARY + sizeof(CANARY), end_canary_ptr);
             if (!start_canary_alive)
             {
-                throw osrm::exception("Start canary of block corrupted.");
+                throw util::exception("Start canary of block corrupted.");
             }
             if (!end_canary_alive)
             {
-                throw osrm::exception("End canary of block corrupted.");
+                throw util::exception("End canary of block corrupted.");
             }
         }
 
