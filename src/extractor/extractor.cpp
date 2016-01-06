@@ -451,7 +451,7 @@ extractor::LoadNodeBasedGraph(std::unordered_set<NodeID> &barrier_nodes,
 
     std::vector<NodeID> barrier_list;
     std::vector<NodeID> traffic_light_list;
-    NodeID number_of_node_based_nodes = loadNodesFromFile(
+    NodeID number_of_node_based_nodes = util::loadNodesFromFile(
         input_stream, barrier_list, traffic_light_list, internal_to_external_node_map);
 
     util::SimpleLogger().Write() << " - " << barrier_list.size() << " bollard nodes, "
