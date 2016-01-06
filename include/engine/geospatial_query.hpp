@@ -170,11 +170,11 @@ template <typename RTreeT> class GeospatialQuery
                                                  : (forward_edge_bearing + 180);
 
         const bool forward_bearing_valid =
-            bearing::CheckInBounds(std::round(forward_edge_bearing), filter_bearing,
+            util::bearing::CheckInBounds(std::round(forward_edge_bearing), filter_bearing,
                                    filter_bearing_range) &&
             segment.forward_edge_based_node_id != SPECIAL_NODEID;
         const bool backward_bearing_valid =
-            bearing::CheckInBounds(std::round(backward_edge_bearing), filter_bearing,
+            util::bearing::CheckInBounds(std::round(backward_edge_bearing), filter_bearing,
                                    filter_bearing_range) &&
             segment.reverse_edge_based_node_id != SPECIAL_NODEID;
         return std::make_pair(forward_bearing_valid, backward_bearing_valid);
