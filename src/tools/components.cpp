@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
 {
     std::vector<extractor::QueryNode> coordinate_list;
 
-    LogPolicy::GetInstance().Unmute();
+    util::LogPolicy::GetInstance().Unmute();
     try
     {
         // enable logging

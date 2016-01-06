@@ -17,7 +17,7 @@ namespace tools
 
 int main(int argc, const char *argv[])
 {
-    LogPolicy::GetInstance().Unmute();
+    util::LogPolicy::GetInstance().Unmute();
     try
     {
         std::string ip_address;

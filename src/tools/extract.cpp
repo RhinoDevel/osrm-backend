@@ -15,7 +15,7 @@ namespace tools
 
 int main(int argc, char *argv[]) try
 {
-    LogPolicy::GetInstance().Unmute();
+    util::LogPolicy::GetInstance().Unmute();
     ExtractorConfig extractor_config;
 
     const return_code result = ExtractorOptions::ParseArguments(argc, argv, extractor_config);

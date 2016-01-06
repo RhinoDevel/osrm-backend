@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
     return 0;
 #else
 
-    LogPolicy::GetInstance().Unmute();
+    util::LogPolicy::GetInstance().Unmute();
     boost::filesystem::path test_path;
     try
     {

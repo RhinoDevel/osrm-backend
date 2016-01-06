@@ -11,7 +11,7 @@ namespace tools
 
 int main()
 {
-    LogPolicy::GetInstance().Unmute();
+    util::LogPolicy::GetInstance().Unmute();
     try
     {
         util::SimpleLogger().Write() << "starting up engines, " << OSRM_VERSION;

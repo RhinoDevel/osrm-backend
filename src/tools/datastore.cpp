@@ -73,7 +73,7 @@ void deleteRegion(const SharedDataType region)
 
 int main(const int argc, const char *argv[]) try
 {
-    LogPolicy::GetInstance().Unmute();
+    util::LogPolicy::GetInstance().Unmute();
     SharedBarriers barrier;
 
 #ifdef __linux__

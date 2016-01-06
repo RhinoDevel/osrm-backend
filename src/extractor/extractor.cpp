@@ -74,7 +74,7 @@ int extractor::run()
 {
     try
     {
-        LogPolicy::GetInstance().Unmute();
+        util::LogPolicy::GetInstance().Unmute();
         TIMER_START(extracting);
 
         const unsigned recommended_num_threads = tbb::task_scheduler_init::default_num_threads();

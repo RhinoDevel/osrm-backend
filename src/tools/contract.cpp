@@ -18,7 +18,7 @@ namespace tools
 
 int main(int argc, char *argv[]) try
 {
-    LogPolicy::GetInstance().Unmute();
+    util::LogPolicy::GetInstance().Unmute();
     contractor::ContractorConfig contractor_config;
 
     const return_code result = ContractorOptions::ParseArguments(argc, argv, contractor_config);

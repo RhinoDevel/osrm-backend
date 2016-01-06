@@ -22,7 +22,7 @@ using QueryGraph = util::StaticGraph<EdgeData>;
 
 int main(int argc, char *argv[])
 {
-    LogPolicy::GetInstance().Unmute();
+    util::LogPolicy::GetInstance().Unmute();
     try
     {
         if (argc != 2)

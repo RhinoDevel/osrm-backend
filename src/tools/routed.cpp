@@ -46,7 +46,7 @@ BOOL WINAPI console_ctrl_handler(DWORD ctrl_type)
 
 int main(int argc, const char *argv[]) try
 {
-    LogPolicy::GetInstance().Unmute();
+    util::LogPolicy::GetInstance().Unmute();
 
     bool trial_run = false;
     std::string ip_address;
