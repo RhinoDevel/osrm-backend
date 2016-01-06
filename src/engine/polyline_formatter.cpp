@@ -10,13 +10,13 @@ namespace osrm
 namespace engine
 {
 
-osrm::json::String
+util::json::String
 PolylineFormatter::printEncodedString(const std::vector<SegmentInformation> &polyline) const
 {
     return util::json::String(PolylineCompressor().get_encoded_string(polyline));
 }
 
-osrm::json::Array
+util::json::Array
 PolylineFormatter::printUnencodedString(const std::vector<SegmentInformation> &polyline) const
 {
     util::json::Array json_geometry_array;

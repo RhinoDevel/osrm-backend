@@ -1,8 +1,6 @@
 #ifndef POLYLINE_FORMATTER_HPP
 #define POLYLINE_FORMATTER_HPP
 
-struct SegmentInformation;
-
 #include "osrm/json_container.hpp"
 
 #include <string>
@@ -12,6 +10,8 @@ namespace osrm
 {
 namespace engine
 {
+
+struct SegmentInformation;
 
 struct PolylineFormatter
 {
