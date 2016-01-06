@@ -43,7 +43,7 @@ struct MatchingDebugInfo
                     json::make_array(elem_s.phantom_node.location.lat / COORDINATE_PRECISION,
                                            elem_s.phantom_node.location.lon / COORDINATE_PRECISION);
                 state.values["viterbi"] =
-                    json::clamp_float(osrm::matching::IMPOSSIBLE_LOG_PROB);
+                    json::clamp_float(engine::map_matching::IMPOSSIBLE_LOG_PROB);
                 state.values["pruned"] = 0u;
                 timestamps.values.push_back(state);
             }

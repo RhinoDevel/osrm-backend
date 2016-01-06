@@ -34,11 +34,10 @@ struct SubMatching
 
 using CandidateList = std::vector<PhantomNodeWithDistance>;
 using CandidateLists = std::vector<CandidateList>;
-using HMM = HiddenMarkovModel<CandidateLists>;
+using HMM = map_matching::HiddenMarkovModel<CandidateLists>;
 using SubMatchingList = std::vector<SubMatching>;
 
 constexpr static const unsigned MAX_BROKEN_STATES = 10;
-
 constexpr static const double MAX_SPEED = 180 / 3.6; // 180km -> m/s
 constexpr static const unsigned SUSPICIOUS_DISTANCE_DELTA = 100;
 
@@ -71,12 +70,12 @@ class MapMatching final : public BasicRoutingInterface<DataFacadeT, MapMatching<
     {
     }
 
-    void operator()(const osrm::matching::CandidateLists &candidates_list,
+    void operator()(const CandidateLists &candidates_list,
                     const std::vector<FixedPointCoordinate> &trace_coordinates,
                     const std::vector<unsigned> &trace_timestamps,
                     const double matching_beta,
                     const double gps_precision,
-                    osrm::matching::SubMatchingList &sub_matchings) const
+                    SubMatchingList &sub_matchings) const
     {
         BOOST_ASSERT(candidates_list.size() == trace_coordinates.size());
         BOOST_ASSERT(candidates_list.size() > 1);
@@ -94,12 +93,12 @@ class MapMatching final : public BasicRoutingInterface<DataFacadeT, MapMatching<
                 return 1u;
             }
         }();
-        const auto max_broken_time = median_sample_time * osrm::matching::MAX_BROKEN_STATES;
+        const auto max_broken_time = median_sample_time * MAX_BROKEN_STATES;
         const auto max_distance_delta = [&]()
         {
             if (use_timestamps)
             {
-                return median_sample_time * osrm::matching::MAX_SPEED;
+                return median_sample_time * MAX_SPEED;
             }
             else
             {
@@ -108,18 +107,18 @@ class MapMatching final : public BasicRoutingInterface<DataFacadeT, MapMatching<
         }();
 
         // TODO replace default values with table lookup based on sampling frequency
-        EmissionLogProbability emission_log_probability(gps_precision);
-        TransitionLogProbability transition_log_probability(matching_beta);
+        map_matching::EmissionLogProbability emission_log_probability(gps_precision);
+        map_matching::TransitionLogProbability transition_log_probability(matching_beta);
 
-        osrm::matching::HMM model(candidates_list, emission_log_probability);
+        HMM model(candidates_list, emission_log_probability);
 
         std::size_t initial_timestamp = model.initialize(0);
-        if (initial_timestamp == osrm::matching::INVALID_STATE)
+        if (initial_timestamp == map_matching::INVALID_STATE)
         {
             return;
         }
 
-        MatchingDebugInfo matching_debug(osrm::json::Logger::get());
+        util::MatchingDebugInfo matching_debug(osrm::json::Logger::get());
         matching_debug.initialize(candidates_list);
 
         engine_working_data.InitializeOrClearFirstThreadLocalStorage(
@@ -128,7 +127,7 @@ class MapMatching final : public BasicRoutingInterface<DataFacadeT, MapMatching<
         QueryHeap &forward_heap = *(engine_working_data.forward_heap_1);
         QueryHeap &reverse_heap = *(engine_working_data.reverse_heap_1);
 
-        std::size_t breakage_begin = osrm::matching::INVALID_STATE;
+        std::size_t breakage_begin = map_matching::INVALID_STATE;
         std::vector<std::size_t> split_points;
         std::vector<std::size_t> prev_unbroken_timestamps;
         prev_unbroken_timestamps.reserve(candidates_list.size());
@@ -149,16 +148,16 @@ class MapMatching final : public BasicRoutingInterface<DataFacadeT, MapMatching<
             else
             {
                 trace_split = trace_split || (t - prev_unbroken_timestamps.back() >
-                                              osrm::matching::MAX_BROKEN_STATES);
+                                              MAX_BROKEN_STATES);
             }
 
             if (trace_split)
             {
                 std::size_t split_index = t;
-                if (breakage_begin != osrm::matching::INVALID_STATE)
+                if (breakage_begin != map_matching::INVALID_STATE)
                 {
                     split_index = breakage_begin;
-                    breakage_begin = osrm::matching::INVALID_STATE;
+                    breakage_begin = map_matching::INVALID_STATE;
                 }
                 split_points.push_back(split_index);
 
@@ -166,7 +165,7 @@ class MapMatching final : public BasicRoutingInterface<DataFacadeT, MapMatching<
                 model.clear(split_index);
                 std::size_t new_start = model.initialize(split_index);
                 // no new start was found -> stop viterbi calculation
-                if (new_start == osrm::matching::INVALID_STATE)
+                if (new_start == map_matching::INVALID_STATE)
                 {
                     break;
                 }
@@ -248,7 +247,7 @@ class MapMatching final : public BasicRoutingInterface<DataFacadeT, MapMatching<
                         current_lengths[s_prime] = network_distance;
                         current_pruned[s_prime] = false;
                         current_suspicious[s_prime] =
-                            d_t > osrm::matching::SUSPICIOUS_DISTANCE_DELTA;
+                            d_t > SUSPICIOUS_DISTANCE_DELTA;
                         model.breakage[t] = false;
                     }
                 }
@@ -282,7 +281,7 @@ class MapMatching final : public BasicRoutingInterface<DataFacadeT, MapMatching<
         std::size_t sub_matching_begin = initial_timestamp;
         for (const auto sub_matching_end : split_points)
         {
-            osrm::matching::SubMatching matching;
+            SubMatching matching;
 
             std::size_t parent_timestamp_index = sub_matching_end - 1;
             while (parent_timestamp_index >= sub_matching_begin &&
