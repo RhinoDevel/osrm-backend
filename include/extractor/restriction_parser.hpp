@@ -8,16 +8,17 @@
 #include <string>
 #include <vector>
 
-namespace osrm
-{
-namespace extractor
-{
-
 struct lua_State;
 namespace osmium
 {
 class Relation;
 }
+
+
+namespace osrm
+{
+namespace extractor
+{
 
 /**
  * Parses the relations that represents turn restrictions.
