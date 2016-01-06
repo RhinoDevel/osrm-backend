@@ -429,7 +429,7 @@ std::shared_ptr<RestrictionMap> extractor::LoadRestrictionMap()
                                              std::ios::in | std::ios::binary);
 
     std::vector<TurnRestriction> restriction_list;
-    loadRestrictionsFromFile(input_stream, restriction_list);
+    util::loadRestrictionsFromFile(input_stream, restriction_list);
 
     util::SimpleLogger().Write() << " - " << restriction_list.size() << " restrictions.";
 
