@@ -19,8 +19,11 @@ namespace osrm
 namespace engine
 {
 
+namespace datafacade
+{
 struct SharedBarriers;
 template <class EdgeDataT> class BaseDataFacade;
+}
 
 class OSRM::OSRM_impl final
 {
@@ -36,7 +39,7 @@ class OSRM::OSRM_impl final
     void RegisterPlugin(BasePlugin *plugin);
     PluginMap plugin_map;
     // will only be initialized if shared memory is used
-    std::unique_ptr<SharedBarriers> barrier;
+    std::unique_ptr<datafacade::SharedBarriers> barrier;
     // base class pointer to the objects
     BaseDataFacade<QueryEdge::EdgeData> *query_data_facade;
 
