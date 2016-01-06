@@ -29,7 +29,7 @@ using EdgeRange = util::range<EdgeID>;
 template <class EdgeDataT> class BaseDataFacade
 {
   public:
-    using RTreeLeaf = EdgeBasedNode;
+    using RTreeLeaf = extractor::EdgeBasedNode;
     using EdgeData = EdgeDataT;
     BaseDataFacade() {}
     virtual ~BaseDataFacade() {}

@@ -48,7 +48,7 @@ class Prepare
                                      const util::DeallocatingVector<QueryEdge> &contracted_edge_list);
     void FindComponents(unsigned max_edge_id,
                         const util::DeallocatingVector<extractor::EdgeBasedEdge> &edges,
-                        std::vector<EdgeBasedNode> &nodes) const;
+                        std::vector<extractor::EdgeBasedNode> &nodes) const;
 
   private:
     ContractorConfig config;
