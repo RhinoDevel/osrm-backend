@@ -25,7 +25,7 @@ RequestParser::RequestParser()
 }
 
 std::tuple<util::tribool, compression_type>
-RequestParser::parse(request &current_request, char *begin, char *end)
+RequestParser::parse(http::request &current_request, char *begin, char *end)
 {
     while (begin != end)
     {
@@ -44,7 +44,7 @@ RequestParser::parse(request &current_request, char *begin, char *end)
     return std::make_tuple(result, selected_compression);
 }
 
-osrm::tribool RequestParser::consume(request &current_request, const char input)
+osrm::tribool RequestParser::consume(http::request &current_request, const char input)
 {
     switch (state)
     {

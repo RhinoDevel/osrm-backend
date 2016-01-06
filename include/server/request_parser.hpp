@@ -23,10 +23,10 @@ class RequestParser
     RequestParser();
 
     std::tuple<util::tribool, compression_type>
-    parse(request &current_request, char *begin, char *end);
+    parse(http::request &current_request, char *begin, char *end);
 
   private:
-    util::tribool consume(request &current_request, const char input);
+    util::tribool consume(http::request &current_request, const char input);
 
     bool is_char(const int character) const;
 
