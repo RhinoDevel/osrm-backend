@@ -1,9 +1,6 @@
 #ifndef OSRM_IMPL_HPP
 #define OSRM_IMPL_HPP
 
-class BasePlugin;
-struct RouteParameters;
-
 #include "contractor/query_edge.hpp"
 
 #include "osrm/json_container.hpp"
@@ -16,9 +13,15 @@ struct RouteParameters;
 
 namespace osrm
 {
+
+namespace plugin
+{
+class BasePlugin;
+}
+
 namespace engine
 {
-
+struct RouteParameters;
 namespace datafacade
 {
 struct SharedBarriers;
@@ -28,7 +31,7 @@ template <class EdgeDataT> class BaseDataFacade;
 class OSRM::OSRM_impl final
 {
   private:
-    using PluginMap = std::unordered_map<std::string, std::unique_ptr<BasePlugin>>;
+    using PluginMap = std::unordered_map<std::string, std::unique_ptr<plugin::BasePlugin>>;
 
   public:
     OSRM_impl(LibOSRMConfig &lib_config);
@@ -36,19 +39,18 @@ class OSRM::OSRM_impl final
     int RunQuery(const RouteParameters &route_parameters, osrm::json::Object &json_result);
 
   private:
-    void RegisterPlugin(BasePlugin *plugin);
+    void RegisterPlugin(plugin::BasePlugin *plugin);
     PluginMap plugin_map;
     // will only be initialized if shared memory is used
     std::unique_ptr<datafacade::SharedBarriers> barrier;
     // base class pointer to the objects
-    BaseDataFacade<QueryEdge::EdgeData> *query_data_facade;
+    datafacade::BaseDataFacade<contractor::QueryEdge::EdgeData> *query_data_facade;
 
     // decrease number of concurrent queries
     void decrease_concurrent_query_count();
     // increase number of concurrent queries
     void increase_concurrent_query_count();
 };
-
 }
 }
 

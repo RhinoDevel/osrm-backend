@@ -14,8 +14,6 @@ namespace osrm
 {
 namespace engine
 {
-namespace routing_algorithms
-{
 
 SearchEngineData::SearchEngineHeapPtr SearchEngineData::forward_heap_1;
 SearchEngineData::SearchEngineHeapPtr SearchEngineData::reverse_heap_1;
@@ -23,6 +21,10 @@ SearchEngineData::SearchEngineHeapPtr SearchEngineData::forward_heap_2;
 SearchEngineData::SearchEngineHeapPtr SearchEngineData::reverse_heap_2;
 SearchEngineData::SearchEngineHeapPtr SearchEngineData::forward_heap_3;
 SearchEngineData::SearchEngineHeapPtr SearchEngineData::reverse_heap_3;
+
+namespace routing_algorithms
+{
+
 
 template <class DataFacadeT, class Derived> class BasicRoutingInterface
 {

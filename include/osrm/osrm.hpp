@@ -34,7 +34,6 @@ namespace osrm
 {
 
 struct LibOSRMConfig;
-struct RouteParameters;
 
 namespace json
 {
@@ -42,6 +41,7 @@ struct Object;
 }
 
 namespace engine {
+struct RouteParameters;
 class OSRM
 {
   private:
