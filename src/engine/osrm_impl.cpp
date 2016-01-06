@@ -38,26 +38,26 @@ OSRM::OSRM_impl::OSRM_impl(LibOSRMConfig &lib_config)
     if (lib_config.use_shared_memory)
     {
         barrier = util::make_unique<datafacade::SharedBarriers>();
-        query_data_facade = new datafacade::SharedDataFacade<QueryEdge::EdgeData>();
+        query_data_facade = new datafacade::SharedDataFacade<contractor::QueryEdge::EdgeData>();
     }
     else
     {
         // populate base path
         populate_base_path(lib_config.server_paths);
-        query_data_facade = new datafacade::InternalDataFacade<QueryEdge::EdgeData>(lib_config.server_paths);
+        query_data_facade = new datafacade::InternalDataFacade<contractor::QueryEdge::EdgeData>(lib_config.server_paths);
     }
 
     // The following plugins handle all requests.
-    RegisterPlugin(new DistanceTablePlugin<BaseDataFacade<QueryEdge::EdgeData>>(
+    RegisterPlugin(new DistanceTablePlugin<BaseDataFacade<contractor::QueryEdge::EdgeData>>(
         query_data_facade, lib_config.max_locations_distance_table));
     RegisterPlugin(new HelloWorldPlugin());
-    RegisterPlugin(new NearestPlugin<BaseDataFacade<QueryEdge::EdgeData>>(query_data_facade));
-    RegisterPlugin(new MapMatchingPlugin<BaseDataFacade<QueryEdge::EdgeData>>(
+    RegisterPlugin(new NearestPlugin<BaseDataFacade<contractor::QueryEdge::EdgeData>>(query_data_facade));
+    RegisterPlugin(new MapMatchingPlugin<BaseDataFacade<contractor::QueryEdge::EdgeData>>(
         query_data_facade, lib_config.max_locations_map_matching));
-    RegisterPlugin(new TimestampPlugin<BaseDataFacade<QueryEdge::EdgeData>>(query_data_facade));
-    RegisterPlugin(new ViaRoutePlugin<BaseDataFacade<QueryEdge::EdgeData>>(
+    RegisterPlugin(new TimestampPlugin<BaseDataFacade<contractor::QueryEdge::EdgeData>>(query_data_facade));
+    RegisterPlugin(new ViaRoutePlugin<BaseDataFacade<contractor::QueryEdge::EdgeData>>(
         query_data_facade, lib_config.max_locations_viaroute));
-    RegisterPlugin(new RoundTripPlugin<BaseDataFacade<QueryEdge::EdgeData>>(
+    RegisterPlugin(new RoundTripPlugin<BaseDataFacade<contractor::QueryEdge::EdgeData>>(
         query_data_facade, lib_config.max_locations_trip));
 }
 
@@ -129,7 +129,7 @@ void OSRM::OSRM_impl::increase_concurrent_query_count()
     // increment query count
     ++(barrier->number_of_queries);
 
-    (static_cast<datafacade::SharedDataFacade<QueryEdge::EdgeData> *>(query_data_facade))
+    (static_cast<datafacade::SharedDataFacade<contractor::QueryEdge::EdgeData> *>(query_data_facade))
         ->CheckAndReloadFacade();
 }
 
