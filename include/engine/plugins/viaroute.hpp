@@ -146,7 +146,7 @@ template <class DataFacadeT> class ViaRoutePlugin final : public BasePlugin
 
         bool no_route = INVALID_EDGE_WEIGHT == raw_route.shortest_path_length;
 
-        std::unique_ptr<BaseDescriptor<DataFacadeT>> descriptor;
+        std::unique_ptr<descriptors::BaseDescriptor<DataFacadeT>> descriptor;
         switch (descriptor_table.get_id(route_parameters.output_format))
         {
         case 1:
