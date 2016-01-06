@@ -73,13 +73,13 @@ template <class DataFacadeT> class MapMatchingPlugin : public BasePlugin
         return label_with_confidence;
     }
 
-    osrm::matching::CandidateLists getCandidates(
+    map_matching::CandidateLists getCandidates(
         const std::vector<FixedPointCoordinate> &input_coords,
         const std::vector<std::pair<const int, const boost::optional<int>>> &input_bearings,
         const double gps_precision,
         std::vector<double> &sub_trace_lengths)
     {
-        osrm::matching::CandidateLists candidates_lists;
+        map_matching::CandidateLists candidates_lists;
 
         double query_radius = 10 * gps_precision;
         double last_distance =
@@ -181,7 +181,7 @@ template <class DataFacadeT> class MapMatchingPlugin : public BasePlugin
         return candidates_lists;
     }
 
-    osrm::json::Object submatchingToJSON(const osrm::matching::SubMatching &sub,
+    osrm::json::Object submatchingToJSON(const map_matching::SubMatching &sub,
                                          const RouteParameters &route_parameters,
                                          const InternalRouteResult &raw_route)
     {
@@ -324,7 +324,7 @@ template <class DataFacadeT> class MapMatchingPlugin : public BasePlugin
             osrm::json::Logger::get()->initialize("matching");
 
         // call the actual map matching
-        osrm::matching::SubMatchingList sub_matchings;
+        map_matching::SubMatchingList sub_matchings;
         search_engine_ptr->map_matching(candidates_lists, input_coords, input_timestamps,
                                         route_parameters.matching_beta,
                                         route_parameters.gps_precision, sub_matchings);

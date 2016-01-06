@@ -34,7 +34,7 @@ struct EmissionLogProbability
 
     double operator()(const double distance) const
     {
-        return -0.5 * (osrm::matching::log_2_pi + (distance / sigma_z) * (distance / sigma_z)) -
+        return -0.5 * (log_2_pi + (distance / sigma_z) * (distance / sigma_z)) -
                log_sigma_z;
     }
 };
@@ -95,7 +95,7 @@ template <class CandidateLists> struct HiddenMarkovModel
 
         for (const auto t : util::irange(initial_timestamp, viterbi.size()))
         {
-            std::fill(viterbi[t].begin(), viterbi[t].end(), osrm::matching::IMPOSSIBLE_LOG_PROB);
+            std::fill(viterbi[t].begin(), viterbi[t].end(), IMPOSSIBLE_LOG_PROB);
             std::fill(parents[t].begin(), parents[t].end(), std::make_pair(0u, 0u));
             std::fill(path_lengths[t].begin(), path_lengths[t].end(), 0);
             std::fill(suspicious[t].begin(), suspicious[t].end(), true);
@@ -117,7 +117,7 @@ template <class CandidateLists> struct HiddenMarkovModel
                     emission_log_probability(candidates_list[initial_timestamp][s].distance);
                 parents[initial_timestamp][s] = std::make_pair(initial_timestamp, s);
                 pruned[initial_timestamp][s] =
-                    viterbi[initial_timestamp][s] < osrm::matching::MINIMAL_LOG_PROB;
+                    viterbi[initial_timestamp][s] < MINIMAL_LOG_PROB;
                 suspicious[initial_timestamp][s] = false;
 
                 breakage[initial_timestamp] =
@@ -129,7 +129,7 @@ template <class CandidateLists> struct HiddenMarkovModel
 
         if (initial_timestamp >= num_points)
         {
-            return osrm::matching::INVALID_STATE;
+            return INVALID_STATE;
         }
 
         BOOST_ASSERT(initial_timestamp > 0);
