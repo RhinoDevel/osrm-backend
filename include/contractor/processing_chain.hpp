@@ -8,16 +8,19 @@
 #include "util/deallocating_vector.hpp"
 #include "util/node_based_graph.hpp"
 
-struct SpeedProfileProperties;
-struct EdgeBasedNode;
-struct lua_State;
-
 #include <boost/filesystem.hpp>
 
 #include <vector>
 
+struct lua_State;
+
 namespace osrm
 {
+namespace extractor
+{
+struct SpeedProfileProperties;
+struct EdgeBasedNode;
+}
 namespace contractor
 {
 
