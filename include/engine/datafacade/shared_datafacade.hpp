@@ -79,7 +79,7 @@ template <class EdgeDataT> class SharedDataFacade final : public BaseDataFacade<
     {
         m_check_sum =
             *data_layout->GetBlockPtr<unsigned>(shared_memory, SharedDataLayout::HSGR_CHECKSUM);
-        SimpleLogger().Write() << "set checksum: " << m_check_sum;
+        util::SimpleLogger().Write() << "set checksum: " << m_check_sum;
     }
 
     void LoadTimestamp()
@@ -258,7 +258,7 @@ template <class EdgeDataT> class SharedDataFacade final : public BaseDataFacade<
             file_index_path = boost::filesystem::path(file_index_ptr);
             if (!boost::filesystem::exists(file_index_path))
             {
-                SimpleLogger().Write(logDEBUG) << "Leaf file name " << file_index_path.string();
+                util::SimpleLogger().Write(logDEBUG) << "Leaf file name " << file_index_path.string();
                 throw osrm::exception("Could not load leaf index file. "
                                       "Is any data loaded into shared memory?");
             }
@@ -274,12 +274,12 @@ template <class EdgeDataT> class SharedDataFacade final : public BaseDataFacade<
 
             data_layout->PrintInformation();
 
-            SimpleLogger().Write() << "number of geometries: " << m_coordinate_list->size();
+            util::SimpleLogger().Write() << "number of geometries: " << m_coordinate_list->size();
             for (unsigned i = 0; i < m_coordinate_list->size(); ++i)
             {
                 if (!GetCoordinateOfNode(i).IsValid())
                 {
-                    SimpleLogger().Write() << "coordinate " << i << " not valid";
+                    util::SimpleLogger().Write() << "coordinate " << i << " not valid";
                 }
             }
         }

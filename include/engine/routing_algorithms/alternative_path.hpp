@@ -88,7 +88,7 @@ class AlternativeRouting final
 
         if (phantom_node_pair.source_phantom.forward_node_id != SPECIAL_NODEID)
         {
-            // SimpleLogger().Write(logDEBUG) << "fwd-a insert: " <<
+            // util::SimpleLogger().Write(logDEBUG) << "fwd-a insert: " <<
             // phantom_node_pair.source_phantom.forward_node_id << ", w: " <<
             // -phantom_node_pair.source_phantom.GetForwardWeightPlusOffset();
             forward_heap1.Insert(phantom_node_pair.source_phantom.forward_node_id,
@@ -97,7 +97,7 @@ class AlternativeRouting final
         }
         if (phantom_node_pair.source_phantom.reverse_node_id != SPECIAL_NODEID)
         {
-            //     SimpleLogger().Write(logDEBUG) << "fwd-b insert: " <<
+            //     util::SimpleLogger().Write(logDEBUG) << "fwd-b insert: " <<
             //     phantom_node_pair.source_phantom.reverse_node_id << ", w: " <<
             // -phantom_node_pair.source_phantom.GetReverseWeightPlusOffset();
             forward_heap1.Insert(phantom_node_pair.source_phantom.reverse_node_id,
@@ -107,7 +107,7 @@ class AlternativeRouting final
 
         if (phantom_node_pair.target_phantom.forward_node_id != SPECIAL_NODEID)
         {
-            // SimpleLogger().Write(logDEBUG) << "rev-a insert: " <<
+            // util::SimpleLogger().Write(logDEBUG) << "rev-a insert: " <<
             // phantom_node_pair.target_phantom.forward_node_id << ", w: " <<
             // phantom_node_pair.target_phantom.GetForwardWeightPlusOffset();
             reverse_heap1.Insert(phantom_node_pair.target_phantom.forward_node_id,
@@ -116,7 +116,7 @@ class AlternativeRouting final
         }
         if (phantom_node_pair.target_phantom.reverse_node_id != SPECIAL_NODEID)
         {
-            // SimpleLogger().Write(logDEBUG) << "rev-b insert: " <<
+            // util::SimpleLogger().Write(logDEBUG) << "rev-b insert: " <<
             // phantom_node_pair.target_phantom.reverse_node_id << ", w: " <<
             // phantom_node_pair.target_phantom.GetReverseWeightPlusOffset();
             reverse_heap1.Insert(phantom_node_pair.target_phantom.reverse_node_id,
@@ -211,10 +211,10 @@ class AlternativeRouting final
             }
         }
 
-        // SimpleLogger().Write(logDEBUG) << "fwd_search_space size: " <<
+        // util::SimpleLogger().Write(logDEBUG) << "fwd_search_space size: " <<
         // forward_search_space.size() << ", marked " << approximated_forward_sharing.size() << "
         // nodes";
-        // SimpleLogger().Write(logDEBUG) << "rev_search_space size: " <<
+        // util::SimpleLogger().Write(logDEBUG) << "rev_search_space size: " <<
         // reverse_search_space.size() << ", marked " << approximated_reverse_sharing.size() << "
         // nodes";
 
@@ -526,7 +526,7 @@ class AlternativeRouting final
     //     //compute forward sharing
     //     while( (packed_alternate_path[aindex] == packed_shortest_path[aindex]) &&
     //     (packed_alternate_path[aindex+1] == packed_shortest_path[aindex+1]) ) {
-    //         //            SimpleLogger().Write() << "retrieving edge (" <<
+    //         //            util::SimpleLogger().Write() << "retrieving edge (" <<
     //         packed_alternate_path[aindex] << "," << packed_alternate_path[aindex+1] << ")";
     //         EdgeID edgeID = facade->FindEdgeInEitherDirection(packed_alternate_path[aindex],
     //         packed_alternate_path[aindex+1]);
@@ -564,7 +564,7 @@ class AlternativeRouting final
         const NodeID node = forward_heap.DeleteMin();
         const int distance = forward_heap.GetKey(node);
         // const NodeID parentnode = forward_heap.GetData(node).parent;
-        // SimpleLogger().Write() << (is_forward_directed ? "[fwd] " : "[rev] ") << "settled edge ("
+        // util::SimpleLogger().Write() << (is_forward_directed ? "[fwd] " : "[rev] ") << "settled edge ("
         // << parentnode << "," << node << "), dist: " << distance;
 
         const int scaled_distance =
@@ -588,10 +588,10 @@ class AlternativeRouting final
                 {
                     *middle_node = node;
                     *upper_bound_to_shortest_path_distance = new_distance;
-                    //     SimpleLogger().Write() << "accepted middle_node " << *middle_node << " at
+                    //     util::SimpleLogger().Write() << "accepted middle_node " << *middle_node << " at
                     //     distance " << new_distance;
                     // } else {
-                    //     SimpleLogger().Write() << "discarded middle_node " << *middle_node << "
+                    //     util::SimpleLogger().Write() << "discarded middle_node " << *middle_node << "
                     //     at distance " << new_distance;
                 }
             }

@@ -317,7 +317,7 @@ template <class DataFacadeT> class RoundTripPlugin final : public BasePlugin
                 }
 
                 // use this output if debugging of route is needed:
-                // SimpleLogger().Write() << "Route #" << k << ": " << [&scc_route]()
+                // util::SimpleLogger().Write() << "Route #" << k << ": " << [&scc_route]()
                 // {
                 //     std::string s = "";
                 //     for (auto x : scc_route)

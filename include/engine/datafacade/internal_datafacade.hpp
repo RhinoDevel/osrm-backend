@@ -68,11 +68,11 @@ template <class EdgeDataT> class InternalDataFacade final : public BaseDataFacad
     {
         if (boost::filesystem::exists(timestamp_path))
         {
-            SimpleLogger().Write() << "Loading Timestamp";
+            util::SimpleLogger().Write() << "Loading Timestamp";
             boost::filesystem::ifstream timestamp_stream(timestamp_path);
             if (!timestamp_stream)
             {
-                SimpleLogger().Write(logWARNING) << timestamp_path << " not found";
+                util::SimpleLogger().Write(logWARNING) << timestamp_path << " not found";
             }
             getline(timestamp_stream, m_timestamp);
             timestamp_stream.close();
@@ -92,19 +92,19 @@ template <class EdgeDataT> class InternalDataFacade final : public BaseDataFacad
         typename util::ShM<typename QueryGraph::NodeArrayEntry, false>::vector node_list;
         typename util::ShM<typename QueryGraph::EdgeArrayEntry, false>::vector edge_list;
 
-        SimpleLogger().Write() << "loading graph from " << hsgr_path.string();
+        util::SimpleLogger().Write() << "loading graph from " << hsgr_path.string();
 
         m_number_of_nodes = readHSGRFromStream(hsgr_path, node_list, edge_list, &m_check_sum);
 
         BOOST_ASSERT_MSG(0 != node_list.size(), "node list empty");
         // BOOST_ASSERT_MSG(0 != edge_list.size(), "edge list empty");
-        SimpleLogger().Write() << "loaded " << node_list.size() << " nodes and " << edge_list.size()
+        util::SimpleLogger().Write() << "loaded " << node_list.size() << " nodes and " << edge_list.size()
                                << " edges";
         m_query_graph = std::unique_ptr<QueryGraph>(new QueryGraph(node_list, edge_list));
 
         BOOST_ASSERT_MSG(0 == node_list.size(), "node list not flushed");
         BOOST_ASSERT_MSG(0 == edge_list.size(), "edge list not flushed");
-        SimpleLogger().Write() << "Data checksum is " << m_check_sum;
+        util::SimpleLogger().Write() << "Data checksum is " << m_check_sum;
     }
 
     void LoadNodeAndEdgeInformation(const boost::filesystem::path &nodes_file,
@@ -227,7 +227,7 @@ template <class EdgeDataT> class InternalDataFacade final : public BaseDataFacad
         name_stream.read((char *)&m_names_char_list[0], number_of_chars * sizeof(char));
         if (0 == m_names_char_list.size())
         {
-            SimpleLogger().Write(logWARNING) << "list of street names is empty";
+            util::SimpleLogger().Write(logWARNING) << "list of street names is empty";
         }
         name_stream.close();
     }
@@ -256,22 +256,22 @@ template <class EdgeDataT> class InternalDataFacade final : public BaseDataFacad
         ram_index_path = file_for("ramindex");
         file_index_path = file_for("fileindex");
 
-        SimpleLogger().Write() << "loading graph data";
+        util::SimpleLogger().Write() << "loading graph data";
         LoadGraph(file_for("hsgrdata"));
 
-        SimpleLogger().Write() << "loading edge information";
+        util::SimpleLogger().Write() << "loading edge information";
         LoadNodeAndEdgeInformation(file_for("nodesdata"), file_for("edgesdata"));
 
-        SimpleLogger().Write() << "loading core information";
+        util::SimpleLogger().Write() << "loading core information";
         LoadCoreInformation(file_for("coredata"));
 
-        SimpleLogger().Write() << "loading geometries";
+        util::SimpleLogger().Write() << "loading geometries";
         LoadGeometries(file_for("geometries"));
 
-        SimpleLogger().Write() << "loading timestamp";
+        util::SimpleLogger().Write() << "loading timestamp";
         LoadTimestamp(file_for("timestamp"));
 
-        SimpleLogger().Write() << "loading street names";
+        util::SimpleLogger().Write() << "loading street names";
         LoadStreetNames(file_for("namesdata"));
     }
 
