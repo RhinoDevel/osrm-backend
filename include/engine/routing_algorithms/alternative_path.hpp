@@ -148,7 +148,7 @@ class AlternativeRouting final
             return;
         }
 
-        osrm::sort_unique_resize(via_node_candidate_list);
+        util::sort_unique_resize(via_node_candidate_list);
 
         std::vector<NodeID> packed_forward_path;
         std::vector<NodeID> packed_reverse_path;
