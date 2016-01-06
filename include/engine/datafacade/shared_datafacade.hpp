@@ -38,7 +38,7 @@ template <class EdgeDataT> class SharedDataFacade final : public BaseDataFacade<
     using NameIndexBlock = typename util::RangeTable<16, true>::BlockT;
     using InputEdge = typename QueryGraph::InputEdge;
     using RTreeLeaf = typename super::RTreeLeaf;
-    using SharedRTree = StaticRTree<RTreeLeaf, util::ShM<util::FixedPointCoordinate, true>::vector, true>;
+    using SharedRTree = util::StaticRTree<RTreeLeaf, util::ShM<util::FixedPointCoordinate, true>::vector, true>;
     using SharedGeospatialQuery = GeospatialQuery<SharedRTree>;
     using TimeStampedRTreePair = std::pair<unsigned, std::shared_ptr<SharedRTree>>;
     using RTreeNode = typename SharedRTree::TreeNode;

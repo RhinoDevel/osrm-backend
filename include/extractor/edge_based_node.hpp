@@ -15,7 +15,7 @@ namespace osrm
 namespace extractor
 {
 
-/// This is what StaticRTree serialized and stores on disk
+/// This is what util::StaticRTree serialized and stores on disk
 /// It is generated in EdgeBasedGraphFactory.
 struct EdgeBasedNode
 {
