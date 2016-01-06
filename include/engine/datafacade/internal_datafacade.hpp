@@ -37,7 +37,7 @@ template <class EdgeDataT> class InternalDataFacade final : public BaseDataFacad
     using QueryGraph = util::StaticGraph<typename super::EdgeData>;
     using InputEdge = typename QueryGraph::InputEdge;
     using RTreeLeaf = typename super::RTreeLeaf;
-    using InternalRTree = util::StaticRTree<RTreeLeaf, ShM<FixedPointCoordinate, false>::vector, false>;
+    using InternalRTree = util::StaticRTree<RTreeLeaf, util::ShM<FixedPointCoordinate, false>::vector, false>;
     using InternalGeospatialQuery = GeospatialQuery<InternalRTree>;
 
     InternalDataFacade() {}
@@ -47,16 +47,16 @@ template <class EdgeDataT> class InternalDataFacade final : public BaseDataFacad
     std::unique_ptr<QueryGraph> m_query_graph;
     std::string m_timestamp;
 
-    std::shared_ptr<ShM<FixedPointCoordinate, false>::vector> m_coordinate_list;
-    ShM<NodeID, false>::vector m_via_node_list;
-    ShM<unsigned, false>::vector m_name_ID_list;
-    ShM<extractor::TurnInstruction, false>::vector m_turn_instruction_list;
-    ShM<extractor::TravelMode, false>::vector m_travel_mode_list;
-    ShM<char, false>::vector m_names_char_list;
-    ShM<bool, false>::vector m_edge_is_compressed;
-    ShM<unsigned, false>::vector m_geometry_indices;
-    ShM<unsigned, false>::vector m_geometry_list;
-    ShM<bool, false>::vector m_is_core_node;
+    std::shared_ptr<util::ShM<FixedPointCoordinate, false>::vector> m_coordinate_list;
+    util::ShM<NodeID, false>::vector m_via_node_list;
+    util::ShM<unsigned, false>::vector m_name_ID_list;
+    util::ShM<extractor::TurnInstruction, false>::vector m_turn_instruction_list;
+    util::ShM<extractor::TravelMode, false>::vector m_travel_mode_list;
+    util::ShM<char, false>::vector m_names_char_list;
+    util::ShM<bool, false>::vector m_edge_is_compressed;
+    util::ShM<unsigned, false>::vector m_geometry_indices;
+    util::ShM<unsigned, false>::vector m_geometry_list;
+    util::ShM<bool, false>::vector m_is_core_node;
 
     boost::thread_specific_ptr<InternalRTree> m_static_rtree;
     boost::thread_specific_ptr<InternalGeospatialQuery> m_geospatial_query;
@@ -89,8 +89,8 @@ template <class EdgeDataT> class InternalDataFacade final : public BaseDataFacad
 
     void LoadGraph(const boost::filesystem::path &hsgr_path)
     {
-        typename ShM<typename QueryGraph::NodeArrayEntry, false>::vector node_list;
-        typename ShM<typename QueryGraph::EdgeArrayEntry, false>::vector edge_list;
+        typename util::ShM<typename QueryGraph::NodeArrayEntry, false>::vector node_list;
+        typename util::ShM<typename QueryGraph::EdgeArrayEntry, false>::vector edge_list;
 
         SimpleLogger().Write() << "loading graph from " << hsgr_path.string();
 

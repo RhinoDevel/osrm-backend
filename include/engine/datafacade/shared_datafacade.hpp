@@ -38,7 +38,7 @@ template <class EdgeDataT> class SharedDataFacade final : public BaseDataFacade<
     using NameIndexBlock = typename RangeTable<16, true>::BlockT;
     using InputEdge = typename QueryGraph::InputEdge;
     using RTreeLeaf = typename super::RTreeLeaf;
-    using SharedRTree = StaticRTree<RTreeLeaf, ShM<FixedPointCoordinate, true>::vector, true>;
+    using SharedRTree = StaticRTree<RTreeLeaf, util::ShM<FixedPointCoordinate, true>::vector, true>;
     using SharedGeospatialQuery = GeospatialQuery<SharedRTree>;
     using TimeStampedRTreePair = std::pair<unsigned, std::shared_ptr<SharedRTree>>;
     using RTreeNode = typename SharedRTree::TreeNode;
@@ -57,17 +57,17 @@ template <class EdgeDataT> class SharedDataFacade final : public BaseDataFacade<
     std::unique_ptr<SharedMemory> m_large_memory;
     std::string m_timestamp;
 
-    std::shared_ptr<ShM<FixedPointCoordinate, true>::vector> m_coordinate_list;
-    ShM<NodeID, true>::vector m_via_node_list;
-    ShM<unsigned, true>::vector m_name_ID_list;
-    ShM<extractor::TurnInstruction, true>::vector m_turn_instruction_list;
-    ShM<extractor::TravelMode, true>::vector m_travel_mode_list;
-    ShM<char, true>::vector m_names_char_list;
-    ShM<unsigned, true>::vector m_name_begin_indices;
-    ShM<bool, true>::vector m_edge_is_compressed;
-    ShM<unsigned, true>::vector m_geometry_indices;
-    ShM<unsigned, true>::vector m_geometry_list;
-    ShM<bool, true>::vector m_is_core_node;
+    std::shared_ptr<util::ShM<FixedPointCoordinate, true>::vector> m_coordinate_list;
+    util::ShM<NodeID, true>::vector m_via_node_list;
+    util::ShM<unsigned, true>::vector m_name_ID_list;
+    util::ShM<extractor::TurnInstruction, true>::vector m_turn_instruction_list;
+    util::ShM<extractor::TravelMode, true>::vector m_travel_mode_list;
+    util::ShM<char, true>::vector m_names_char_list;
+    util::ShM<unsigned, true>::vector m_name_begin_indices;
+    util::ShM<bool, true>::vector m_edge_is_compressed;
+    util::ShM<unsigned, true>::vector m_geometry_indices;
+    util::ShM<unsigned, true>::vector m_geometry_list;
+    util::ShM<bool, true>::vector m_is_core_node;
 
     boost::thread_specific_ptr<std::pair<unsigned, std::shared_ptr<SharedRTree>>> m_static_rtree;
     boost::thread_specific_ptr<SharedGeospatialQuery> m_geospatial_query;
@@ -115,9 +115,9 @@ template <class EdgeDataT> class SharedDataFacade final : public BaseDataFacade<
         GraphEdge *graph_edges_ptr =
             data_layout->GetBlockPtr<GraphEdge>(shared_memory, SharedDataLayout::GRAPH_EDGE_LIST);
 
-        typename ShM<GraphNode, true>::vector node_list(
+        typename util::ShM<GraphNode, true>::vector node_list(
             graph_nodes_ptr, data_layout->num_entries[SharedDataLayout::GRAPH_NODE_LIST]);
-        typename ShM<GraphEdge, true>::vector edge_list(
+        typename util::ShM<GraphEdge, true>::vector edge_list(
             graph_edges_ptr, data_layout->num_entries[SharedDataLayout::GRAPH_EDGE_LIST]);
         m_query_graph.reset(new QueryGraph(node_list, edge_list));
     }
@@ -127,25 +127,25 @@ template <class EdgeDataT> class SharedDataFacade final : public BaseDataFacade<
 
         FixedPointCoordinate *coordinate_list_ptr = data_layout->GetBlockPtr<FixedPointCoordinate>(
             shared_memory, SharedDataLayout::COORDINATE_LIST);
-        m_coordinate_list = util::make_unique<ShM<FixedPointCoordinate, true>::vector>(
+        m_coordinate_list = util::make_unique<util::ShM<FixedPointCoordinate, true>::vector>(
             coordinate_list_ptr, data_layout->num_entries[SharedDataLayout::COORDINATE_LIST]);
 
         extractor::TravelMode *travel_mode_list_ptr =
             data_layout->GetBlockPtr<extractor::TravelMode>(shared_memory, SharedDataLayout::TRAVEL_MODE);
-        typename ShM<extractor::TravelMode, true>::vector travel_mode_list(
+        typename util::ShM<extractor::TravelMode, true>::vector travel_mode_list(
             travel_mode_list_ptr, data_layout->num_entries[SharedDataLayout::TRAVEL_MODE]);
         m_travel_mode_list.swap(travel_mode_list);
 
         extractor::TurnInstruction *turn_instruction_list_ptr = data_layout->GetBlockPtr<extractor::TurnInstruction>(
             shared_memory, SharedDataLayout::TURN_INSTRUCTION);
-        typename ShM<extractor::TurnInstruction, true>::vector turn_instruction_list(
+        typename util::ShM<extractor::TurnInstruction, true>::vector turn_instruction_list(
             turn_instruction_list_ptr,
             data_layout->num_entries[SharedDataLayout::TURN_INSTRUCTION]);
         m_turn_instruction_list.swap(turn_instruction_list);
 
         unsigned *name_id_list_ptr =
             data_layout->GetBlockPtr<unsigned>(shared_memory, SharedDataLayout::NAME_ID_LIST);
-        typename ShM<unsigned, true>::vector name_id_list(
+        typename util::ShM<unsigned, true>::vector name_id_list(
             name_id_list_ptr, data_layout->num_entries[SharedDataLayout::NAME_ID_LIST]);
         m_name_ID_list.swap(name_id_list);
     }
@@ -154,7 +154,7 @@ template <class EdgeDataT> class SharedDataFacade final : public BaseDataFacade<
     {
         NodeID *via_node_list_ptr =
             data_layout->GetBlockPtr<NodeID>(shared_memory, SharedDataLayout::VIA_NODE_LIST);
-        typename ShM<NodeID, true>::vector via_node_list(
+        typename util::ShM<NodeID, true>::vector via_node_list(
             via_node_list_ptr, data_layout->num_entries[SharedDataLayout::VIA_NODE_LIST]);
         m_via_node_list.swap(via_node_list);
     }
@@ -165,14 +165,14 @@ template <class EdgeDataT> class SharedDataFacade final : public BaseDataFacade<
             data_layout->GetBlockPtr<unsigned>(shared_memory, SharedDataLayout::NAME_OFFSETS);
         NameIndexBlock *blocks_ptr =
             data_layout->GetBlockPtr<NameIndexBlock>(shared_memory, SharedDataLayout::NAME_BLOCKS);
-        typename ShM<unsigned, true>::vector name_offsets(
+        typename util::ShM<unsigned, true>::vector name_offsets(
             offsets_ptr, data_layout->num_entries[SharedDataLayout::NAME_OFFSETS]);
-        typename ShM<NameIndexBlock, true>::vector name_blocks(
+        typename util::ShM<NameIndexBlock, true>::vector name_blocks(
             blocks_ptr, data_layout->num_entries[SharedDataLayout::NAME_BLOCKS]);
 
         char *names_list_ptr =
             data_layout->GetBlockPtr<char>(shared_memory, SharedDataLayout::NAME_CHAR_LIST);
-        typename ShM<char, true>::vector names_char_list(
+        typename util::ShM<char, true>::vector names_char_list(
             names_list_ptr, data_layout->num_entries[SharedDataLayout::NAME_CHAR_LIST]);
         m_name_table = util::make_unique<RangeTable<16, true>>(
             name_offsets, name_blocks, static_cast<unsigned>(names_char_list.size()));
@@ -189,7 +189,7 @@ template <class EdgeDataT> class SharedDataFacade final : public BaseDataFacade<
 
         unsigned *core_marker_ptr =
             data_layout->GetBlockPtr<unsigned>(shared_memory, SharedDataLayout::CORE_MARKER);
-        typename ShM<bool, true>::vector is_core_node(
+        typename util::ShM<bool, true>::vector is_core_node(
             core_marker_ptr, data_layout->num_entries[SharedDataLayout::CORE_MARKER]);
         m_is_core_node.swap(is_core_node);
     }
@@ -198,20 +198,20 @@ template <class EdgeDataT> class SharedDataFacade final : public BaseDataFacade<
     {
         unsigned *geometries_compressed_ptr = data_layout->GetBlockPtr<unsigned>(
             shared_memory, SharedDataLayout::GEOMETRIES_INDICATORS);
-        typename ShM<bool, true>::vector edge_is_compressed(
+        typename util::ShM<bool, true>::vector edge_is_compressed(
             geometries_compressed_ptr,
             data_layout->num_entries[SharedDataLayout::GEOMETRIES_INDICATORS]);
         m_edge_is_compressed.swap(edge_is_compressed);
 
         unsigned *geometries_index_ptr =
             data_layout->GetBlockPtr<unsigned>(shared_memory, SharedDataLayout::GEOMETRIES_INDEX);
-        typename ShM<unsigned, true>::vector geometry_begin_indices(
+        typename util::ShM<unsigned, true>::vector geometry_begin_indices(
             geometries_index_ptr, data_layout->num_entries[SharedDataLayout::GEOMETRIES_INDEX]);
         m_geometry_indices.swap(geometry_begin_indices);
 
         unsigned *geometries_list_ptr =
             data_layout->GetBlockPtr<unsigned>(shared_memory, SharedDataLayout::GEOMETRIES_LIST);
-        typename ShM<unsigned, true>::vector geometry_list(
+        typename util::ShM<unsigned, true>::vector geometry_list(
             geometries_list_ptr, data_layout->num_entries[SharedDataLayout::GEOMETRIES_LIST]);
         m_geometry_list.swap(geometry_list);
     }

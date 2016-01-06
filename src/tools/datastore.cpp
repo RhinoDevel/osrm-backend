@@ -38,7 +38,7 @@ namespace tools
 {
 
 using RTreeLeaf = typename engine::datafacade::BaseDataFacade<contractor::QueryEdge::EdgeData>::RTreeLeaf;
-using RTreeNode = util::StaticRTree<RTreeLeaf, ShM<FixedPointCoordinate, true>::vector, true>::TreeNode;
+using RTreeNode = util::StaticRTree<RTreeLeaf, util::ShM<FixedPointCoordinate, true>::vector, true>::TreeNode;
 using QueryGraph = util::StaticGraph<contractor::QueryEdge::EdgeData>;
 
 // delete a shared memory region. report warning if it could not be deleted
