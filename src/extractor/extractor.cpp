@@ -466,7 +466,7 @@ extractor::LoadNodeBasedGraph(std::unordered_set<NodeID> &barrier_nodes,
     traffic_light_list.clear();
     traffic_light_list.shrink_to_fit();
 
-    loadEdgesFromFile(input_stream, edge_list);
+    util::loadEdgesFromFile(input_stream, edge_list);
 
     if (edge_list.empty())
     {

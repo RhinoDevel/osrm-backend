@@ -72,7 +72,7 @@ std::size_t loadGraph(const char *path,
     auto number_of_nodes = loadNodesFromFile(input_stream, barrier_node_list,
                                              traffic_light_node_list, coordinate_list);
 
-    loadEdgesFromFile(input_stream, edge_list);
+    util::loadEdgesFromFile(input_stream, edge_list);
 
     traffic_light_node_list.clear();
     traffic_light_node_list.shrink_to_fit();
