@@ -38,13 +38,13 @@ OSRM::OSRM_impl::OSRM_impl(LibOSRMConfig &lib_config)
     if (lib_config.use_shared_memory)
     {
         barrier = util::make_unique<datafacade::SharedBarriers>();
-        query_data_facade = new SharedDataFacade<QueryEdge::EdgeData>();
+        query_data_facade = new datafacade::SharedDataFacade<QueryEdge::EdgeData>();
     }
     else
     {
         // populate base path
         populate_base_path(lib_config.server_paths);
-        query_data_facade = new InternalDataFacade<QueryEdge::EdgeData>(lib_config.server_paths);
+        query_data_facade = new datafacade::InternalDataFacade<QueryEdge::EdgeData>(lib_config.server_paths);
     }
 
     // The following plugins handle all requests.
@@ -129,7 +129,7 @@ void OSRM::OSRM_impl::increase_concurrent_query_count()
     // increment query count
     ++(barrier->number_of_queries);
 
-    (static_cast<SharedDataFacade<QueryEdge::EdgeData> *>(query_data_facade))
+    (static_cast<datafacade::SharedDataFacade<QueryEdge::EdgeData> *>(query_data_facade))
         ->CheckAndReloadFacade();
 }
 
