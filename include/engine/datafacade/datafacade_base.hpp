@@ -24,7 +24,7 @@ namespace engine
 namespace datafacade
 {
 
-using EdgeRange = osrm::range<EdgeID>;
+using EdgeRange = util::range<EdgeID>;
 
 template <class EdgeDataT> class BaseDataFacade
 {
