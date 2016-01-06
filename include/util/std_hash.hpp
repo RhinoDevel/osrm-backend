@@ -3,11 +3,6 @@
 
 #include <functional>
 
-namespace osrm
-{
-namespace util
-{
-
 // this is largely inspired by boost's hash combine as can be found in
 // "The C++ Standard Library" 2nd Edition. Nicolai M. Josuttis. 2012.
 
@@ -45,9 +40,6 @@ template <typename T1, typename T2> struct hash<std::pair<T1, T2>>
         return hash_val(pair.first, pair.second);
     }
 };
-}
-
-}
 }
 
 #endif // STD_HASH_HPP
