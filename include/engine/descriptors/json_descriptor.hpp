@@ -312,7 +312,7 @@ template <class DataFacadeT> class JSONDescriptor final : public BaseDescriptor<
                     if (extractor::TurnInstruction::LeaveRoundAbout == current_instruction)
                     {
                         temp_instruction = std::to_string(
-                            cast::enum_to_underlying(extractor::TurnInstruction::EnterRoundAbout));
+                            util::cast::enum_to_underlying(extractor::TurnInstruction::EnterRoundAbout));
                         current_turn_instruction += temp_instruction;
                         current_turn_instruction += "-";
                         temp_instruction = std::to_string(round_about.leave_at_exit + 1);
@@ -322,7 +322,7 @@ template <class DataFacadeT> class JSONDescriptor final : public BaseDescriptor<
                     else
                     {
                         temp_instruction =
-                            std::to_string(cast::enum_to_underlying(current_instruction));
+                            std::to_string(util::cast::enum_to_underlying(current_instruction));
                         current_turn_instruction += temp_instruction;
                     }
                     json_instruction_row.values.push_back(current_turn_instruction);
@@ -367,7 +367,7 @@ template <class DataFacadeT> class JSONDescriptor final : public BaseDescriptor<
 
         util::json::Array json_last_instruction_row;
         temp_instruction =
-            std::to_string(cast::enum_to_underlying(extractor::TurnInstruction::ReachedYourDestination));
+            std::to_string(util::cast::enum_to_underlying(extractor::TurnInstruction::ReachedYourDestination));
         json_last_instruction_row.values.push_back(temp_instruction);
         json_last_instruction_row.values.push_back("");
         json_last_instruction_row.values.push_back(0);
