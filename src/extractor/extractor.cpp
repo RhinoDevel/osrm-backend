@@ -314,7 +314,7 @@ void extractor::SetupScriptingEnvironment(lua_State *lua_state,
     luaL_openlibs(lua_state);
 
     // adjust lua load path
-    luaAddScriptFolderToLoadPath(lua_state, config.profile_path.string().c_str());
+    util::luaAddScriptFolderToLoadPath(lua_state, config.profile_path.string().c_str());
 
     // Now call our function in a lua script
     if (0 != luaL_dofile(lua_state, config.profile_path.string().c_str()))

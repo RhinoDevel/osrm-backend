@@ -54,7 +54,7 @@ void ScriptingEnvironment::InitLuaState(lua_State *lua_state)
     // open utility libraries string library;
     luaL_openlibs(lua_state);
 
-    luaAddScriptFolderToLoadPath(lua_state, file_name.c_str());
+    util::luaAddScriptFolderToLoadPath(lua_state, file_name.c_str());
 
     // Add our function to the state's global scope
     luabind::module(lua_state)
