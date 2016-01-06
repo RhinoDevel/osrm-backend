@@ -124,7 +124,7 @@ int main(int argc, char *argv[])
 
         util::SimpleLogger().Write() << "Starting SCC graph traversal";
 
-        auto tarjan = util::make_unique<TarjanSCC<TarjanGraph>>(graph);
+        auto tarjan = util::make_unique<extractor::TarjanSCC<TarjanGraph>>(graph);
         tarjan->run();
         util::SimpleLogger().Write() << "identified: " << tarjan->get_number_of_components()
                                << " many components";

@@ -156,7 +156,7 @@ template <class DataFacadeT> class RoundTripPlugin final : public BasePlugin
         // Run TarjanSCC
         auto wrapper = std::make_shared<util::MatrixGraphWrapper<EdgeWeight>>(result_table.GetTable(),
                                                                         number_of_locations);
-        auto scc = TarjanSCC<util::MatrixGraphWrapper<EdgeWeight>>(wrapper);
+        auto scc = extractor::TarjanSCC<util::MatrixGraphWrapper<EdgeWeight>>(wrapper);
         scc.run();
 
         const auto number_of_components = scc.get_number_of_components();
