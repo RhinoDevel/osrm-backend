@@ -62,7 +62,7 @@ template <class EdgeDataT> class InternalDataFacade final : public BaseDataFacad
     boost::thread_specific_ptr<InternalGeospatialQuery> m_geospatial_query;
     boost::filesystem::path ram_index_path;
     boost::filesystem::path file_index_path;
-    RangeTable<16, false> m_name_table;
+    util::RangeTable<16, false> m_name_table;
 
     void LoadTimestamp(const boost::filesystem::path &timestamp_path)
     {

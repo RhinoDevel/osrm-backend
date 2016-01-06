@@ -35,7 +35,7 @@ template <class EdgeDataT> class SharedDataFacade final : public BaseDataFacade<
     using QueryGraph = util::StaticGraph<EdgeData, true>;
     using GraphNode = typename QueryGraph::NodeArrayEntry;
     using GraphEdge = typename QueryGraph::EdgeArrayEntry;
-    using NameIndexBlock = typename RangeTable<16, true>::BlockT;
+    using NameIndexBlock = typename util::RangeTable<16, true>::BlockT;
     using InputEdge = typename QueryGraph::InputEdge;
     using RTreeLeaf = typename super::RTreeLeaf;
     using SharedRTree = StaticRTree<RTreeLeaf, util::ShM<util::FixedPointCoordinate, true>::vector, true>;
@@ -73,7 +73,7 @@ template <class EdgeDataT> class SharedDataFacade final : public BaseDataFacade<
     boost::thread_specific_ptr<SharedGeospatialQuery> m_geospatial_query;
     boost::filesystem::path file_index_path;
 
-    std::shared_ptr<RangeTable<16, true>> m_name_table;
+    std::shared_ptr<util::RangeTable<16, true>> m_name_table;
 
     void LoadChecksum()
     {
@@ -174,7 +174,7 @@ template <class EdgeDataT> class SharedDataFacade final : public BaseDataFacade<
             data_layout->GetBlockPtr<char>(shared_memory, SharedDataLayout::NAME_CHAR_LIST);
         typename util::ShM<char, true>::vector names_char_list(
             names_list_ptr, data_layout->num_entries[SharedDataLayout::NAME_CHAR_LIST]);
-        m_name_table = util::make_unique<RangeTable<16, true>>(
+        m_name_table = util::make_unique<util::RangeTable<16, true>>(
             name_offsets, name_blocks, static_cast<unsigned>(names_char_list.size()));
 
         m_names_char_list.swap(names_char_list);

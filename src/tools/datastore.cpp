@@ -209,7 +209,7 @@ int main(const int argc, const char *argv[]) try
     unsigned name_blocks = 0;
     name_stream.read((char *)&name_blocks, sizeof(unsigned));
     shared_layout_ptr->SetBlockSize<unsigned>(SharedDataLayout::NAME_OFFSETS, name_blocks);
-    shared_layout_ptr->SetBlockSize<typename RangeTable<16, true>::BlockT>(
+    shared_layout_ptr->SetBlockSize<typename util::RangeTable<16, true>::BlockT>(
         SharedDataLayout::NAME_BLOCKS, name_blocks);
     util::SimpleLogger().Write() << "name offsets size: " << name_blocks;
     BOOST_ASSERT_MSG(0 != name_blocks, "name file broken");
