@@ -60,7 +60,7 @@ template <class EdgeDataT> class BaseDataFacade
     FindEdgeIndicateIfReverse(const NodeID from, const NodeID to, bool &result) const = 0;
 
     // node and edge information access
-    virtual FixedPointCoordinate GetCoordinateOfNode(const unsigned id) const = 0;
+    virtual util::FixedPointCoordinate GetCoordinateOfNode(const unsigned id) const = 0;
 
     virtual bool EdgeIsCompressed(const unsigned id) const = 0;
 
@@ -74,19 +74,19 @@ template <class EdgeDataT> class BaseDataFacade
     virtual extractor::TravelMode GetTravelModeForEdgeID(const unsigned id) const = 0;
 
     virtual std::vector<PhantomNodeWithDistance>
-    NearestPhantomNodesInRange(const FixedPointCoordinate &input_coordinate,
+    NearestPhantomNodesInRange(const util::FixedPointCoordinate &input_coordinate,
                                const float max_distance,
                                const int bearing = 0,
                                const int bearing_range = 180) = 0;
 
     virtual std::vector<PhantomNodeWithDistance>
-    NearestPhantomNodes(const FixedPointCoordinate &input_coordinate,
+    NearestPhantomNodes(const util::FixedPointCoordinate &input_coordinate,
                         const unsigned max_results,
                         const int bearing = 0,
                         const int bearing_range = 180) = 0;
 
     virtual std::pair<PhantomNode, PhantomNode>
-    NearestPhantomNodeWithAlternativeFromBigComponent(const FixedPointCoordinate &input_coordinate,
+    NearestPhantomNodeWithAlternativeFromBigComponent(const util::FixedPointCoordinate &input_coordinate,
                                                       const int bearing = 0,
                                                       const int bearing_range = 180) = 0;
 

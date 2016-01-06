@@ -38,7 +38,7 @@ template <class EdgeDataT> class SharedDataFacade final : public BaseDataFacade<
     using NameIndexBlock = typename RangeTable<16, true>::BlockT;
     using InputEdge = typename QueryGraph::InputEdge;
     using RTreeLeaf = typename super::RTreeLeaf;
-    using SharedRTree = StaticRTree<RTreeLeaf, util::ShM<FixedPointCoordinate, true>::vector, true>;
+    using SharedRTree = StaticRTree<RTreeLeaf, util::ShM<util::FixedPointCoordinate, true>::vector, true>;
     using SharedGeospatialQuery = GeospatialQuery<SharedRTree>;
     using TimeStampedRTreePair = std::pair<unsigned, std::shared_ptr<SharedRTree>>;
     using RTreeNode = typename SharedRTree::TreeNode;
@@ -57,7 +57,7 @@ template <class EdgeDataT> class SharedDataFacade final : public BaseDataFacade<
     std::unique_ptr<SharedMemory> m_large_memory;
     std::string m_timestamp;
 
-    std::shared_ptr<util::ShM<FixedPointCoordinate, true>::vector> m_coordinate_list;
+    std::shared_ptr<util::ShM<util::FixedPointCoordinate, true>::vector> m_coordinate_list;
     util::ShM<NodeID, true>::vector m_via_node_list;
     util::ShM<unsigned, true>::vector m_name_ID_list;
     util::ShM<extractor::TurnInstruction, true>::vector m_turn_instruction_list;
@@ -125,9 +125,9 @@ template <class EdgeDataT> class SharedDataFacade final : public BaseDataFacade<
     void LoadNodeAndEdgeInformation()
     {
 
-        FixedPointCoordinate *coordinate_list_ptr = data_layout->GetBlockPtr<FixedPointCoordinate>(
+        util::FixedPointCoordinate *coordinate_list_ptr = data_layout->GetBlockPtr<util::FixedPointCoordinate>(
             shared_memory, SharedDataLayout::COORDINATE_LIST);
-        m_coordinate_list = util::make_unique<util::ShM<FixedPointCoordinate, true>::vector>(
+        m_coordinate_list = util::make_unique<util::ShM<util::FixedPointCoordinate, true>::vector>(
             coordinate_list_ptr, data_layout->num_entries[SharedDataLayout::COORDINATE_LIST]);
 
         extractor::TravelMode *travel_mode_list_ptr =
@@ -329,7 +329,7 @@ template <class EdgeDataT> class SharedDataFacade final : public BaseDataFacade<
     }
 
     // node and edge information access
-    FixedPointCoordinate GetCoordinateOfNode(const NodeID id) const override final
+    util::FixedPointCoordinate GetCoordinateOfNode(const NodeID id) const override final
     {
         return m_coordinate_list->at(id);
     };
@@ -366,7 +366,7 @@ template <class EdgeDataT> class SharedDataFacade final : public BaseDataFacade<
     }
 
     std::vector<PhantomNodeWithDistance>
-    NearestPhantomNodesInRange(const FixedPointCoordinate &input_coordinate,
+    NearestPhantomNodesInRange(const util::FixedPointCoordinate &input_coordinate,
                                const float max_distance,
                                const int bearing = 0,
                                const int bearing_range = 180) override final
@@ -382,7 +382,7 @@ template <class EdgeDataT> class SharedDataFacade final : public BaseDataFacade<
     }
 
     std::vector<PhantomNodeWithDistance>
-    NearestPhantomNodes(const FixedPointCoordinate &input_coordinate,
+    NearestPhantomNodes(const util::FixedPointCoordinate &input_coordinate,
                         const unsigned max_results,
                         const int bearing = 0,
                         const int bearing_range = 180) override final
@@ -398,7 +398,7 @@ template <class EdgeDataT> class SharedDataFacade final : public BaseDataFacade<
     }
 
     std::pair<PhantomNode, PhantomNode>
-    NearestPhantomNodeWithAlternativeFromBigComponent(const FixedPointCoordinate &input_coordinate,
+    NearestPhantomNodeWithAlternativeFromBigComponent(const util::FixedPointCoordinate &input_coordinate,
                                                       const int bearing = 0,
                                                       const int bearing_range = 180) override final
     {

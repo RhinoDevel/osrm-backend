@@ -52,7 +52,7 @@ class HelloWorldPlugin final : public BasePlugin
 
         util::json::Array json_locations;
         unsigned counter = 0;
-        for (const FixedPointCoordinate &coordinate : routeParameters.coordinates)
+        for (const util::FixedPointCoordinate &coordinate : routeParameters.coordinates)
         {
             util::json::Object json_location;
             util::json::Array json_coordinates;

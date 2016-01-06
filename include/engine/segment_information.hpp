@@ -16,7 +16,7 @@ namespace engine
 // Struct fits everything in one cache line
 struct SegmentInformation
 {
-    FixedPointCoordinate location;
+    util::FixedPointCoordinate location;
     NodeID name_id;
     EdgeWeight duration;
     float length;
@@ -27,7 +27,7 @@ struct SegmentInformation
     bool necessary;
     bool is_via_location;
 
-    explicit SegmentInformation(FixedPointCoordinate location,
+    explicit SegmentInformation(util::FixedPointCoordinate location,
                                 const NodeID name_id,
                                 const EdgeWeight duration,
                                 const float length,
@@ -41,7 +41,7 @@ struct SegmentInformation
     {
     }
 
-    explicit SegmentInformation(FixedPointCoordinate location,
+    explicit SegmentInformation(util::FixedPointCoordinate location,
                                 const NodeID name_id,
                                 const EdgeWeight duration,
                                 const float length,

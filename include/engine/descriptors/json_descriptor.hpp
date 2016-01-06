@@ -35,7 +35,7 @@ template <class DataFacadeT> class JSONDescriptor final : public BaseDescriptor<
     DataFacadeT *facade;
     DescriptorConfig config;
     DescriptionFactory description_factory, alternate_description_factory;
-    FixedPointCoordinate current;
+    util::FixedPointCoordinate current;
 
   public:
     struct Segment
@@ -63,7 +63,7 @@ template <class DataFacadeT> class JSONDescriptor final : public BaseDescriptor<
     {
         unsigned added_element_count = 0;
         // Get all the coordinates for the computed route
-        FixedPointCoordinate current_coordinate;
+        util::FixedPointCoordinate current_coordinate;
         for (const PathData &path_data : route_leg)
         {
             current_coordinate = facade->GetCoordinateOfNode(path_data.node);

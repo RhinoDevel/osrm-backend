@@ -38,7 +38,7 @@ namespace tools
 {
 
 using RTreeLeaf = typename engine::datafacade::BaseDataFacade<contractor::QueryEdge::EdgeData>::RTreeLeaf;
-using RTreeNode = util::StaticRTree<RTreeLeaf, util::ShM<FixedPointCoordinate, true>::vector, true>::TreeNode;
+using RTreeNode = util::StaticRTree<RTreeLeaf, util::ShM<util::FixedPointCoordinate, true>::vector, true>::TreeNode;
 using QueryGraph = util::StaticGraph<contractor::QueryEdge::EdgeData>;
 
 // delete a shared memory region. report warning if it could not be deleted
@@ -314,7 +314,7 @@ int main(const int argc, const char *argv[]) try
     boost::filesystem::ifstream nodes_input_stream(nodes_data_path, std::ios::binary);
     unsigned coordinate_list_size = 0;
     nodes_input_stream.read((char *)&coordinate_list_size, sizeof(unsigned));
-    shared_layout_ptr->SetBlockSize<FixedPointCoordinate>(SharedDataLayout::COORDINATE_LIST,
+    shared_layout_ptr->SetBlockSize<util::FixedPointCoordinate>(SharedDataLayout::COORDINATE_LIST,
                                                           coordinate_list_size);
 
     // load geometries sizes
@@ -461,15 +461,15 @@ int main(const int argc, const char *argv[]) try
     }
 
     // Loading list of coordinates
-    FixedPointCoordinate *coordinates_ptr =
-        shared_layout_ptr->GetBlockPtr<FixedPointCoordinate, true>(
+    util::FixedPointCoordinate *coordinates_ptr =
+        shared_layout_ptr->GetBlockPtr<util::FixedPointCoordinate, true>(
             shared_memory_ptr, SharedDataLayout::COORDINATE_LIST);
 
     QueryNode current_node;
     for (unsigned i = 0; i < coordinate_list_size; ++i)
     {
         nodes_input_stream.read((char *)&current_node, sizeof(QueryNode));
-        coordinates_ptr[i] = FixedPointCoordinate(current_node.lat, current_node.lon);
+        coordinates_ptr[i] = util::FixedPointCoordinate(current_node.lat, current_node.lon);
     }
     nodes_input_stream.close();
 

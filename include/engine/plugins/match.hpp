@@ -77,7 +77,7 @@ template <class DataFacadeT> class MapMatchingPlugin : public BasePlugin
     }
 
     CandidateLists getCandidates(
-        const std::vector<FixedPointCoordinate> &input_coords,
+        const std::vector<util::FixedPointCoordinate> &input_coords,
         const std::vector<std::pair<const int, const boost::optional<int>>> &input_bearings,
         const double gps_precision,
         std::vector<double> &sub_trace_lengths)
@@ -203,7 +203,7 @@ template <class DataFacadeT> class MapMatchingPlugin : public BasePlugin
         if (route_parameters.geometry || route_parameters.print_instructions)
         {
             descriptors::DescriptionFactory factory;
-            FixedPointCoordinate current_coordinate;
+            util::FixedPointCoordinate current_coordinate;
             factory.SetStartSegment(raw_route.segment_end_coordinates.front().source_phantom,
                                     raw_route.source_traversed_in_reverse.front());
             for (const auto i :

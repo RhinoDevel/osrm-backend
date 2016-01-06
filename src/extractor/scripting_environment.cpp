@@ -115,9 +115,9 @@ void ScriptingEnvironment::InitLuaState(lua_State *lua_state)
          luabind::class_<ExternalMemoryNode>("EdgeTarget")
              .property("lat", &ExternalMemoryNode::lat)
              .property("lon", &ExternalMemoryNode::lon),
-         luabind::class_<FixedPointCoordinate>("Coordinate")
-             .property("lat", &FixedPointCoordinate::lat)
-             .property("lon", &FixedPointCoordinate::lon),
+         luabind::class_<util::FixedPointCoordinate>("Coordinate")
+             .property("lat", &util::FixedPointCoordinate::lat)
+             .property("lon", &util::FixedPointCoordinate::lon),
          luabind::class_<RasterDatum>("RasterDatum")
              .property("datum", &RasterDatum::datum)
              .def("invalid_data", &RasterDatum::get_invalid)];

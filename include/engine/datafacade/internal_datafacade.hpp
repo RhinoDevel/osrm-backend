@@ -37,7 +37,7 @@ template <class EdgeDataT> class InternalDataFacade final : public BaseDataFacad
     using QueryGraph = util::StaticGraph<typename super::EdgeData>;
     using InputEdge = typename QueryGraph::InputEdge;
     using RTreeLeaf = typename super::RTreeLeaf;
-    using InternalRTree = util::StaticRTree<RTreeLeaf, util::ShM<FixedPointCoordinate, false>::vector, false>;
+    using InternalRTree = util::StaticRTree<RTreeLeaf, util::ShM<util::FixedPointCoordinate, false>::vector, false>;
     using InternalGeospatialQuery = GeospatialQuery<InternalRTree>;
 
     InternalDataFacade() {}
@@ -47,7 +47,7 @@ template <class EdgeDataT> class InternalDataFacade final : public BaseDataFacad
     std::unique_ptr<QueryGraph> m_query_graph;
     std::string m_timestamp;
 
-    std::shared_ptr<util::ShM<FixedPointCoordinate, false>::vector> m_coordinate_list;
+    std::shared_ptr<util::ShM<util::FixedPointCoordinate, false>::vector> m_coordinate_list;
     util::ShM<NodeID, false>::vector m_via_node_list;
     util::ShM<unsigned, false>::vector m_name_ID_list;
     util::ShM<extractor::TurnInstruction, false>::vector m_turn_instruction_list;
@@ -116,11 +116,11 @@ template <class EdgeDataT> class InternalDataFacade final : public BaseDataFacad
         unsigned number_of_coordinates = 0;
         nodes_input_stream.read((char *)&number_of_coordinates, sizeof(unsigned));
         m_coordinate_list =
-            std::make_shared<std::vector<FixedPointCoordinate>>(number_of_coordinates);
+            std::make_shared<std::vector<util::FixedPointCoordinate>>(number_of_coordinates);
         for (unsigned i = 0; i < number_of_coordinates; ++i)
         {
             nodes_input_stream.read((char *)&current_node, sizeof(QueryNode));
-            m_coordinate_list->at(i) = FixedPointCoordinate(current_node.lat, current_node.lon);
+            m_coordinate_list->at(i) = util::FixedPointCoordinate(current_node.lat, current_node.lon);
             BOOST_ASSERT((std::abs(m_coordinate_list->at(i).lat) >> 30) == 0);
             BOOST_ASSERT((std::abs(m_coordinate_list->at(i).lon) >> 30) == 0);
         }
@@ -319,7 +319,7 @@ template <class EdgeDataT> class InternalDataFacade final : public BaseDataFacad
     }
 
     // node and edge information access
-    FixedPointCoordinate GetCoordinateOfNode(const unsigned id) const override final
+    util::FixedPointCoordinate GetCoordinateOfNode(const unsigned id) const override final
     {
         return m_coordinate_list->at(id);
     };
@@ -340,7 +340,7 @@ template <class EdgeDataT> class InternalDataFacade final : public BaseDataFacad
     }
 
     std::vector<PhantomNodeWithDistance>
-    NearestPhantomNodesInRange(const FixedPointCoordinate &input_coordinate,
+    NearestPhantomNodesInRange(const util::FixedPointCoordinate &input_coordinate,
                                const float max_distance,
                                const int bearing = 0,
                                const int bearing_range = 180) override final
@@ -356,7 +356,7 @@ template <class EdgeDataT> class InternalDataFacade final : public BaseDataFacad
     }
 
     std::vector<PhantomNodeWithDistance>
-    NearestPhantomNodes(const FixedPointCoordinate &input_coordinate,
+    NearestPhantomNodes(const util::FixedPointCoordinate &input_coordinate,
                         const unsigned max_results,
                         const int bearing = 0,
                         const int bearing_range = 180) override final
@@ -372,7 +372,7 @@ template <class EdgeDataT> class InternalDataFacade final : public BaseDataFacad
     }
 
     std::pair<PhantomNode, PhantomNode>
-    NearestPhantomNodeWithAlternativeFromBigComponent(const FixedPointCoordinate &input_coordinate,
+    NearestPhantomNodeWithAlternativeFromBigComponent(const util::FixedPointCoordinate &input_coordinate,
                                                       const int bearing = 0,
                                                       const int bearing_range = 180) override final
     {

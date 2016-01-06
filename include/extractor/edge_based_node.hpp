@@ -58,10 +58,10 @@ struct EdgeBasedNode
                      (reverse_edge_based_node_id != SPECIAL_NODEID));
     }
 
-    static inline FixedPointCoordinate Centroid(const FixedPointCoordinate &a,
-                                                const FixedPointCoordinate &b)
+    static inline util::FixedPointCoordinate Centroid(const util::FixedPointCoordinate &a,
+                                                const util::FixedPointCoordinate &b)
     {
-        FixedPointCoordinate centroid;
+        util::FixedPointCoordinate centroid;
         // The coordinates of the midpoint are given by:
         centroid.lat = (a.lat + b.lat) / 2;
         centroid.lon = (a.lon + b.lon) / 2;

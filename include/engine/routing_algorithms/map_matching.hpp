@@ -71,7 +71,7 @@ class MapMatching final : public BasicRoutingInterface<DataFacadeT, MapMatching<
     }
 
     void operator()(const CandidateLists &candidates_list,
-                    const std::vector<FixedPointCoordinate> &trace_coordinates,
+                    const std::vector<util::FixedPointCoordinate> &trace_coordinates,
                     const std::vector<unsigned> &trace_timestamps,
                     const double matching_beta,
                     const double gps_precision,

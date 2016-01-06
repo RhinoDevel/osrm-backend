@@ -32,7 +32,7 @@ template <class DataFacadeT> class GPXDescriptor final : public BaseDescriptor<D
         output = util::printInt<11, 6>(buffer, value);
     }
 
-    void AddRoutePoint(const FixedPointCoordinate &coordinate, util::json::Array &json_route)
+    void AddRoutePoint(const util::FixedPointCoordinate &coordinate, util::json::Array &json_route)
     {
         util::json::Object json_lat;
         util::json::Object json_lon;
@@ -70,7 +70,7 @@ template <class DataFacadeT> class GPXDescriptor final : public BaseDescriptor<D
             {
                 for (const PathData &path_data : path_data_vector)
                 {
-                    const FixedPointCoordinate current_coordinate =
+                    const util::FixedPointCoordinate current_coordinate =
                         facade->GetCoordinateOfNode(path_data.node);
                     AddRoutePoint(current_coordinate, json_route);
                 }

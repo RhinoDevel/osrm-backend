@@ -47,7 +47,7 @@ void DescriptionFactory::SetEndSegment(const PhantomNode &target,
     BOOST_ASSERT(path_description.back().duration == segment_duration);
 }
 
-void DescriptionFactory::AppendSegment(const FixedPointCoordinate &coordinate,
+void DescriptionFactory::AppendSegment(const util::FixedPointCoordinate &coordinate,
                                        const PathData &path_point)
 {
     // if the start location is on top of a node, the first movement might be zero-length,

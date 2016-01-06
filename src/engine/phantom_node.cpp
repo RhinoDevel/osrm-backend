@@ -20,7 +20,7 @@ PhantomNode::PhantomNode(NodeID forward_node_id,
                          unsigned packed_geometry_id,
                          bool is_tiny_component,
                          unsigned component_id,
-                         FixedPointCoordinate &location,
+                         util::FixedPointCoordinate &location,
                          unsigned short fwd_segment_position,
                          extractor::TravelMode forward_travel_mode,
                          extractor::TravelMode backward_travel_mode)
