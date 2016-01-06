@@ -1,8 +1,6 @@
 #ifndef COORDINATE_CALCULATION
 #define COORDINATE_CALCULATION
 
-struct FixedPointCoordinate;
-
 #include <string>
 #include <utility>
 
@@ -10,6 +8,8 @@ namespace osrm
 {
 namespace util
 {
+
+struct FixedPointCoordinate;
 
 namespace coordinate_calculation
 {
