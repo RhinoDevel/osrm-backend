@@ -6,6 +6,7 @@
 #include "engine/object_encoder.hpp"
 #include "engine/route_name_extraction.hpp"
 #include "engine/segment_information.hpp"
+#include "engine/internal_route_result.hpp"
 #include "extractor/turn_instructions.hpp"
 #include "util/bearing.hpp"
 #include "util/cast.hpp"

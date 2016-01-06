@@ -2,7 +2,6 @@
 #define DESCRIPTOR_BASE_HPP
 
 #include "util/coordinate_calculation.hpp"
-#include "engine/internal_route_result.hpp"
 #include "engine/phantom_node.hpp"
 #include "util/typedefs.hpp"
 
@@ -18,6 +17,9 @@ namespace osrm
 {
 namespace engine
 {
+
+struct InternalRouteResult;
+
 namespace descriptors
 {
 

@@ -20,10 +20,12 @@ namespace osrm
 {
 namespace engine
 {
+
+struct PathData;
+
 namespace descriptors
 {
 
-struct PathData;
 /* This class is fed with all way segments in consecutive order
  *  and produces the description plus the encoded polyline */
 

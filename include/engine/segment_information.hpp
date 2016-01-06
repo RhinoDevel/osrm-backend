@@ -2,7 +2,6 @@
 #define SEGMENT_INFORMATION_HPP
 
 #include "extractor/turn_instructions.hpp"
-
 #include "extractor/travel_mode.hpp"
 #include "util/typedefs.hpp"
 
