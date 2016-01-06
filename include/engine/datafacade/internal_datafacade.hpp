@@ -50,8 +50,8 @@ template <class EdgeDataT> class InternalDataFacade final : public BaseDataFacad
     std::shared_ptr<ShM<FixedPointCoordinate, false>::vector> m_coordinate_list;
     ShM<NodeID, false>::vector m_via_node_list;
     ShM<unsigned, false>::vector m_name_ID_list;
-    ShM<TurnInstruction, false>::vector m_turn_instruction_list;
-    ShM<TravelMode, false>::vector m_travel_mode_list;
+    ShM<extractor::TurnInstruction, false>::vector m_turn_instruction_list;
+    ShM<extractor::TravelMode, false>::vector m_travel_mode_list;
     ShM<char, false>::vector m_names_char_list;
     ShM<bool, false>::vector m_edge_is_compressed;
     ShM<unsigned, false>::vector m_geometry_indices;
@@ -329,12 +329,12 @@ template <class EdgeDataT> class InternalDataFacade final : public BaseDataFacad
         return m_edge_is_compressed.at(id);
     }
 
-    TurnInstruction GetTurnInstructionForEdgeID(const unsigned id) const override final
+    extractor::TurnInstruction GetTurnInstructionForEdgeID(const unsigned id) const override final
     {
         return m_turn_instruction_list.at(id);
     }
 
-    TravelMode GetTravelModeForEdgeID(const unsigned id) const override final
+    extractor::TravelMode GetTravelModeForEdgeID(const unsigned id) const override final
     {
         return m_travel_mode_list.at(id);
     }
