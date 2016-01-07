@@ -117,3 +117,25 @@ Feature: Via points
             | 1,2,3     | ab,ab                      | 200m +-1  | head,via,destination                                             |
             | 1,3,2     | ab,ab,bc,cd,da,ab          | 1100m +-1 | head,via,right,right,right,right,destination                     |
             | 3,2,1     | ab,bc,cd,da,ab,ab,bc,cd,da,ab | 1800m     | head,right,right,right,right,via,right,right,right,right,destination |
+
+    Scenario: Via points on ring on the same oneway, forces one of the vertices to be top node
+    # xa it to avoid only having a single ring, which cna trigger edge cases
+        Given the node map
+            | a | 1 | 2 | b |
+            | 8 |   |   | 3 |
+            | 7 |   |   | 4 |
+            | d | 6 | 5 | c |
+
+        And the ways
+            | nodes | oneway |
+            | ab    | yes    |
+            | bc    | yes    |
+            | cd    | yes    |
+            | da    | yes    |
+
+        When I route I should get
+            | waypoints | route                      | distance  | turns                                                            |
+            | 2,1       | ab,bc,cd,da,ab             | 800m +-1  | head,right,right,right,right,destination                         |
+            | 4,3       | bc,cd,da,ab,bc             | 800m +-1  | head,right,right,right,right,destination                         |
+            | 6,5       | cd,da,ab,bc,cd             | 800m +-1  | head,right,right,right,right,destination                         |
+            | 8,7       | da,ab,bc,cd,da             | 800m +-1  | head,right,right,right,right,destination                         |
