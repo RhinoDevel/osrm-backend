@@ -11,29 +11,26 @@
 #include <new>
 #include <ostream>
 
-namespace osrm
-{
-namespace tools
-{
+using namespace osrm;
 
 int main(int argc, char *argv[]) try
 {
     util::LogPolicy::GetInstance().Unmute();
     contractor::ContractorConfig contractor_config;
 
-    const return_code result = ContractorOptions::ParseArguments(argc, argv, contractor_config);
+    const contractor::return_code result = contractor::ContractorOptions::ParseArguments(argc, argv, contractor_config);
 
-    if (return_code::fail == result)
+    if (contractor::return_code::fail == result)
     {
         return EXIT_FAILURE;
     }
 
-    if (return_code::exit == result)
+    if (contractor::return_code::exit == result)
     {
         return EXIT_SUCCESS;
     }
 
-    ContractorOptions::GenerateOutputFilesNames(contractor_config);
+    contractor::ContractorOptions::GenerateOutputFilesNames(contractor_config);
 
     if (1 > contractor_config.requested_num_threads)
     {
@@ -71,7 +68,7 @@ int main(int argc, char *argv[]) try
 
     tbb::task_scheduler_init init(contractor_config.requested_num_threads);
 
-    return Prepare(contractor_config).Run();
+    return contractor::Prepare(contractor_config).Run();
 }
 catch (const std::bad_alloc &e)
 {
@@ -84,6 +81,4 @@ catch (const std::exception &e)
 {
     util::SimpleLogger().Write(logWARNING) << "[exception] " << e.what();
     return EXIT_FAILURE;
-}
-}
 }
