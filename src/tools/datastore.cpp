@@ -32,19 +32,24 @@
 #include <new>
 #include <string>
 
-namespace osrm
-{
-namespace tools
-{
+// FIXME remove after move to datastore
+using namespace osrm::engine::datafacade;
+using namespace osrm::datastore;
+using namespace osrm;
 
 using RTreeLeaf = typename engine::datafacade::BaseDataFacade<contractor::QueryEdge::EdgeData>::RTreeLeaf;
 using RTreeNode = util::StaticRTree<RTreeLeaf, util::ShM<util::FixedPointCoordinate, true>::vector, true>::TreeNode;
 using QueryGraph = util::StaticGraph<contractor::QueryEdge::EdgeData>;
 
+namespace osrm
+{
+namespace tools
+{
+
 // delete a shared memory region. report warning if it could not be deleted
 void deleteRegion(const SharedDataType region)
 {
-    if (datastore::SharedMemory::RegionExists(region) && !datastore::SharedMemory::Remove(region))
+    if (SharedMemory::RegionExists(region) && !SharedMemory::Remove(region))
     {
         const std::string name = [&]
         {
@@ -69,6 +74,9 @@ void deleteRegion(const SharedDataType region)
 
         util::SimpleLogger().Write(logWARNING) << "could not delete shared memory region " << name;
     }
+}
+
+}
 }
 
 int main(const int argc, const char *argv[]) try
@@ -99,7 +107,7 @@ int main(const int argc, const char *argv[]) try
     util::SimpleLogger().Write(logDEBUG) << "Checking input parameters";
 
     std::unordered_map<std::string, boost::filesystem::path> server_paths;
-    if (!GenerateDataStoreOptions(argc, argv, server_paths))
+    if (!util::GenerateDataStoreOptions(argc, argv, server_paths))
     {
         return EXIT_SUCCESS;
     }
@@ -177,26 +185,26 @@ int main(const int argc, const char *argv[]) try
     const boost::filesystem::path &core_marker_path = paths_iterator->second;
 
     // determine segment to use
-    bool segment2_in_use = datastore::SharedMemory::RegionExists(LAYOUT_2);
-    const SharedDataType layout_region = [&]
+    bool segment2_in_use = SharedMemory::RegionExists(LAYOUT_2);
+    const engine::datafacade::SharedDataType layout_region = [&]
     {
         return segment2_in_use ? LAYOUT_1 : LAYOUT_2;
     }();
-    const SharedDataType data_region = [&]
+    const engine::datafacade::SharedDataType data_region = [&]
     {
         return segment2_in_use ? DATA_1 : DATA_2;
     }();
-    const SharedDataType previous_layout_region = [&]
+    const engine::datafacade::SharedDataType previous_layout_region = [&]
     {
         return segment2_in_use ? LAYOUT_2 : LAYOUT_1;
     }();
-    const SharedDataType previous_data_region = [&]
+    const engine::datafacade::SharedDataType previous_data_region = [&]
     {
         return segment2_in_use ? DATA_2 : DATA_1;
     }();
 
     // Allocate a memory layout in shared memory, deallocate previous
-    auto *layout_memory = datastore::SharedMemoryFactory::Get(layout_region, sizeof(SharedDataLayout));
+    auto *layout_memory = SharedMemoryFactory::Get(layout_region, sizeof(SharedDataLayout));
     auto *shared_layout_ptr = new (layout_memory->Ptr()) SharedDataLayout();
 
     shared_layout_ptr->SetBlockSize<char>(SharedDataLayout::FILE_INDEX_PATH,
@@ -333,8 +341,8 @@ int main(const int argc, const char *argv[]) try
     // allocate shared memory block
     util::SimpleLogger().Write() << "allocating shared memory of " << shared_layout_ptr->GetSizeOfLayout()
                            << " bytes";
-    datastore::SharedMemory *shared_memory =
-        datastore::SharedMemoryFactory::Get(data_region, shared_layout_ptr->GetSizeOfLayout());
+    SharedMemory *shared_memory =
+        SharedMemoryFactory::Get(data_region, shared_layout_ptr->GetSizeOfLayout());
     char *shared_memory_ptr = static_cast<char *>(shared_memory->Ptr());
 
     // read actual data into shared memory object //
@@ -540,8 +548,8 @@ int main(const int argc, const char *argv[]) try
     hsgr_input_stream.close();
 
     // acquire lock
-    datastore::SharedMemory *data_type_memory =
-        datastore::SharedMemoryFactory::Get(CURRENT_REGIONS, sizeof(SharedDataTimestamp), true, false);
+    SharedMemory *data_type_memory =
+        SharedMemoryFactory::Get(CURRENT_REGIONS, sizeof(SharedDataTimestamp), true, false);
     SharedDataTimestamp *data_timestamp_ptr =
         static_cast<SharedDataTimestamp *>(data_type_memory->Ptr());
 
@@ -557,11 +565,12 @@ int main(const int argc, const char *argv[]) try
     data_timestamp_ptr->layout = layout_region;
     data_timestamp_ptr->data = data_region;
     data_timestamp_ptr->timestamp += 1;
-    deleteRegion(previous_data_region);
-    deleteRegion(previous_layout_region);
+    tools::deleteRegion(previous_data_region);
+    tools::deleteRegion(previous_layout_region);
     util::SimpleLogger().Write() << "all data loaded";
 
     shared_layout_ptr->PrintInformation();
+    return EXIT_SUCCESS;
 }
 catch (const std::bad_alloc &e)
 {
@@ -573,6 +582,4 @@ catch (const std::bad_alloc &e)
 catch (const std::exception &e)
 {
     util::SimpleLogger().Write(logWARNING) << "caught exception: " << e.what();
-}
-}
 }

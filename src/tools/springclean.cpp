@@ -10,9 +10,13 @@ namespace osrm
 namespace tools
 {
 
+// FIXME remove after folding back into datastore
+using namespace datastore;
+using namespace engine::datafacade;
+
 void deleteRegion(const SharedDataType region)
 {
-    if (datastore::SharedMemory::RegionExists(region) && !datastore::SharedMemory::Remove(region))
+    if (SharedMemory::RegionExists(region) && !SharedMemory::Remove(region))
     {
         const std::string name = [&]
         {
