@@ -876,6 +876,7 @@ class Contractor
                     }
                     else
                     {
+                        //TODO currently, this process can compute parallel arcs, we only require the minimal one
                         inserted_edges.emplace_back(source, target,
                                                     in_data.distance + out_data.distance,
                                                     out_data.originalEdges + in_data.originalEdges,

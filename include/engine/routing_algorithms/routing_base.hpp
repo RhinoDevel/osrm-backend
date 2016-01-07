@@ -160,7 +160,8 @@ template <class DataFacadeT, class Derived> class BasicRoutingInterface
         {
             const NodeID to = facade->GetTarget(edge);
             const EdgeData &data = facade->GetEdgeData(edge);
-            if ( (search_forward == data.forward or not search_forward == data.backward) and to == node)
+            if ((search_forward == data.forward or not search_forward == data.backward) and
+                to == node)
             {
                 if (best_weight > data.distance)
                 {
@@ -169,9 +170,12 @@ template <class DataFacadeT, class Derived> class BasicRoutingInterface
                 }
             }
         }
-        distance = facade->GetEdgeData(best).distance + total_distance_to_forward +
-                   total_distance_to_reverse;
-        UnpackEdge(node, node, packed_path);
+        if (best_weight != std::numeric_limits<std::int32_t>::max())
+        {
+            distance = facade->GetEdgeData(best).distance + total_distance_to_forward +
+                       total_distance_to_reverse;
+            UnpackEdge(node, node, packed_path);
+        }
     }
 
     template <typename RandomIter>

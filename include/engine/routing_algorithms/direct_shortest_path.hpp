@@ -115,6 +115,11 @@ class DirectShortestPathRouting final
               } else {
                 super::SearchLoop( source_phantom.forward_node_id, not forward, -source_phantom.GetReverseWeightPlusOffset(), target_phantom.GetReverseWeightPlusOffset(), distance, packed_leg );
               }
+              if( distance == INVALID_EDGE_WEIGHT ){
+                raw_route_data.shortest_path_length = INVALID_EDGE_WEIGHT;
+                raw_route_data.alternative_path_length = INVALID_EDGE_WEIGHT;
+                return;
+              }
             } else {
               raw_route_data.shortest_path_length = INVALID_EDGE_WEIGHT;
               raw_route_data.alternative_path_length = INVALID_EDGE_WEIGHT;
