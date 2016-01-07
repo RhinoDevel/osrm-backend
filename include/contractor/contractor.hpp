@@ -810,8 +810,6 @@ class Contractor
         int inserted_edges_size = data->inserted_edges.size();
         std::vector<ContractorEdge> &inserted_edges = data->inserted_edges;
 
-        std::cout << "Contracting " << node << std::endl;
-
         for (auto in_edge : contractor_graph->GetAdjacentEdgeRange(node))
         {
             const ContractorEdgeData &in_data = contractor_graph->GetEdgeData(in_edge);
@@ -867,7 +865,6 @@ class Contractor
                 const NodeID target = contractor_graph->GetTarget(out_edge);
                 const int path_distance = in_data.distance + out_data.distance;
                 const int distance = heap.GetKey(target);
-                std::cout << source << " of " << node_represents_one_way.size() << std::endl;
                 if ( source == target and node_represents_one_way[source])
                 {
                     if (RUNSIMULATION)
@@ -879,7 +876,6 @@ class Contractor
                     }
                     else
                     {
-                        std::cout << "Cycle arc added" << std::endl;
                         inserted_edges.emplace_back(source, target,
                                                     in_data.distance + out_data.distance,
                                                     out_data.originalEdges + in_data.originalEdges,

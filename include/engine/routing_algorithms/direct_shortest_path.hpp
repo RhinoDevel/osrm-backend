@@ -106,9 +106,20 @@ class DirectShortestPathRouting final
         // No path found for both target nodes?
         if (INVALID_EDGE_WEIGHT == distance)
         {
-            raw_route_data.shortest_path_length = INVALID_EDGE_WEIGHT;
-            raw_route_data.alternative_path_length = INVALID_EDGE_WEIGHT;
-            return;
+            if( source_phantom.forward_node_id == target_phantom.forward_node_id
+                and source_phantom.reverse_node_id == target_phantom.reverse_node_id ){
+              bool forward = source_phantom.forward_node_id != SPECIAL_NODEID;
+              raw_route_data.alternative_path_length = INVALID_EDGE_WEIGHT;
+              if( forward ){
+                super::SearchLoop( source_phantom.forward_node_id, forward, -source_phantom.GetForwardWeightPlusOffset(), target_phantom.GetForwardWeightPlusOffset(), distance, packed_leg );
+              } else {
+                super::SearchLoop( source_phantom.forward_node_id, not forward, -source_phantom.GetReverseWeightPlusOffset(), target_phantom.GetReverseWeightPlusOffset(), distance, packed_leg );
+              }
+            } else {
+              raw_route_data.shortest_path_length = INVALID_EDGE_WEIGHT;
+              raw_route_data.alternative_path_length = INVALID_EDGE_WEIGHT;
+              return;
+            }
         }
 
         BOOST_ASSERT_MSG(!packed_leg.empty(), "packed path empty");

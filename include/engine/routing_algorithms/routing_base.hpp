@@ -147,6 +147,33 @@ template <class DataFacadeT, class Derived> class BasicRoutingInterface
         }
     }
 
+    void SearchLoop(const NodeID node,
+                    bool search_forward,
+                    const int total_distance_to_forward,
+                    const int total_distance_to_reverse,
+                    std::int32_t &distance,
+                    std::vector<NodeID> &packed_path) const
+    {
+        std::int32_t best_weight = std::numeric_limits<std::int32_t>::max();
+        EdgeID best;
+        for (const auto edge : facade->GetAdjacentEdgeRange(node))
+        {
+            const NodeID to = facade->GetTarget(edge);
+            const EdgeData &data = facade->GetEdgeData(edge);
+            if ( (search_forward == data.forward or not search_forward == data.backward) and to == node)
+            {
+                if (best_weight > data.distance)
+                {
+                    best = edge;
+                    best_weight = data.distance;
+                }
+            }
+        }
+        distance = facade->GetEdgeData(best).distance + total_distance_to_forward +
+                   total_distance_to_reverse;
+        UnpackEdge(node, node, packed_path);
+    }
+
     template <typename RandomIter>
     void UnpackPath(RandomIter packed_path_begin,
                     RandomIter packed_path_end,
@@ -649,11 +676,11 @@ template <class DataFacadeT, class Derived> class BasicRoutingInterface
             {
                 current_coordinate = facade->GetCoordinateOfNode(p.node);
                 distance += coordinate_calculation::haversineDistance(previous_coordinate,
-                                                                       current_coordinate);
+                                                                      current_coordinate);
                 previous_coordinate = current_coordinate;
             }
             distance += coordinate_calculation::haversineDistance(previous_coordinate,
-                                                                   target_phantom.location);
+                                                                  target_phantom.location);
         }
         return distance;
     }
