@@ -31,9 +31,6 @@ namespace osrm
 namespace tools
 {
 
-namespace
-{
-
 struct TarjanEdgeData
 {
     TarjanEdgeData() : distance(INVALID_EDGE_WEIGHT), name_id(INVALID_NAMEID) {}
@@ -52,7 +49,6 @@ void deleteFileIfExists(const std::string &file_name)
         boost::filesystem::remove(file_name);
     }
 }
-}
 
 std::size_t loadGraph(const char *path,
                       std::vector<extractor::QueryNode> &coordinate_list,
@@ -65,7 +61,7 @@ std::size_t loadGraph(const char *path,
     }
 
     // load graph data
-    std::vector<NodeBasedEdge> edge_list;
+    std::vector<extractor::NodeBasedEdge> edge_list;
     std::vector<NodeID> traffic_light_node_list;
     std::vector<NodeID> barrier_node_list;
 
@@ -99,46 +95,48 @@ std::size_t loadGraph(const char *path,
 
     return number_of_nodes;
 }
+}
+}
 
 int main(int argc, char *argv[])
 {
-    std::vector<extractor::QueryNode> coordinate_list;
+    std::vector<osrm::extractor::QueryNode> coordinate_list;
 
-    util::LogPolicy::GetInstance().Unmute();
+    osrm::util::LogPolicy::GetInstance().Unmute();
     try
     {
         // enable logging
         if (argc < 2)
         {
-            util::SimpleLogger().Write(logWARNING) << "usage:\n" << argv[0] << " <osrm>";
+            osrm::util::SimpleLogger().Write(logWARNING) << "usage:\n" << argv[0] << " <osrm>";
             return -1;
         }
 
-        std::vector<TarjanEdge> graph_edge_list;
-        auto number_of_nodes = loadGraph(argv[1], coordinate_list, graph_edge_list);
+        std::vector<osrm::tools::TarjanEdge> graph_edge_list;
+        auto number_of_nodes = osrm::tools::loadGraph(argv[1], coordinate_list, graph_edge_list);
 
         tbb::parallel_sort(graph_edge_list.begin(), graph_edge_list.end());
-        const auto graph = std::make_shared<TarjanGraph>(number_of_nodes, graph_edge_list);
+        const auto graph = std::make_shared<osrm::tools::TarjanGraph>(number_of_nodes, graph_edge_list);
         graph_edge_list.clear();
         graph_edge_list.shrink_to_fit();
 
-        util::SimpleLogger().Write() << "Starting SCC graph traversal";
+        osrm::util::SimpleLogger().Write() << "Starting SCC graph traversal";
 
-        auto tarjan = util::make_unique<extractor::TarjanSCC<TarjanGraph>>(graph);
+        auto tarjan = osrm::util::make_unique<osrm::extractor::TarjanSCC<osrm::tools::TarjanGraph>>(graph);
         tarjan->run();
-        util::SimpleLogger().Write() << "identified: " << tarjan->get_number_of_components()
+        osrm::util::SimpleLogger().Write() << "identified: " << tarjan->get_number_of_components()
                                << " many components";
-        util::SimpleLogger().Write() << "identified " << tarjan->get_size_one_count() << " size 1 SCCs";
+        osrm::util::SimpleLogger().Write() << "identified " << tarjan->get_size_one_count() << " size 1 SCCs";
 
         // output
         TIMER_START(SCC_RUN_SETUP);
 
         // remove files from previous run if exist
-        deleteFileIfExists("component.dbf");
-        deleteFileIfExists("component.shx");
-        deleteFileIfExists("component.shp");
+        osrm::tools::deleteFileIfExists("component.dbf");
+        osrm::tools::deleteFileIfExists("component.shx");
+        osrm::tools::deleteFileIfExists("component.shp");
 
-        Percent percentage(graph->GetNumberOfNodes());
+        osrm::util::Percent percentage(graph->GetNumberOfNodes());
 
         OGRRegisterAll();
 
@@ -147,13 +145,13 @@ int main(int argc, char *argv[])
             OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(psz_driver_name);
         if (nullptr == po_driver)
         {
-            throw util::exception("ESRI Shapefile driver not available");
+            throw osrm::util::exception("ESRI Shapefile driver not available");
         }
         auto *po_datasource = po_driver->CreateDataSource("component.shp", nullptr);
 
         if (nullptr == po_datasource)
         {
-            throw util::exception("Creation of output file failed");
+            throw osrm::util::exception("Creation of output file failed");
         }
 
         auto *po_srs = new OGRSpatialReference();
@@ -163,26 +161,26 @@ int main(int argc, char *argv[])
 
         if (nullptr == po_layer)
         {
-            throw util::exception("Layer creation failed.");
+            throw osrm::util::exception("Layer creation failed.");
         }
         TIMER_STOP(SCC_RUN_SETUP);
-        util::SimpleLogger().Write() << "shapefile setup took " << TIMER_MSEC(SCC_RUN_SETUP) / 1000.
+        osrm::util::SimpleLogger().Write() << "shapefile setup took " << TIMER_MSEC(SCC_RUN_SETUP) / 1000.
                                << "s";
 
         uint64_t total_network_length = 0;
         percentage.reinit(graph->GetNumberOfNodes());
         TIMER_START(SCC_OUTPUT);
-        for (const NodeID source : util::irange(0u, graph->GetNumberOfNodes()))
+        for (const NodeID source : osrm::util::irange(0u, graph->GetNumberOfNodes()))
         {
             percentage.printIncrement();
             for (const auto current_edge : graph->GetAdjacentEdgeRange(source))
             {
-                const TarjanGraph::NodeIterator target = graph->GetTarget(current_edge);
+                const auto target = graph->GetTarget(current_edge);
 
                 if (source < target || SPECIAL_EDGEID == graph->FindEdge(target, source))
                 {
                     total_network_length +=
-                        100 * util::coordinate_calculation::greatCircleDistance(
+                        100 * osrm::util::coordinate_calculation::greatCircleDistance(
                                   coordinate_list[source].lat, coordinate_list[source].lon,
                                   coordinate_list[target].lat, coordinate_list[target].lon);
 
@@ -198,17 +196,17 @@ int main(int argc, char *argv[])
                     if (size_of_containing_component < 1000)
                     {
                         OGRLineString line_string;
-                        line_string.addPoint(coordinate_list[source].lon / COORDINATE_PRECISION,
-                                             coordinate_list[source].lat / COORDINATE_PRECISION);
-                        line_string.addPoint(coordinate_list[target].lon / COORDINATE_PRECISION,
-                                            coordinate_list[target].lat / COORDINATE_PRECISION);
+                        line_string.addPoint(coordinate_list[source].lon / osrm::COORDINATE_PRECISION,
+                                             coordinate_list[source].lat / osrm::COORDINATE_PRECISION);
+                        line_string.addPoint(coordinate_list[target].lon / osrm::COORDINATE_PRECISION,
+                                            coordinate_list[target].lat  / osrm::COORDINATE_PRECISION);
 
                         OGRFeature *po_feature = OGRFeature::CreateFeature(po_layer->GetLayerDefn());
 
                         po_feature->SetGeometry(&line_string);
                         if (OGRERR_NONE != po_layer->CreateFeature(po_feature))
                         {
-                            throw util::exception("Failed to create feature in shapefile.");
+                            throw osrm::util::exception("Failed to create feature in shapefile.");
                         }
                         OGRFeature::DestroyFeature(po_feature);
                     }
@@ -218,20 +216,18 @@ int main(int argc, char *argv[])
         OGRSpatialReference::DestroySpatialReference(po_srs);
         OGRDataSource::DestroyDataSource(po_datasource);
         TIMER_STOP(SCC_OUTPUT);
-        util::SimpleLogger().Write() << "generating output took: " << TIMER_MSEC(SCC_OUTPUT) / 1000.
+        osrm::util::SimpleLogger().Write() << "generating output took: " << TIMER_MSEC(SCC_OUTPUT) / 1000.
                                << "s";
 
-        util::SimpleLogger().Write() << "total network distance: "
+        osrm::util::SimpleLogger().Write() << "total network distance: "
                                << static_cast<uint64_t>(total_network_length / 100 / 1000.)
                                << " km";
 
-        util::SimpleLogger().Write() << "finished component analysis";
+        osrm::util::SimpleLogger().Write() << "finished component analysis";
     }
     catch (const std::exception &e)
     {
-        util::SimpleLogger().Write(logWARNING) << "[exception] " << e.what();
+        osrm::util::SimpleLogger().Write(logWARNING) << "[exception] " << e.what();
     }
     return 0;
-}
-}
 }
