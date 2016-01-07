@@ -8,29 +8,26 @@
 #include <exception>
 #include <new>
 
-namespace osrm
-{
-namespace tools
-{
+using namespace osrm;
 
 int main(int argc, char *argv[]) try
 {
     util::LogPolicy::GetInstance().Unmute();
-    ExtractorConfig extractor_config;
+    extractor::ExtractorConfig extractor_config;
 
-    const return_code result = ExtractorOptions::ParseArguments(argc, argv, extractor_config);
+    const extractor::return_code result = extractor::ExtractorOptions::ParseArguments(argc, argv, extractor_config);
 
-    if (return_code::fail == result)
+    if (extractor::return_code::fail == result)
     {
         return EXIT_FAILURE;
     }
 
-    if (return_code::exit == result)
+    if (extractor::return_code::exit == result)
     {
         return EXIT_SUCCESS;
     }
 
-    ExtractorOptions::GenerateOutputFilesNames(extractor_config);
+    extractor::ExtractorOptions::GenerateOutputFilesNames(extractor_config);
 
     if (1 > extractor_config.requested_num_threads)
     {
@@ -51,7 +48,7 @@ int main(int argc, char *argv[]) try
                                          << " not found!";
         return EXIT_FAILURE;
     }
-    return extractor(extractor_config).run();
+    return extractor::extractor(extractor_config).run();
 }
 catch (const std::bad_alloc &e)
 {
@@ -64,6 +61,4 @@ catch (const std::exception &e)
 {
     util::SimpleLogger().Write(logWARNING) << "[exception] " << e.what();
     return EXIT_FAILURE;
-}
-}
 }
