@@ -268,7 +268,7 @@ int Extractor::run()
 
         TIMER_STOP(expansion);
 
-        SimpleLogger().Write() << "Remembering One-Ways";
+        SimpleLogger().Write() << "Remembering One-Ways to " << config.oneway_flags_file_name;
         TIMER_START(one_ways);
         std::vector<bool> node_represents_oneway_street;
         node_represents_oneway_street.reserve(node_based_edge_list.size() + 31);
