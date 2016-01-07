@@ -38,7 +38,7 @@ class Server
 
     explicit Server(const std::string &address, const int port, const unsigned thread_pool_size)
         : thread_pool_size(thread_pool_size), acceptor(io_service),
-          new_connection(std::make_shared<http::Connection>(io_service, request_handler))
+          new_connection(std::make_shared<Connection>(io_service, request_handler))
     {
         const auto port_string = std::to_string(port);
 
@@ -80,7 +80,7 @@ class Server
         if (!e)
         {
             new_connection->start();
-            new_connection = std::make_shared<http::Connection>(io_service, request_handler);
+            new_connection = std::make_shared<Connection>(io_service, request_handler);
             acceptor.async_accept(
                 new_connection->socket(),
                 boost::bind(&Server::HandleAccept, this, boost::asio::placeholders::error));
@@ -90,7 +90,7 @@ class Server
     unsigned thread_pool_size;
     boost::asio::io_service io_service;
     boost::asio::ip::tcp::acceptor acceptor;
-    std::shared_ptr<http::Connection> new_connection;
+    std::shared_ptr<Connection> new_connection;
     RequestHandler request_handler;
 };
 

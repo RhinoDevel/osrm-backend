@@ -20,11 +20,6 @@
 #include <new>
 #include <thread>
 
-namespace osrm
-{
-namespace tools
-{
-
 #ifdef _WIN32
 boost::function0<void> console_ctrl_function;
 
@@ -44,6 +39,8 @@ BOOL WINAPI console_ctrl_handler(DWORD ctrl_type)
 }
 #endif
 
+using namespace osrm;
+
 int main(int argc, const char *argv[]) try
 {
     util::LogPolicy::GetInstance().Unmute();
@@ -53,16 +50,16 @@ int main(int argc, const char *argv[]) try
     int ip_port, requested_thread_num;
 
     LibOSRMConfig lib_config;
-    const unsigned init_result = GenerateServerProgramOptions(
+    const unsigned init_result = util::GenerateServerProgramOptions(
         argc, argv, lib_config.server_paths, ip_address, ip_port, requested_thread_num,
         lib_config.use_shared_memory, trial_run, lib_config.max_locations_trip,
         lib_config.max_locations_viaroute, lib_config.max_locations_distance_table,
         lib_config.max_locations_map_matching);
-    if (init_result == INIT_OK_DO_NOT_START_ENGINE)
+    if (init_result == util::INIT_OK_DO_NOT_START_ENGINE)
     {
         return EXIT_SUCCESS;
     }
-    if (init_result == INIT_FAILED)
+    if (init_result == util::INIT_FAILED)
     {
         return EXIT_FAILURE;
     }
@@ -106,7 +103,7 @@ int main(int argc, const char *argv[]) try
 #endif
 
     OSRM osrm_lib(lib_config);
-    auto routing_server = Server::CreateServer(ip_address, ip_port, requested_thread_num);
+    auto routing_server = server::Server::CreateServer(ip_address, ip_port, requested_thread_num);
 
     routing_server->GetRequestHandlerPtr().RegisterRoutingMachine(&osrm_lib);
 
@@ -173,6 +170,4 @@ catch (const std::exception &e)
 {
     util::SimpleLogger().Write(logWARNING) << "[exception] " << e.what();
     return EXIT_FAILURE;
-}
-}
 }
