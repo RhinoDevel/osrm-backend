@@ -29,7 +29,7 @@ struct ExtractorConfig
     std::string node_output_path;
     std::string rtree_nodes_output_path;
     std::string rtree_leafs_output_path;
-	std::string oneway_flags_file_name;
+    std::string oneway_flags_file_name;
 
     unsigned requested_num_threads;
     unsigned small_component_size;

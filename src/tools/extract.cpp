@@ -46,7 +46,7 @@ int main(int argc, char *argv[]) try
                                          << " not found!";
         return EXIT_FAILURE;
     }
-    return extractor(extractor_config).run();
+    return Extractor(extractor_config).run();
 }
 catch (const std::bad_alloc &e)
 {

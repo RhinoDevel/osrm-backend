@@ -44,7 +44,7 @@ add_custom_target(FingerPrintConfigure ALL ${CMAKE_COMMAND}
   COMMENT "Configuring revision fingerprint"
   VERBATIM)
 
-add_custom_target(tests DEPENDS engine-tests extractor-tests util-tests)
+add_custom_target(tests DEPENDS engine-tests extractor-tests util-tests io-tests)
 add_custom_target(benchmarks DEPENDS rtree-bench)
 
 set(BOOST_COMPONENTS date_time filesystem iostreams program_options regex system thread unit_test_framework)
