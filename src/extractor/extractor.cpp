@@ -267,6 +267,21 @@ int extractor::run()
 
         TIMER_STOP(expansion);
 
+        SimpleLogger.Write() << "Remembering One-Ways";
+        TIMER_START(one_ways);
+        std::vector<bool> node_represents_oneway_street;
+        node_represents_oneway_street.reserve(node_based_edge_list.size() + 31);
+        node_represents_oneway_street.resize(node_based_edge_list.size(), false);
+        const auto isOneWay = [](EdgeBasedNode const &node)
+        {
+            return (SPECIAL_NODEID == node.forward_edge_based_node_id) xor
+                   (SPECIAL_NODEID == node.reverse_edge_based_node_id);
+        };
+        std::transform(node_represents_oneway_street.begin(), node_represents_oneway_street.end(),
+                       node_based_edge_list.begin(), node_based_edge_list.end(), isOneWay);
+        WriteOneWayFlags(node_represents_oneway_street);
+        TIMER_STOP(one_ways);
+
         SimpleLogger().Write() << "building r-tree ...";
         TIMER_START(rtree);
 
@@ -539,6 +554,31 @@ void extractor::WriteNodeMapping(const std::vector<QueryNode> &internal_to_exter
                           size_of_mapping * sizeof(QueryNode));
     }
     node_stream.close();
+}
+
+/**
+  \brief Writing flags indicating one-way nodes.
+  */
+void extractor::WriteOneWayFlags(const std::vector<bool> &flags)
+{
+    // TODO this should be replaced with a FILE-based write using error checking
+    std::uint32_t number_of_bits = flags.size();
+    boost::filesystem::ofstream flag_stream(config.oneway_flags_file_name, std::ios::binary);
+    flag_stream.write(reinterpret_cast<const char *>(&number_of_bits), sizeof(number_of_bits));
+    // putting bits in ints
+    std::uint32_t chunk = 0;
+    while (flags.size() % 32 != 0) // avoid special case handling
+        flags.push_back(false);
+    for (std::size_t bit_nr = 0; bit_nr < number_of_bits; ++bit_nr)
+    {
+        chunk <<= 1;
+        chunk |= flags[bit_nr];
+        if (31 == (bit_nr % 32))
+        {
+            flag_stream.write(reinterpret_cast<const char *>(&chunk), sizeof(chunk));
+            chunk = 0;
+        }
+    }
 }
 
 /**

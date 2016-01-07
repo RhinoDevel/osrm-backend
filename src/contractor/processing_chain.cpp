@@ -22,6 +22,7 @@
 
 #include <tbb/parallel_sort.h>
 
+#include <bitset>
 #include <chrono>
 #include <memory>
 #include <string>
@@ -257,6 +258,25 @@ void Prepare::WriteNodeLevels(std::vector<float> &&in_node_levels) const
     unsigned level_size = node_levels.size();
     order_output_stream.write((char *)&level_size, sizeof(unsigned));
     order_output_stream.write((char *)node_levels.data(), sizeof(float) * node_levels.size());
+}
+
+void Prepare::ReadOneWayFlags(std::vector<bool> &oneway_flags) const
+{
+    std::uint32_t number_of_bits;
+    boost::filesystem::ifstream flag_stream(config.one_way_flags_path, std::ios::binary);
+    flag_stream.read(reinterpret_cast<char *>(&number_of_bits), sizeof(number_of_bits));
+    oneway_flags.resize( number_of_bits );
+    // putting bits in ints
+    std::uint32_t chunks = (number_of_bits + 31)/32;
+    std::size_t bit_position = 0;
+    std::uint32_t chunk;
+    for (std::size_t chunk_id = 0; chunk_id < chunks; ++chunk_id )
+    {
+        flag_stream.read(reinterpret_cast<char *>(&chunk), sizeof(chunk));
+        std::bitset<32> chunk_bits(chunk);
+        for( std::size_t bit = 0; bit < 32 and bit_position < number_of_bits; ++bit, ++bit_position )
+          oneway_flags[bit_position] = chunk_bits[bit];
+    }
 }
 
 void Prepare::WriteCoreNodeMarker(std::vector<bool> &&in_is_core_node) const
