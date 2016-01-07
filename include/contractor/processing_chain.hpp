@@ -37,7 +37,8 @@ class Prepare
                        DeallocatingVector<EdgeBasedEdge> &edge_based_edge_list,
                        DeallocatingVector<QueryEdge> &contracted_edge_list,
                        std::vector<bool> &is_core_node,
-                       std::vector<float> &node_levels) const;
+                       std::vector<float> &node_levels,
+                       std::vector<bool> &&oneway_flags) const;
     void WriteCoreNodeMarker(std::vector<bool> &&is_core_node) const;
     void WriteNodeLevels(std::vector<float> &&node_levels) const;
     void ReadNodeLevels(std::vector<float> &contraction_order) const;

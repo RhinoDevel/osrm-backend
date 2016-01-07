@@ -298,7 +298,7 @@ def prepare_data
       raise PrepareError.new $?.exitstatus, "osrm-prepare exited with code #{$?.exitstatus}."
     end
     begin
-      ["osrm.hsgr","osrm.fileIndex","osrm.geometry","osrm.nodes","osrm.ramIndex","osrm.core","osrm.edges"].each do |file|
+      ["osrm.hsgr","osrm.fileIndex","osrm.geometry","osrm.nodes","osrm.ramIndex","osrm.core","osrm.edges","osrm.osi"].each do |file|
         log "Renaming #{extracted_file}.#{file} to #{prepared_file}.#{file}", :preprocess
         File.rename "#{extracted_file}.#{file}", "#{prepared_file}.#{file}"
       end

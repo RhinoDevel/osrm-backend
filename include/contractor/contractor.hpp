@@ -137,8 +137,12 @@ class Contractor
     }
 
     template <class ContainerT>
-    Contractor(int nodes, ContainerT &input_edge_list, std::vector<float> &&node_levels_)
-        : node_levels(std::move(node_levels_))
+    Contractor(int nodes,
+               ContainerT &input_edge_list,
+               std::vector<float> &&node_levels_,
+               std::vector<bool> &&node_represents_one_way_)
+        : node_levels(std::move(node_levels_)),
+          node_represents_one_way(std::move(node_represents_one_way_))
     {
         std::vector<ContractorEdge> edges;
         edges.reserve(input_edge_list.size() * 2);
@@ -806,6 +810,8 @@ class Contractor
         int inserted_edges_size = data->inserted_edges.size();
         std::vector<ContractorEdge> &inserted_edges = data->inserted_edges;
 
+        std::cout << "Contracting " << node << std::endl;
+
         for (auto in_edge : contractor_graph->GetAdjacentEdgeRange(node))
         {
             const ContractorEdgeData &in_data = contractor_graph->GetEdgeData(in_edge);
@@ -861,7 +867,30 @@ class Contractor
                 const NodeID target = contractor_graph->GetTarget(out_edge);
                 const int path_distance = in_data.distance + out_data.distance;
                 const int distance = heap.GetKey(target);
-                if (path_distance < distance)
+                std::cout << source << " of " << node_represents_one_way.size() << std::endl;
+                if ( source == target and node_represents_one_way[source])
+                {
+                    if (RUNSIMULATION)
+                    {
+                        BOOST_ASSERT(stats != nullptr);
+                        stats->edges_added_count += 2;
+                        stats->original_edges_added_count +=
+                            2 * (out_data.originalEdges + in_data.originalEdges);
+                    }
+                    else
+                    {
+                        std::cout << "Cycle arc added" << std::endl;
+                        inserted_edges.emplace_back(source, target,
+                                                    in_data.distance + out_data.distance,
+                                                    out_data.originalEdges + in_data.originalEdges,
+                                                    node, true, true, false);
+                        inserted_edges.emplace_back(source, target,
+                                                    in_data.distance + out_data.distance,
+                                                    out_data.originalEdges + in_data.originalEdges,
+                                                    node, true, false, true);
+                    }
+                }
+                else if (path_distance < distance)
                 {
                     if (RUNSIMULATION)
                     {
@@ -883,7 +912,7 @@ class Contractor
                 }
             }
         }
-		//Check For One-Way Streets to decide on the creation of self-loops
+        // Check For One-Way Streets to decide on the creation of self-loops
 
         if (!RUNSIMULATION)
         {
@@ -1062,6 +1091,7 @@ class Contractor
     std::vector<NodeID> orig_node_id_from_new_node_id_map;
     std::vector<float> node_levels;
     std::vector<bool> is_core_node;
+    std::vector<bool> node_represents_one_way;
     XORFastHash fast_hash;
 };
 

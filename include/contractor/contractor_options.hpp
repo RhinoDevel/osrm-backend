@@ -27,7 +27,7 @@ struct ContractorConfig
 
     std::string edge_segment_lookup_path;
     std::string edge_penalty_path;
-    std::string one_way_flags_path;
+    boost::filesystem::path one_way_flags_path;
     bool use_cached_priority;
 
     unsigned requested_num_threads;

@@ -105,6 +105,9 @@ ContractorOptions::ParseArguments(int argc, char *argv[], ContractorConfig &cont
         return return_code::fail;
     }
 
+    contractor_config.one_way_flags_path = contractor_config.osrm_input_path.string();
+    contractor_config.one_way_flags_path.replace_extension( ".osrm.osi" );
+
     return return_code::ok;
 }
 
