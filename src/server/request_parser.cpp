@@ -15,16 +15,13 @@ namespace osrm
 namespace server
 {
 
-namespace http
-{
-
 RequestParser::RequestParser()
     : state(internal_state::method_start), current_header({"", ""}),
-      selected_compression(no_compression), is_post_header(false), content_length(0)
+      selected_compression(http::no_compression), is_post_header(false), content_length(0)
 {
 }
 
-std::tuple<util::tribool, compression_type>
+std::tuple<util::tribool, http::compression_type>
 RequestParser::parse(http::request &current_request, char *begin, char *end)
 {
     while (begin != end)
@@ -44,7 +41,7 @@ RequestParser::parse(http::request &current_request, char *begin, char *end)
     return std::make_tuple(result, selected_compression);
 }
 
-osrm::tribool RequestParser::consume(http::request &current_request, const char input)
+util::tribool RequestParser::consume(http::request &current_request, const char input)
 {
     switch (state)
     {
@@ -201,11 +198,11 @@ osrm::tribool RequestParser::consume(http::request &current_request, const char 
             /* giving gzip precedence over deflate */
             if (boost::icontains(current_header.value, "deflate"))
             {
-                selected_compression = deflate_rfc1951;
+                selected_compression = http::deflate_rfc1951;
             }
             if (boost::icontains(current_header.value, "gzip"))
             {
-                selected_compression = gzip_rfc1952;
+                selected_compression = http::gzip_rfc1952;
             }
         }
 
@@ -366,7 +363,6 @@ bool RequestParser::is_special(const int character) const
 bool RequestParser::is_digit(const int character) const
 {
     return character >= '0' && character <= '9';
-}
 }
 }
 }

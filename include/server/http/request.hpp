@@ -12,9 +12,6 @@ namespace server
 namespace http
 {
 
-namespace http
-{
-
 struct request
 {
     std::string uri;
@@ -22,8 +19,6 @@ struct request
     std::string agent;
     boost::asio::ip::address endpoint;
 };
-
-} // namespace http
 
 }
 }

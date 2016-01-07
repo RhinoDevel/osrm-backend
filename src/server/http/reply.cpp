@@ -9,9 +9,6 @@ namespace server
 namespace http
 {
 
-namespace http
-{
-
 const char ok_html[] = "";
 const char bad_request_html[] = "{\"status\": 400,\"status_message\":\"Bad Request\"}";
 const char internal_server_error_html[] =
@@ -107,7 +104,6 @@ boost::asio::const_buffer reply::status_to_buffer(const reply::status_type statu
 }
 
 reply::reply() : status(ok) {}
-}
 }
 }
 }

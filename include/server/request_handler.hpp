@@ -5,12 +5,14 @@
 
 namespace osrm
 {
+namespace engine
+{
+class OSRM;
+struct RouteParameters;
+}
 namespace server
 {
-
 template <typename Iterator, class HandlerT> struct APIGrammar;
-struct RouteParameters;
-class OSRM;
 
 namespace http
 {
@@ -22,16 +24,16 @@ class RequestHandler
 {
 
   public:
-    using APIGrammarParser = APIGrammar<std::string::iterator, RouteParameters>;
+    using APIGrammarParser = APIGrammar<std::string::iterator, engine::RouteParameters>;
 
     RequestHandler();
     RequestHandler(const RequestHandler &) = delete;
 
     void handle_request(const http::request &current_request, http::reply &current_reply);
-    void RegisterRoutingMachine(OSRM *osrm);
+    void RegisterRoutingMachine(engine::OSRM *osrm);
 
   private:
-    OSRM *routing_machine;
+    engine::OSRM *routing_machine;
 };
 
 }

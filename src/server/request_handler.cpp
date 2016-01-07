@@ -36,7 +36,7 @@ void RequestHandler::handle_request(const http::request &current_request,
     try
     {
         std::string request_string;
-        URIDecode(current_request.uri, request_string);
+        util::URIDecode(current_request.uri, request_string);
 
         // deactivated as GCC apparently does not implement that, not even in 4.9
         // std::time_t t = std::time(nullptr);
@@ -66,7 +66,7 @@ void RequestHandler::handle_request(const http::request &current_request,
                                << (0 == current_request.agent.length() ? "- " : " ")
                                << request_string;
 
-        RouteParameters route_parameters;
+        engine::RouteParameters route_parameters;
         APIGrammarParser api_parser(&route_parameters);
 
         auto api_iterator = request_string.begin();

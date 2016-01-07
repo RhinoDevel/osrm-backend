@@ -14,15 +14,16 @@ namespace server
 
 namespace http
 {
-
 struct request;
+}
+
 
 class RequestParser
 {
   public:
     RequestParser();
 
-    std::tuple<util::tribool, compression_type>
+    std::tuple<util::tribool, http::compression_type>
     parse(http::request &current_request, char *begin, char *end);
 
   private:
@@ -66,12 +67,10 @@ class RequestParser
     } state;
 
     http::header current_header;
-    compression_type selected_compression;
+    http::compression_type selected_compression;
     bool is_post_header;
     int content_length;
 };
-
-} // namespace http
 
 }
 }

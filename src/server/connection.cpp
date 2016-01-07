@@ -15,9 +15,6 @@ namespace osrm
 namespace server
 {
 
-namespace http
-{
-
 Connection::Connection(boost::asio::io_service &io_service, RequestHandler &handler)
     : strand(io_service), TCP_socket(io_service), request_handler(handler)
 {
@@ -43,7 +40,7 @@ void Connection::handle_read(const boost::system::error_code &error, std::size_t
     }
 
     // no error detected, let's parse the request
-    compression_type compression_type(no_compression);
+    http::compression_type compression_type(http::no_compression);
     util::tribool result;
     std::tie(result, compression_type) =
         request_parser.parse(current_request, incoming_data_buffer.data(),
@@ -61,7 +58,7 @@ void Connection::handle_read(const boost::system::error_code &error, std::size_t
         // compress the result w/ gzip/deflate if requested
         switch (compression_type)
         {
-        case deflate_rfc1951:
+        case http::deflate_rfc1951:
             // use deflate for compression
             current_reply.headers.insert(current_reply.headers.begin(),
                                          {"Content-Encoding", "deflate"});
@@ -70,7 +67,7 @@ void Connection::handle_read(const boost::system::error_code &error, std::size_t
             output_buffer = current_reply.headers_to_buffers();
             output_buffer.push_back(boost::asio::buffer(compressed_output));
             break;
-        case gzip_rfc1952:
+        case http::gzip_rfc1952:
             // use gzip for compression
             current_reply.headers.insert(current_reply.headers.begin(),
                                          {"Content-Encoding", "gzip"});
@@ -79,7 +76,7 @@ void Connection::handle_read(const boost::system::error_code &error, std::size_t
             output_buffer = current_reply.headers_to_buffers();
             output_buffer.push_back(boost::asio::buffer(compressed_output));
             break;
-        case no_compression:
+        case http::no_compression:
             // don't use any compression
             current_reply.set_uncompressed_size();
             output_buffer = current_reply.to_buffers();
@@ -93,7 +90,7 @@ void Connection::handle_read(const boost::system::error_code &error, std::size_t
     }
     else if (result == util::tribool::no)
     { // request is not parseable
-        current_reply = reply::stock_reply(reply::bad_request);
+        current_reply = http::reply::stock_reply(http::reply::bad_request);
 
         boost::asio::async_write(
             TCP_socket, current_reply.to_buffers(),
@@ -123,14 +120,14 @@ void Connection::handle_write(const boost::system::error_code &error)
 }
 
 std::vector<char> Connection::compress_buffers(const std::vector<char> &uncompressed_data,
-                                               const compression_type compression_type)
+                                               const http::compression_type compression_type)
 {
     boost::iostreams::gzip_params compression_parameters;
 
     // there's a trade-off between speed and size. speed wins
     compression_parameters.level = boost::iostreams::zlib::best_speed;
     // check which compression flavor is used
-    if (deflate_rfc1951 == compression_type)
+    if (http::deflate_rfc1951 == compression_type)
     {
         compression_parameters.noheader = true;
     }
@@ -144,7 +141,6 @@ std::vector<char> Connection::compress_buffers(const std::vector<char> &uncompre
     boost::iostreams::close(gzip_stream);
 
     return compressed_data;
-}
 }
 }
 }

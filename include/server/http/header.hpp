@@ -11,8 +11,6 @@ namespace server
 namespace http
 {
 
-namespace http
-{
 struct header
 {
     // explicitly use default copy c'tor as adding move c'tor
@@ -29,7 +27,6 @@ struct header
     std::string name;
     std::string value;
 };
-}
 
 }
 }
