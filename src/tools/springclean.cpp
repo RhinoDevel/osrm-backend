@@ -2,7 +2,6 @@
 
 #include "datastore/shared_memory_factory.hpp"
 #include "engine/datafacade/shared_datatype.hpp"
-#include "util/version.hpp"
 #include "util/simple_logger.hpp"
 
 namespace osrm
@@ -53,34 +52,33 @@ void springclean()
     deleteRegion(LAYOUT_2);
     deleteRegion(CURRENT_REGIONS);
 }
+}
+}
 
 int main()
 {
-    util::LogPolicy::GetInstance().Unmute();
+    osrm::util::LogPolicy::GetInstance().Unmute();
     try
     {
-        util::SimpleLogger().Write() << "starting up engines, " << OSRM_VERSION << "\n\n";
-        util::SimpleLogger().Write() << "Releasing all locks";
-        util::SimpleLogger().Write() << "ATTENTION! BE CAREFUL!";
-        util::SimpleLogger().Write() << "----------------------";
-        util::SimpleLogger().Write() << "This tool may put osrm-routed into an undefined state!";
-        util::SimpleLogger().Write() << "Type 'Y' to acknowledge that you know what your are doing.";
-        util::SimpleLogger().Write() << "\n\nDo you want to purge all shared memory allocated "
+        osrm::util::SimpleLogger().Write() << "Releasing all locks";
+        osrm::util::SimpleLogger().Write() << "ATTENTION! BE CAREFUL!";
+        osrm::util::SimpleLogger().Write() << "----------------------";
+        osrm::util::SimpleLogger().Write() << "This tool may put osrm-routed into an undefined state!";
+        osrm::util::SimpleLogger().Write() << "Type 'Y' to acknowledge that you know what your are doing.";
+        osrm::util::SimpleLogger().Write() << "\n\nDo you want to purge all shared memory allocated "
                                << "by osrm-datastore? [type 'Y' to confirm]";
 
         const auto letter = getchar();
         if (letter != 'Y')
         {
-            util::SimpleLogger().Write() << "aborted.";
+            osrm::util::SimpleLogger().Write() << "aborted.";
             return 0;
         }
-        springclean();
+        osrm::tools::springclean();
     }
     catch (const std::exception &e)
     {
-        util::SimpleLogger().Write(logWARNING) << "[excpetion] " << e.what();
+        osrm::util::SimpleLogger().Write(logWARNING) << "[excpetion] " << e.what();
     }
     return 0;
-}
-}
 }
