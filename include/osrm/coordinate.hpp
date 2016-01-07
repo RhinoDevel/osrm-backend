@@ -35,10 +35,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 namespace osrm
 {
 
-namespace
-{
 constexpr static const double COORDINATE_PRECISION = 1000000.0;
-}
 
 namespace util
 {
