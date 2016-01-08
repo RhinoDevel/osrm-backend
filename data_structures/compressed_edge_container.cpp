@@ -102,7 +102,7 @@ void CompressedEdgeContainer::SerializeInternalVector(const std::string &path) c
         BOOST_ASSERT(std::numeric_limits<unsigned>::max() != unpacked_size);
         for (const CompressedNode current_node : current_vector)
         {
-            geometry_out_stream.write((char *)&(current_node.first), sizeof(NodeID));
+            geometry_out_stream.write((char *)&(std::get<0>(current_node)), sizeof(NodeID));
         }
     }
     BOOST_ASSERT(control_sum == prefix_sum_of_list_indices);
@@ -115,7 +115,9 @@ void CompressedEdgeContainer::CompressEdge(const EdgeID edge_id_1,
                                       const NodeID via_node_id,
                                       const NodeID target_node_id,
                                       const EdgeWeight weight1,
-                                      const EdgeWeight weight2)
+                                      const EdgeWeight weight2,
+                                      const EdgeMeters meters1,
+                                      const EdgeMeters meters2)
 {
     // remove super-trivial geometries
     BOOST_ASSERT(SPECIAL_EDGEID != edge_id_1);
@@ -124,6 +126,9 @@ void CompressedEdgeContainer::CompressEdge(const EdgeID edge_id_1,
     BOOST_ASSERT(SPECIAL_NODEID != target_node_id);
     BOOST_ASSERT(INVALID_EDGE_WEIGHT != weight1);
     BOOST_ASSERT(INVALID_EDGE_WEIGHT != weight2);
+    BOOST_ASSERT(INVALID_EDGE_METERS != meters1);
+    BOOST_ASSERT(INVALID_EDGE_METERS != meters2);
+
 
     // append list of removed edge_id plus via node to surviving edge id:
     // <surv_1, .. , surv_n, via_node_id, rem_1, .. rem_n
@@ -159,7 +164,7 @@ void CompressedEdgeContainer::CompressEdge(const EdgeID edge_id_1,
     // weight1 is the distance to the (currently) last coordinate in the bucket
     if (edge_bucket_list1.empty())
     {
-        edge_bucket_list1.emplace_back(via_node_id, weight1);
+        edge_bucket_list1.emplace_back(via_node_id, weight1, meters1);
     }
 
     BOOST_ASSERT(0 < edge_bucket_list1.size());
@@ -190,7 +195,7 @@ void CompressedEdgeContainer::CompressEdge(const EdgeID edge_id_1,
     else
     {
         // we are certain that the second edge is atomic.
-        edge_bucket_list1.emplace_back(target_node_id, weight2);
+        edge_bucket_list1.emplace_back(target_node_id, weight2, meters2);
     }
 }
 
@@ -230,11 +235,11 @@ NodeID CompressedEdgeContainer::GetFirstEdgeTargetID(const EdgeID edge_id) const
 {
     const auto &bucket = GetBucketReference(edge_id);
     BOOST_ASSERT(bucket.size() >= 2);
-    return bucket.front().first;
+    return std::get<0>(bucket.front());
 }
 NodeID CompressedEdgeContainer::GetLastEdgeSourceID(const EdgeID edge_id) const
 {
     const auto &bucket = GetBucketReference(edge_id);
     BOOST_ASSERT(bucket.size() >= 2);
-    return bucket[bucket.size() - 2].first;
+    return std::get<0>(bucket[bucket.size() - 2]);
 }

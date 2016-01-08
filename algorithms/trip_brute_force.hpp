@@ -47,7 +47,7 @@ namespace trip
 {
 
 // computes the distance of a given permutation
-EdgeWeight ReturnDistance(const DistTableWrapper<EdgeWeight> &dist_table,
+EdgeWeight ReturnDistance(const DistTableWrapper &dist_table,
                           const std::vector<NodeID> &location_order,
                           const EdgeWeight min_route_dist,
                           const std::size_t component_size)
@@ -71,7 +71,7 @@ template <typename NodeIDIterator>
 std::vector<NodeID> BruteForceTrip(const NodeIDIterator start,
                                    const NodeIDIterator end,
                                    const std::size_t number_of_locations,
-                                   const DistTableWrapper<EdgeWeight> &dist_table)
+                                   const DistTableWrapper &dist_table)
 {
     (void)number_of_locations; // unused
 

@@ -48,7 +48,7 @@ bool NodeBasedEdge::operator<(const NodeBasedEdge &other) const
 }
 
 NodeBasedEdge::NodeBasedEdge()
-    : source(SPECIAL_NODEID), target(SPECIAL_NODEID), name_id(0), weight(0), forward(false),
+    : source(SPECIAL_NODEID), target(SPECIAL_NODEID), name_id(0), weight(0), meters(0), forward(false),
       backward(false), roundabout(false),
       access_restricted(false), startpoint(true), is_split(false), travel_mode(false)
 {
@@ -58,6 +58,7 @@ NodeBasedEdge::NodeBasedEdge(NodeID source,
                              NodeID target,
                              NodeID name_id,
                              EdgeWeight weight,
+                             EdgeMeters meters,
                              bool forward,
                              bool backward,
                              bool roundabout,
@@ -65,7 +66,7 @@ NodeBasedEdge::NodeBasedEdge(NodeID source,
                              bool startpoint,
                              TravelMode travel_mode,
                              bool is_split)
-    : source(source), target(target), name_id(name_id), weight(weight), forward(forward),
+    : source(source), target(target), name_id(name_id), weight(weight), meters(meters), forward(forward),
       backward(backward), roundabout(roundabout),
       access_restricted(access_restricted), startpoint(startpoint), is_split(is_split), travel_mode(travel_mode)
 {
@@ -91,13 +92,13 @@ bool EdgeBasedEdge::operator<(const EdgeBasedEdge &other) const
 template <class EdgeT>
 EdgeBasedEdge::EdgeBasedEdge(const EdgeT &other)
     : source(other.source), target(other.target), edge_id(other.data.via),
-      weight(other.data.distance), forward(other.data.forward), backward(other.data.backward)
+    meters(other.data.meters), weight(other.data.distance), forward(other.data.forward), backward(other.data.backward)
 {
 }
 
 /** Default constructor. target and weight are set to 0.*/
 EdgeBasedEdge::EdgeBasedEdge()
-    : source(0), target(0), edge_id(0), weight(0), forward(false), backward(false)
+    : source(0), target(0), edge_id(0), meters(0), weight(0), forward(false), backward(false)
 {
 }
 
@@ -105,9 +106,10 @@ EdgeBasedEdge::EdgeBasedEdge(const NodeID source,
                              const NodeID target,
                              const NodeID edge_id,
                              const EdgeWeight weight,
+                             const EdgeMeters meters,
                              const bool forward,
                              const bool backward)
-    : source(source), target(target), edge_id(edge_id), weight(weight), forward(forward),
+    : source(source), target(target), edge_id(edge_id), meters(meters), weight(weight), forward(forward),
       backward(backward)
 {
 }

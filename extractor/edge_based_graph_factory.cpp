@@ -142,7 +142,7 @@ void EdgeBasedGraphFactory::InsertEdgeBasedNode(const NodeID node_u,
         for (const auto i : osrm::irange(0u, geometry_size))
         {
             forward_dist_prefix_sum[i] = temp_sum;
-            temp_sum += forward_geometry[i].second;
+            temp_sum += std::get<1>(forward_geometry[i]);
 
             BOOST_ASSERT(forward_data.distance >= temp_sum);
         }
@@ -150,7 +150,7 @@ void EdgeBasedGraphFactory::InsertEdgeBasedNode(const NodeID node_u,
         temp_sum = 0;
         for (const auto i : osrm::irange(0u, geometry_size))
         {
-            temp_sum += reverse_geometry[reverse_geometry.size() - 1 - i].second;
+            temp_sum += std::get<1>(reverse_geometry[reverse_geometry.size() - 1 - i]);
             reverse_dist_prefix_sum[i] = reverse_data.distance - temp_sum;
             // BOOST_ASSERT(reverse_data.distance >= temp_sum);
         }
@@ -161,16 +161,18 @@ void EdgeBasedGraphFactory::InsertEdgeBasedNode(const NodeID node_u,
         for (const auto i : osrm::irange(0u, geometry_size))
         {
             BOOST_ASSERT(current_edge_source_coordinate_id ==
-                         reverse_geometry[geometry_size - 1 - i].first);
-            const NodeID current_edge_target_coordinate_id = forward_geometry[i].first;
+                         std::get<0>(reverse_geometry[geometry_size - 1 - i]));
+            const NodeID current_edge_target_coordinate_id = std::get<0>(forward_geometry[i]);
             BOOST_ASSERT(current_edge_target_coordinate_id != current_edge_source_coordinate_id);
 
             // build edges
             m_edge_based_node_list.emplace_back(
                 forward_data.edge_id, reverse_data.edge_id,
                 current_edge_source_coordinate_id, current_edge_target_coordinate_id,
-                forward_data.name_id, forward_geometry[i].second,
-                reverse_geometry[geometry_size - 1 - i].second, forward_dist_prefix_sum[i],
+                forward_data.name_id, std::get<1>(forward_geometry[i]),
+                std::get<1>(reverse_geometry[geometry_size - 1 - i]),
+                std::get<2>(forward_geometry[i]), std::get<2>(reverse_geometry[geometry_size - 1 - i]),
+                forward_dist_prefix_sum[i],
                 reverse_dist_prefix_sum[i], m_compressed_edge_container.GetPositionForID(edge_id_1),
                 false, INVALID_COMPONENTID, i, forward_data.travel_mode, reverse_data.travel_mode);
             m_edge_based_node_is_startpoint.push_back(forward_data.startpoint || reverse_data.startpoint);
@@ -215,7 +217,7 @@ void EdgeBasedGraphFactory::InsertEdgeBasedNode(const NodeID node_u,
 
         m_edge_based_node_list.emplace_back(
             forward_data.edge_id, reverse_data.edge_id, node_u, node_v,
-            forward_data.name_id, forward_data.distance, reverse_data.distance, 0, 0, SPECIAL_EDGEID,
+            forward_data.name_id, forward_data.distance, reverse_data.distance, forward_data.meters, reverse_data.meters, 0, 0, SPECIAL_EDGEID,
             false, INVALID_COMPONENTID, 0, forward_data.travel_mode, reverse_data.travel_mode);
         m_edge_based_node_is_startpoint.push_back(forward_data.startpoint || reverse_data.startpoint);
         BOOST_ASSERT(!m_edge_based_node_list.back().IsCompressed());
@@ -260,11 +262,11 @@ void EdgeBasedGraphFactory::Run(const std::string &original_edge_data_filename,
     TIMER_START(generate_edges);
 #ifdef DEBUG_GEOMETRY
     GenerateEdgeExpandedEdges(original_edge_data_filename, lua_state,
-            edge_segment_lookup_filename,edge_penalty_filename, 
+            edge_segment_lookup_filename,edge_penalty_filename,
             generate_edge_lookup, debug_turns_path);
 #else
     GenerateEdgeExpandedEdges(original_edge_data_filename, lua_state,
-            edge_segment_lookup_filename,edge_penalty_filename, 
+            edge_segment_lookup_filename,edge_penalty_filename,
             generate_edge_lookup);
 #endif
 
@@ -358,7 +360,7 @@ void EdgeBasedGraphFactory::GenerateEdgeExpandedEdges(
     const std::string &original_edge_data_filename, lua_State *lua_state,
     const std::string &edge_segment_lookup_filename,
     const std::string &edge_fixed_penalties_filename,
-    const bool generate_edge_lookup, 
+    const bool generate_edge_lookup,
     const std::string &debug_turns_path)
 #else
 void EdgeBasedGraphFactory::GenerateEdgeExpandedEdges(
@@ -473,6 +475,7 @@ void EdgeBasedGraphFactory::GenerateEdgeExpandedEdges(
 
                 // the following is the core of the loop.
                 unsigned distance = edge_data1.distance;
+                const unsigned meters = edge_data1.meters;
                 if (m_traffic_lights.find(node_v) != m_traffic_lights.end())
                 {
                     distance += speed_profile.traffic_signal_penalty;
@@ -502,7 +505,7 @@ void EdgeBasedGraphFactory::GenerateEdgeExpandedEdges(
                     distance += speed_profile.u_turn_penalty;
 
                     DEBUG_UTURN(node_v, m_node_info_list, speed_profile.u_turn_penalty);
-                } 
+                }
 
                 DEBUG_TURN(node_v, m_node_info_list, first_coordinate, turn_angle, turn_penalty);
 
@@ -534,7 +537,7 @@ void EdgeBasedGraphFactory::GenerateEdgeExpandedEdges(
                 // NOTE: potential overflow here if we hit 2^32 routable edges
                 BOOST_ASSERT(m_edge_based_edge_list.size() <= std::numeric_limits<NodeID>::max());
                 m_edge_based_edge_list.emplace_back(edge_data1.edge_id, edge_data2.edge_id,
-                                  m_edge_based_edge_list.size(), distance, true, false);
+                                  m_edge_based_edge_list.size(), distance, meters, true, false);
 
 
                 // Here is where we write out the mapping between the edge-expanded edges, and
@@ -566,13 +569,13 @@ void EdgeBasedGraphFactory::GenerateEdgeExpandedEdges(
                         for (auto target_node : node_based_edges)
                         {
                             const QueryNode &from = m_node_info_list[previous];
-                            const QueryNode &to = m_node_info_list[target_node.first];
+                            const QueryNode &to = m_node_info_list[std::get<0>(target_node)];
                             const double segment_length = coordinate_calculation::great_circle_distance(from.lat, from.lon, to.lat, to.lon);
 
                             edge_segment_file.write(reinterpret_cast<const char *>(&to.node_id), sizeof(to.node_id));
                             edge_segment_file.write(reinterpret_cast<const char *>(&segment_length), sizeof(segment_length));
-                            edge_segment_file.write(reinterpret_cast<const char *>(&target_node.second), sizeof(target_node.second));
-                            previous = target_node.first;
+                            edge_segment_file.write(reinterpret_cast<const char *>(&(std::get<1>(target_node))), sizeof(std::get<1>(target_node)));
+                            previous = std::get<0>(target_node);
                         }
                     }
                     else
@@ -686,4 +689,3 @@ TurnInstruction EdgeBasedGraphFactory::AnalyzeTurn(const NodeID node_u,
 
     return TurnInstructionsClass::GetTurnDirectionOfInstruction(angle);
 }
-

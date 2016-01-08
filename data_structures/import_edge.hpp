@@ -40,6 +40,7 @@ struct NodeBasedEdge
                            NodeID target,
                            NodeID name_id,
                            EdgeWeight weight,
+                           EdgeMeters meters,
                            bool forward,
                            bool backward,
                            bool roundabout,
@@ -52,6 +53,7 @@ struct NodeBasedEdge
     NodeID target;
     NodeID name_id;
     EdgeWeight weight;
+    EdgeMeters meters;
     bool forward : 1;
     bool backward : 1;
     bool roundabout : 1;
@@ -67,6 +69,7 @@ struct NodeBasedEdgeWithOSM : NodeBasedEdge
                            OSMNodeID target,
                            NodeID name_id,
                            EdgeWeight weight,
+                           EdgeMeters meters,
                            bool forward,
                            bool backward,
                            bool roundabout,
@@ -74,7 +77,7 @@ struct NodeBasedEdgeWithOSM : NodeBasedEdge
                            bool startpoint,
                            TravelMode travel_mode,
                            bool is_split)
-        : NodeBasedEdge(SPECIAL_NODEID, SPECIAL_NODEID, name_id, weight, forward, backward, roundabout, access_restricted, startpoint, travel_mode, is_split),
+        : NodeBasedEdge(SPECIAL_NODEID, SPECIAL_NODEID, name_id, weight, meters, forward, backward, roundabout, access_restricted, startpoint, travel_mode, is_split),
         osm_source_id(source), osm_target_id(target) {}
 
     OSMNodeID osm_source_id;
@@ -95,11 +98,13 @@ struct EdgeBasedEdge
                            const NodeID target,
                            const NodeID edge_id,
                            const EdgeWeight weight,
+                           const EdgeMeters meters,
                            const bool forward,
                            const bool backward);
     NodeID source;
     NodeID target;
     NodeID edge_id;
+    EdgeMeters meters;
     EdgeWeight weight : 30;
     bool forward : 1;
     bool backward : 1;

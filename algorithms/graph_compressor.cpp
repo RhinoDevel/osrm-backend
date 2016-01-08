@@ -114,11 +114,18 @@ void GraphCompressor::Compress(const std::unordered_set<NodeID>& barrier_nodes,
             const int forward_weight1 = graph.GetEdgeData(forward_e1).distance;
             const int forward_weight2 = graph.GetEdgeData(forward_e2).distance;
 
+            // Get meters before graph is modified
+            const int forward_meters1 = graph.GetEdgeData(forward_e1).meters;
+            const int forward_meters2 = graph.GetEdgeData(forward_e2).meters;
+
             BOOST_ASSERT(0 != forward_weight1);
             BOOST_ASSERT(0 != forward_weight2);
 
             const int reverse_weight1 = graph.GetEdgeData(reverse_e1).distance;
             const int reverse_weight2 = graph.GetEdgeData(reverse_e2).distance;
+
+            const int reverse_meters1 = graph.GetEdgeData(reverse_e1).meters;
+            const int reverse_meters2 = graph.GetEdgeData(reverse_e2).meters;
 
             BOOST_ASSERT(0 != reverse_weight1);
             BOOST_ASSERT(0 != reverse_weight2);
@@ -135,6 +142,10 @@ void GraphCompressor::Compress(const std::unordered_set<NodeID>& barrier_nodes,
                 graph.GetEdgeData(reverse_e1).distance +=
                     speed_profile.traffic_signal_penalty;
             }
+            
+            // add meters of e2's to e1
+            graph.GetEdgeData(forward_e1).meters += fwd_edge_data2.meters;
+            graph.GetEdgeData(reverse_e1).meters += rev_edge_data2.meters;
 
             // extend e1's to targets of e2's
             graph.SetTarget(forward_e1, node_w);
@@ -155,10 +166,14 @@ void GraphCompressor::Compress(const std::unordered_set<NodeID>& barrier_nodes,
             geometry_compressor.CompressEdge(
                 forward_e1, forward_e2, node_v, node_w,
                 forward_weight1 + (has_node_penalty ? speed_profile.traffic_signal_penalty : 0),
-                forward_weight2);
+                forward_weight2,
+                forward_meters1,
+                forward_meters2);
             geometry_compressor.CompressEdge(
                 reverse_e1, reverse_e2, node_v, node_u, reverse_weight1,
-                reverse_weight2 + (has_node_penalty ? speed_profile.traffic_signal_penalty : 0));
+                reverse_weight2 + (has_node_penalty ? speed_profile.traffic_signal_penalty : 0),
+                reverse_meters1,
+                reverse_meters2);
         }
     }
 

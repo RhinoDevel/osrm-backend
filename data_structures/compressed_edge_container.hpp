@@ -38,7 +38,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 class CompressedEdgeContainer
 {
   public:
-    using CompressedNode = std::pair<NodeID, EdgeWeight>;
+    using CompressedNode = std::tuple<NodeID, EdgeWeight, EdgeMeters>;
     using EdgeBucket = std::vector<CompressedNode>;
 
     CompressedEdgeContainer();
@@ -47,7 +47,9 @@ class CompressedEdgeContainer
                       const NodeID via_node_id,
                       const NodeID target_node,
                       const EdgeWeight weight1,
-                      const EdgeWeight weight2);
+                      const EdgeWeight weight2,
+                      const EdgeMeters meters1,
+                      const EdgeMeters meters2);
 
     bool HasEntryForID(const EdgeID edge_id) const;
     void PrintStatistics() const;

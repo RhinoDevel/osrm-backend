@@ -63,7 +63,7 @@ struct InternalExtractorEdge
     };
 
     explicit InternalExtractorEdge()
-        : result(MIN_OSM_NODEID, MIN_OSM_NODEID, 0, 0, false, false, false, false, true,
+        : result(MIN_OSM_NODEID, MIN_OSM_NODEID, 0, 0, 0, false, false, false, false, true,
                 TRAVEL_MODE_INACCESSIBLE, false)
     {
     }
@@ -82,6 +82,7 @@ struct InternalExtractorEdge
         : result(OSMNodeID(source),
                  OSMNodeID(target),
                  name_id,
+                 0,
                  0,
                  forward,
                  backward,

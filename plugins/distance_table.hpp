@@ -211,9 +211,18 @@ template <class DataFacadeT> class DistanceTablePlugin final : public BasePlugin
         for (const auto row : osrm::irange<std::size_t>(0, number_of_sources))
         {
             osrm::json::Array json_row;
-            auto row_begin_iterator = result_table->begin() + (row * number_of_destination);
-            auto row_end_iterator = result_table->begin() + ((row + 1) * number_of_destination);
-            json_row.values.insert(json_row.values.end(), row_begin_iterator, row_end_iterator);
+            const auto row_end_iterator = result_table->begin() + ((row + 1) * number_of_destination);
+
+            for(auto entry = result_table->begin() + (row * number_of_destination);entry!=row_end_iterator;++entry)
+            {
+                osrm::json::Array json_entry;
+
+                json_entry.values.push_back(entry->first);
+                json_entry.values.push_back(entry->second);
+                
+                json_row.values.push_back(json_entry);
+            }
+
             matrix_json_array.values.push_back(json_row);
         }
         json_result.values["distance_table"] = matrix_json_array;

@@ -35,18 +35,23 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // This Wrapper provides an easier access to a distance table that is given as an linear vector
 
-template <typename T> class DistTableWrapper
+class DistTableWrapper
 {
   public:
-    using Iterator = typename std::vector<T>::iterator;
-    using ConstIterator = typename std::vector<T>::const_iterator;
+    using Iterator = typename std::vector<std::pair<EdgeWeight, EdgeMeters>>::iterator;
+    using ConstIterator = typename std::vector<std::pair<EdgeWeight, EdgeMeters>>::const_iterator;
 
-    DistTableWrapper(std::vector<T> table, std::size_t number_of_nodes)
+    DistTableWrapper(std::vector<std::pair<EdgeWeight, EdgeMeters>> table, std::size_t number_of_nodes)
         : table_(std::move(table)), number_of_nodes_(number_of_nodes)
     {
         BOOST_ASSERT_MSG(table.size() == 0, "table is empty");
         BOOST_ASSERT_MSG(number_of_nodes_ * number_of_nodes_ <= table_.size(),
                          "number_of_nodes_ is invalid");
+                         
+        for(const auto &i : table_)
+        {
+            weight_table_.push_back(i.first);
+        }
     };
 
     std::size_t GetNumberOfNodes() const { return number_of_nodes_; }
@@ -62,7 +67,7 @@ template <typename T> class DistTableWrapper
 
         BOOST_ASSERT_MSG(index < table_.size(), "index is out of bound");
 
-        return table_[index];
+        return table_[index].first;
     }
 
     ConstIterator begin() const { return std::begin(table_); }
@@ -73,15 +78,20 @@ template <typename T> class DistTableWrapper
 
     Iterator end() { return std::end(table_); }
 
-    NodeID GetIndexOfMaxValue() const
+//    NodeID GetIndexOfMaxValue() const
+//    {
+//        return std::distance(table_.begin(), std::max_element(table_.begin(), table_.end()));
+//    }
+
+//    std::vector<std::pair<EdgeWeight, EdgeMeters>> GetTable() const { return table_; }
+    std::vector<EdgeWeight> GetWeightTable() const
     {
-        return std::distance(table_.begin(), std::max_element(table_.begin(), table_.end()));
+        return weight_table_;
     }
 
-    std::vector<T> GetTable() const { return table_; }
-
   private:
-    std::vector<T> table_;
+    std::vector<std::pair<EdgeWeight, EdgeMeters>> table_;
+    std::vector<EdgeWeight> weight_table_;
     const std::size_t number_of_nodes_;
 };
 

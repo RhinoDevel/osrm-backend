@@ -58,11 +58,13 @@ using OSMEdgeID_weak = std::uint64_t;
 using NodeID = unsigned int;
 using EdgeID = unsigned int;
 using EdgeWeight = int;
+using EdgeMeters = int;
 
 static const NodeID SPECIAL_NODEID = std::numeric_limits<unsigned>::max();
 static const EdgeID SPECIAL_EDGEID = std::numeric_limits<unsigned>::max();
 static const unsigned INVALID_NAMEID = std::numeric_limits<unsigned>::max();
 static const unsigned INVALID_COMPONENTID = 0;
 static const EdgeWeight INVALID_EDGE_WEIGHT = std::numeric_limits<int>::max();
+static const EdgeMeters INVALID_EDGE_METERS = std::numeric_limits<int>::max();
 
 #endif /* TYPEDEFS_H */

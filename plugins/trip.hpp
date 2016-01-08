@@ -160,10 +160,10 @@ template <class DataFacadeT> class RoundTripPlugin final : public BasePlugin
     // identifies and splits the graph in its strongly connected components (scc)
     // and returns an SCC_Component
     SCC_Component SplitUnaccessibleLocations(const std::size_t number_of_locations,
-                                             const DistTableWrapper<EdgeWeight> &result_table)
+                                             const DistTableWrapper &result_table)
     {
 
-        if (std::find(std::begin(result_table), std::end(result_table), INVALID_EDGE_WEIGHT) ==
+        if (std::find_if(std::begin(result_table), std::end(result_table), [](const std::pair<EdgeWeight, EdgeMeters> &a){ return a.first==INVALID_EDGE_WEIGHT; }) ==
             std::end(result_table))
         {
             // whole graph is one scc
@@ -173,7 +173,7 @@ template <class DataFacadeT> class RoundTripPlugin final : public BasePlugin
         }
 
         // Run TarjanSCC
-        auto wrapper = std::make_shared<MatrixGraphWrapper<EdgeWeight>>(result_table.GetTable(),
+        auto wrapper = std::make_shared<MatrixGraphWrapper<EdgeWeight>>(result_table.GetWeightTable(),
                                                                         number_of_locations);
         auto scc = TarjanSCC<MatrixGraphWrapper<EdgeWeight>>(wrapper);
         scc.run();
@@ -290,7 +290,7 @@ template <class DataFacadeT> class RoundTripPlugin final : public BasePlugin
         const auto number_of_locations = phantom_node_list.size();
 
         // compute the distance table of all phantom nodes
-        const auto result_table = DistTableWrapper<EdgeWeight>(
+        const auto result_table = DistTableWrapper(
             *search_engine_ptr->distance_table(phantom_node_list, phantom_node_list),
             number_of_locations);
 

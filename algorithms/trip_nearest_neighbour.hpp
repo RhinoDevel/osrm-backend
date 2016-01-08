@@ -48,7 +48,7 @@ template <typename NodeIDIterator>
 std::vector<NodeID> NearestNeighbourTrip(const NodeIDIterator &start,
                                          const NodeIDIterator &end,
                                          const std::size_t number_of_locations,
-                                         const DistTableWrapper<EdgeWeight> &dist_table)
+                                         const DistTableWrapper &dist_table)
 {
     //////////////////////////////////////////////////////////////////////////////////////////////////
     // START GREEDY NEAREST NEIGHBOUR HERE

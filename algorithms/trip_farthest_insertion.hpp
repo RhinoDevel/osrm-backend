@@ -50,7 +50,7 @@ namespace trip
 using NodeIDIter = std::vector<NodeID>::iterator;
 std::pair<EdgeWeight, NodeIDIter>
 GetShortestRoundTrip(const NodeID new_loc,
-                     const DistTableWrapper<EdgeWeight> &dist_table,
+                     const DistTableWrapper &dist_table,
                      const std::size_t number_of_locations,
                      std::vector<NodeID> &route)
 {
@@ -103,7 +103,7 @@ std::vector<NodeID> FindRoute(const std::size_t &number_of_locations,
                               const std::size_t &component_size,
                               const NodeIDIterator &start,
                               const NodeIDIterator &end,
-                              const DistTableWrapper<EdgeWeight> &dist_table,
+                              const DistTableWrapper &dist_table,
                               const NodeID &start1,
                               const NodeID &start2)
 {
@@ -165,7 +165,7 @@ template <typename NodeIDIterator>
 std::vector<NodeID> FarthestInsertionTrip(const NodeIDIterator &start,
                                           const NodeIDIterator &end,
                                           const std::size_t number_of_locations,
-                                          const DistTableWrapper<EdgeWeight> &dist_table)
+                                          const DistTableWrapper &dist_table)
 {
     //////////////////////////////////////////////////////////////////////////////////////////////////
     // START FARTHEST INSERTION HERE
@@ -188,7 +188,7 @@ std::vector<NodeID> FarthestInsertionTrip(const NodeIDIterator &start,
         // find the pair of location with the biggest distance and make the pair the initial start
         // trip
         const auto index = std::distance(
-            std::begin(dist_table), std::max_element(std::begin(dist_table), std::end(dist_table)));
+            std::begin(dist_table), std::max_element(std::begin(dist_table), std::end(dist_table), [](const std::pair<EdgeWeight, EdgeMeters> &a, const std::pair<EdgeWeight, EdgeMeters> &b){ return a.first<b.first; }));
         max_from = index / number_of_locations;
         max_to = index % number_of_locations;
     }

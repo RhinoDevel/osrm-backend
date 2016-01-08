@@ -60,22 +60,24 @@ class Contractor
     struct ContractorEdgeData
     {
         ContractorEdgeData()
-            : distance(0), id(0), originalEdges(0), shortcut(0), forward(0), backward(0),
+            : distance(0), meters(0), id(0), originalEdges(0), shortcut(0), forward(0), backward(0),
               is_original_via_node_ID(false)
         {
         }
         ContractorEdgeData(unsigned distance,
+                           unsigned meters,
                            unsigned original_edges,
                            unsigned id,
                            bool shortcut,
                            bool forward,
                            bool backward)
-            : distance(distance), id(id),
+            : distance(distance), meters(meters), id(id),
               originalEdges(std::min((unsigned)1 << 28, original_edges)), shortcut(shortcut),
               forward(forward), backward(backward), is_original_via_node_ID(false)
         {
         }
         unsigned distance;
+        unsigned meters;
         unsigned id;
         unsigned originalEdges : 28;
         bool shortcut : 1;
@@ -187,12 +189,12 @@ class Contractor
             }
 #endif
             edges.emplace_back(diter->source, diter->target,
-                               static_cast<unsigned int>(std::max(diter->weight, 1)), 1,
+                               static_cast<unsigned int>(std::max(diter->weight, 1)), static_cast<unsigned int>(std::max(diter->meters, 0)), 1,
                                diter->edge_id, false, diter->forward ? true : false,
                                diter->backward ? true : false);
 
             edges.emplace_back(diter->target, diter->source,
-                               static_cast<unsigned int>(std::max(diter->weight, 1)), 1,
+                               static_cast<unsigned int>(std::max(diter->weight, 1)), static_cast<unsigned int>(std::max(diter->meters, 0)), 1,
                                diter->edge_id, false, diter->backward ? true : false,
                                diter->forward ? true : false);
         }
@@ -225,18 +227,26 @@ class Contractor
             forward_edge.data.originalEdges = reverse_edge.data.originalEdges = 1;
             forward_edge.data.distance = reverse_edge.data.distance =
                 std::numeric_limits<int>::max();
+            forward_edge.data.meters = reverse_edge.data.meters =
+                std::numeric_limits<int>::max();
             // remove parallel edges
             while (i < edges.size() && edges[i].source == source && edges[i].target == target)
             {
                 if (edges[i].data.forward)
                 {
-                    forward_edge.data.distance =
-                        std::min(edges[i].data.distance, forward_edge.data.distance);
+                    if(edges[i].data.distance<forward_edge.data.distance)
+                    {
+                        forward_edge.data.distance = edges[i].data.distance;
+                        forward_edge.data.meters = edges[i].data.meters;
+                    }
                 }
                 if (edges[i].data.backward)
                 {
-                    reverse_edge.data.distance =
-                        std::min(edges[i].data.distance, reverse_edge.data.distance);
+                    if(edges[i].data.distance<reverse_edge.data.distance)
+                    {
+                        reverse_edge.data.distance = edges[i].data.distance;
+                        reverse_edge.data.meters = edges[i].data.meters;
+                    }
                 }
                 ++i;
             }
@@ -694,6 +704,7 @@ class Contractor
                     BOOST_ASSERT_MSG(UINT_MAX != new_edge.source, "Source id invalid");
                     BOOST_ASSERT_MSG(UINT_MAX != new_edge.target, "Target id invalid");
                     new_edge.data.distance = data.distance;
+                    new_edge.data.meters = data.meters;
                     new_edge.data.shortcut = data.shortcut;
                     if (!data.is_original_via_node_ID && !orig_node_id_from_new_node_id_map.empty())
                     {
@@ -889,11 +900,13 @@ class Contractor
                     }
                     else
                     {
-                        inserted_edges.emplace_back(source, target, path_distance,
+                        const int path_meters = in_data.meters + out_data.meters;
+                        
+                        inserted_edges.emplace_back(source, target, path_distance, path_meters,
                                                     out_data.originalEdges + in_data.originalEdges,
                                                     node, true, true, false);
 
-                        inserted_edges.emplace_back(target, source, path_distance,
+                        inserted_edges.emplace_back(target, source, path_distance, path_meters,
                                                     out_data.originalEdges + in_data.originalEdges,
                                                     node, true, false, true);
                     }
