@@ -240,7 +240,6 @@ class ManyToManyRouting final
                 const EdgeMeters edge_meters = data.meters;
 
                 BOOST_ASSERT_MSG(edge_weight > 0, "edge_weight invalid");
-                BOOST_ASSERT_MSG(edge_meters > 0, "edge_meters invalid");
                 const int to_distance = distance + edge_weight;
                 const EdgeMeters to_meters = meters + edge_meters;
 
