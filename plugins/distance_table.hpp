@@ -207,44 +207,79 @@ template <class DataFacadeT> class DistanceTablePlugin final : public BasePlugin
             return Status::EmptyResult;
         }
 
-        osrm::json::Array matrix_json_array;
+        // CX MT: Disabled and replaced by distance_table_str for performance reasons (big distance matrices):
+        //
+        // osrm::json::Array matrix_json_array;
+        // for (const auto row : osrm::irange<std::size_t>(0, number_of_sources))
+        // {
+        //     osrm::json::Array json_row;
+        //     const auto row_end_iterator = result_table->begin() + ((row + 1) * number_of_destination);
+        //
+        //     for(auto entry = result_table->begin() + (row * number_of_destination);entry!=row_end_iterator;++entry)
+        //     {
+        //         osrm::json::Array json_entry;
+        //
+        //         json_entry.values.push_back(entry->first);
+        //         json_entry.values.push_back(entry->second);
+        //
+        //         json_row.values.push_back(json_entry);
+        //     }
+        //
+        //     matrix_json_array.values.push_back(json_row);
+        // }
+        // json_result.values["distance_table"] = matrix_json_array;
+        //
+        // osrm::json::Array target_coord_json_array;
+        // for (const auto &phantom : snapped_target_phantoms)
+        // {
+        //     osrm::json::Array json_coord;
+        //     json_coord.values.push_back(phantom.location.lat / COORDINATE_PRECISION);
+        //     json_coord.values.push_back(phantom.location.lon / COORDINATE_PRECISION);
+        //     target_coord_json_array.values.push_back(json_coord);
+        // }
+        // json_result.values["destination_coordinates"] = target_coord_json_array;
+        // osrm::json::Array source_coord_json_array;
+        // for (const auto &phantom : snapped_source_phantoms)
+        // {
+        //     osrm::json::Array json_coord;
+        //     json_coord.values.push_back(phantom.location.lat / COORDINATE_PRECISION);
+        //     json_coord.values.push_back(phantom.location.lon / COORDINATE_PRECISION);
+        //     source_coord_json_array.values.push_back(json_coord);
+        // }
+        // json_result.values["source_coordinates"] = source_coord_json_array;
+        //
+        std::string matrix_json_str(""/*"["*/);
         for (const auto row : osrm::irange<std::size_t>(0, number_of_sources))
         {
-            osrm::json::Array json_row;
+            std::string json_row_str(""/*"["*/);
             const auto row_end_iterator = result_table->begin() + ((row + 1) * number_of_destination);
 
             for(auto entry = result_table->begin() + (row * number_of_destination);entry!=row_end_iterator;++entry)
             {
-                osrm::json::Array json_entry;
+                std::string json_entry_str(""/*"["*/);
 
-                json_entry.values.push_back(entry->first);
-                json_entry.values.push_back(entry->second);
-                
-                json_row.values.push_back(json_entry);
+                json_entry_str += std::to_string(entry->first);
+                json_entry_str += ",";
+                json_entry_str += std::to_string(entry->second);
+                //json_entry_str += "]";
+
+                if(json_row_str.length()>0)//1) // "["
+                {
+                    json_row_str += "|";//",";
+                }
+                json_row_str += json_entry_str;
             }
+            //json_row_str += "]";
 
-            matrix_json_array.values.push_back(json_row);
+            if(matrix_json_str.length()>0)//1) // "["
+            {
+                matrix_json_str += "_";//",";
+            }
+            matrix_json_str += json_row_str;
         }
-        json_result.values["distance_table"] = matrix_json_array;
+        //matrix_json_str += "]";
+        json_result.values["distance_table_str"] = matrix_json_str;
 
-        osrm::json::Array target_coord_json_array;
-        for (const auto &phantom : snapped_target_phantoms)
-        {
-            osrm::json::Array json_coord;
-            json_coord.values.push_back(phantom.location.lat / COORDINATE_PRECISION);
-            json_coord.values.push_back(phantom.location.lon / COORDINATE_PRECISION);
-            target_coord_json_array.values.push_back(json_coord);
-        }
-        json_result.values["destination_coordinates"] = target_coord_json_array;
-        osrm::json::Array source_coord_json_array;
-        for (const auto &phantom : snapped_source_phantoms)
-        {
-            osrm::json::Array json_coord;
-            json_coord.values.push_back(phantom.location.lat / COORDINATE_PRECISION);
-            json_coord.values.push_back(phantom.location.lon / COORDINATE_PRECISION);
-            source_coord_json_array.values.push_back(json_coord);
-        }
-        json_result.values["source_coordinates"] = source_coord_json_array;
         return Status::Ok;
     }
 

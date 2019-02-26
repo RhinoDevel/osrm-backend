@@ -149,10 +149,26 @@ void RequestHandler::handle_request(const http::request &current_request,
         }
         else if (route_parameters.jsonp_parameter.empty())
         { // json file
-            osrm::json::render(current_reply.content, json_result);
-            current_reply.headers.emplace_back("Content-Type", "application/json; charset=UTF-8");
-            current_reply.headers.emplace_back("Content-Disposition",
-                                               "inline; filename=\"response.json\"");
+            // CX MT: HACK: Added if/else to respond with JUST the distance matrix in simplified format (not JSON), if no error occurred (see changes in distance_table.hpp):
+            //
+            if((route_parameters.service.compare("table")==0)&&(current_reply.status == http::reply::ok))
+            {
+                osrm::json::Value const & jsonVal(json_result.values["distance_table_str"]);
+                osrm::json::String const & jsonStr(jsonVal.get<osrm::json::String>());
+
+                current_reply.content = std::vector<char>(jsonStr.value.begin(), jsonStr.value.end()); // CX MT: Copies!?
+
+                current_reply.headers.emplace_back("Content-Type", "text/plain; charset=ASCII");
+                current_reply.headers.emplace_back("Content-Disposition",
+                                                   "inline; filename=\"response.txt\"");
+            }
+            else
+            {
+                osrm::json::render(current_reply.content, json_result);
+                current_reply.headers.emplace_back("Content-Type", "application/json; charset=UTF-8");
+                current_reply.headers.emplace_back("Content-Disposition",
+                                                   "inline; filename=\"response.json\"");
+            }
         }
         else
         { // jsonp
